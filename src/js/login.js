@@ -16,6 +16,7 @@
 		const username = $loginForm.find('.LoginForm__input-username').val();
 		const password = $loginForm.find('.LoginForm__input-password').val();
 		console.log([username, password]);
+		window.location.href = '/';
 		e.preventDefault();
 	}
 })();
