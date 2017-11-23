@@ -1,0 +1,25 @@
+{
+	"name": "0verPick",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"babel": {
+		"presets": [
+			"env"
+		]
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "harp compile src dist && babel dist/js -d dist/js",
+		"serve": "harp server src"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"harp": "^0.24.1"
+	},
+	"devDependencies": {
+		"babel-cli": "^6.26.0",
+		"babel-preset-env": "^1.6.1"
+	}
+}
