@@ -1,9 +1,9 @@
 # 0verPick
-For school to pick students they want.
+For schools to pick students they want.
 
 ## Install
 ```
-git clone https://github.com/0verseas/0verPick
+git clone https://github.com/0verseas/0verPick.git
 cd 0verPick
 npm install
 ```
@@ -17,4 +17,4 @@ npm run serve
 ```
 npm run build
 ```
-the built static file will be in the `dist`
+the built static files will be in the `dist`
