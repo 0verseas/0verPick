@@ -14,40 +14,42 @@
 				<div style="font-size: 16px; font-weight: bold; flex: 2;">個人申請制<br />應繳資料下載系統</div>
 			</div>
 		</div>
-		<div>
-			<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
+		<div class="row mb-3">
+			<div class="col-12">
+				<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
 
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-					<ul class="navbar-nav mx-auto">
-						<li class="nav-item <%= current.source === 'index' ? 'active' : ''%>">
-							<a class="nav-link" href="/">首頁</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link <%= current.source === 'account' ? 'active' : ''%>" href="/account.html">學校帳號管理</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link <%= current.source === 'bachelor' ? 'active' : ''%>" href="/bachelor.html">學士班資料</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link <%= current.source === 'master' ? 'active' : ''%>" href="/master.html">碩士班資料</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link <%= current.source === 'phd' ? 'active' : ''%>" href="/phd.html">博士班資料</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link <%= current.source === 'twoyear' ? 'active' : ''%>" href="/twoyear.html">港二技資料</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="javascript:;">登出</a>
-						</li>
-					</ul>
-				</div>
-			</nav>
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav mx-auto">
+							<li class="nav-item <%= current.source === 'index' ? 'active' : ''%>">
+								<a class="nav-link" href="/">首頁</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link <%= current.source === 'account' ? 'active' : ''%>" href="/account.html">學校帳號管理</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link <%= current.source === 'bachelor' ? 'active' : ''%>" href="/bachelor.html">學士班資料</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link <%= current.source === 'master' ? 'active' : ''%>" href="/master.html">碩士班資料</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link <%= current.source === 'phd' ? 'active' : ''%>" href="/phd.html">博士班資料</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link <%= current.source === 'twoyear' ? 'active' : ''%>" href="/twoyear.html">港二技資料</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="javascript:;">登出</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
 		</div>
-	<%- yield %>
+		<%- yield %>
 	</div>
 	<div class="text-center pt-2 pb-2">
 		<% include component/footer %>
