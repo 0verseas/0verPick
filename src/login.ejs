@@ -1,11 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
 	<title>Login</title>
 	<% include component/header %>
 </head>
 <body>
-	login
+	<div class="container" style="padding-top: 15vh; min-height: calc(100vh - 112px)">
+		<div class="row">
+			<div class="col-12">
+				<div class="mx-auto" style="width: 360px; display: flex;">
+					<div style="flex: 1">
+						<img src="./img/logo.png" alt="logo" height="80" />
+					</div>
+					<div class="pl-1" style="font-size: 26px; font-weight: bold; flex: 2;">個人申請制<br />應繳資料下載系統</div>
+				</div>
+			</div>
+		</div>
+		<div class="row mt-5">
+			<div class="col-lg-8 mx-auto">
+				<div class="card">
+					<div class="card-body">
+						<form>
+							<div class="form-group row">
+								<label for="input-username" class="col-sm-2 col-form-label">帳號</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="input-username">
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="input-password" class="col-sm-2 col-form-label">密碼</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="input-password">
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-12">
+									<button class="btn btn-primary btn-block">登入</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="text-center pt-2 pb-2">
+		<% include component/footer %>
+	</div>
 </body>
 </html>
