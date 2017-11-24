@@ -19,9 +19,18 @@
 		$AccountModal.find('.AccountModal__input-modalType').val(type);
 		$AccountModal.find('.AccountModal__title').text(type === 'C' ? '新增帳號' : '編輯帳號');
 		$AccountModal.find('.AccountModal__btn-submit').text(type === 'C' ? '新增' : '更新');
+
+		// TODO: set old value
 	}
 
 	function _handleDelAccount() {
 		alert();
+	}
+
+	/**
+	 * private method
+	 */
+	function _renderAccount() {
+
 	}
 })();
