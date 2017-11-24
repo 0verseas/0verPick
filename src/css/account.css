@@ -1,0 +1,23 @@
+.DeptList__item:hover,
+.SelectedDeptList__item:hover {
+	background: #eaeaea;
+}
+
+.DeptList__item .btn-select,
+.SelectedDeptList__item .btn-remove {
+	display: none;
+	color: #6f6f6f;
+	position: absolute;
+	right: 10px;
+	cursor: pointer;
+}
+
+.DeptList__item:hover .btn-select,
+.SelectedDeptList__item:hover .btn-remove {
+	display: initial;
+}
+
+.DeptList__item:hover .btn-select:hover,
+.SelectedDeptList__item:hover .btn-remove:hover {
+	color: #000;
+}
