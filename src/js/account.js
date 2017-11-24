@@ -1,11 +1,19 @@
 (() => {
 	/**
+	 * priveate variable
+	 */
+	let _csvFile;
+
+	/**
 	 * cache DOM
 	 */
 	const $AccountModal = $('.AccountModal');
 	const $AccountList = $('.AccountList');
 	const $DeptList = $('.DeptList');
 	const $SelectedDeptList = $('.SelectedDeptList');
+	const $importAccountBtn = $('.btn-importAccount');
+	const $fileInput = $('.input-file');
+	const $CSVModal = $('.CSVModal');
 
 	/**
 	 * bind event
@@ -14,7 +22,10 @@
 	$AccountList.on('click.delAccount', '.AccountItem__btn-del', _handleDelAccount);
 	$DeptList.on('click.select', '.DeptList__item .btn-select', _handleSelectDept);
 	$SelectedDeptList.on('click.select', '.SelectedDeptList__item .btn-remove', _handleremoveDept);
-
+	$importAccountBtn.on('click', _handleUpload);
+	$fileInput.on('change', _handleFileChange);
+	$CSVModal.on('click.submit', '.CSVModal__btn-submit', _handleSubmitCSV);
+	$CSVModal.on('hide.bs.modal', _handleCancelCSV);
 	/**
 	 * event handler
 	 */
@@ -65,10 +76,73 @@
 		$DeptList.append($newItem);
 	}
 
+	function _handleUpload() {
+		$fileInput.trigger('click');
+	}
+
+	function _handleFileChange() {
+		const file = _csvFile = this.files[0];
+		if (file.type !== 'text/csv') {
+			alert('請匯入 .csv 檔');
+			return;
+		}
+
+		const fileName = file.name;
+		const fr = new FileReader();
+		fr.onload = function () {
+			_renderCSVTable(fileName, fr.result);
+		};
+
+		fr.readAsText(file);
+	}
+
+	function _handleSubmitCSV() {
+		console.log(_csvFile);
+		$CSVModal.modal('hide');
+	}
+
+	function _handleCancelCSV() {
+		$fileInput.val('');
+		_csvFile = '';
+	}
+
 	/**
 	 * private method
 	 */
 	function _renderAccount() {
 
+	}
+
+	function _renderCSVTable(fileName, data) {
+		$CSVModal.find('.CSVModal__title').text(`預覽匯入清單 ${fileName}`);
+		$CSVModal.find('.CSVModal__body').empty();
+		const rows = data.split('\r');
+		const header = rows.shift();
+		$CSVModal.find('.CSVModal__body').html(`
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						${
+							header.split(',').map((val, i) => `<th>${val}</th>`).join().replace(/,/g, '')
+						}
+					</tr>
+				</thead>
+				<tbody>
+					${
+						rows.map((r, i) => {
+							return `
+								<tr>
+									${
+										rows[i].split(',').map((val, j) => `<td>${val}</td>`).join().replace(/,/g, '')
+									}
+								</tr>
+							`;
+						}).join().replace(/,/g, '')
+					}
+				</tbody>
+			</table>
+		`);
+
+		$CSVModal.modal();
 	}
 })();

@@ -1,7 +1,8 @@
 <div class="row mb-2">
 	<div class="col-12">
 		<button class="btn btn-primary" data-toggle="modal" data-target=".AccountModal" data-type="C"><i class="fa fa-plus" aria-hidden="true"></i> 新增帳號</button> 
-		<button class="btn btn-info"><i class="fa fa-sign-in" aria-hidden="true"></i> 匯入帳號</button>
+		<button class="btn btn-info btn-importAccount"><i class="fa fa-sign-in" aria-hidden="true"></i> 匯入帳號</button>
+		<input type="file" class="input-file" accept=".csv" style="display: none" />
 	</div>
 </div>
 <div class="row">
@@ -190,6 +191,24 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary AccountModal__btn-submit"></button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade CSVModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title CSVModal__title"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body CSVModal__body" style="max-height: 500px; overflow: auto">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary CSVModal__btn-submit">匯入</button>
+				<button type="button" class="btn btn-secondary CSVModal__btn-cancel" data-dismiss="modal">取消</button>
 			</div>
 		</div>
 	</div>
