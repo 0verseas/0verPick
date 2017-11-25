@@ -10,6 +10,7 @@ npm install
 
 ## Run
 ```
+npm run webpack
 npm run serve
 ```
 
