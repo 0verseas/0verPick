@@ -1,25 +1,33 @@
 {
-	"name": "0verPick",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
-	"babel": {
-		"presets": [
-			"env"
-		]
-	},
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "harp compile src dist && babel dist/js -d dist/js",
-		"serve": "harp server src"
-	},
-	"author": "",
-	"license": "ISC",
-	"dependencies": {
-		"harp": "^0.24.1"
-	},
-	"devDependencies": {
-		"babel-cli": "^6.26.0",
-		"babel-preset-env": "^1.6.1"
-	}
+  "name": "0verPick",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run webpack && harp compile src dist && babel dist/js -d dist/js",
+    "webpack": "./node_modules/.bin/webpack",
+    "serve": "harp server src"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "harp": "^0.24.1"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.7",
+    "style-loader": "^0.19.0",
+    "webpack": "^3.8.1"
+  }
 }
