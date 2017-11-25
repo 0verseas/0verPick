@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
 	entry: './reactSrc/studentData/index.js',
 	output: {
-		filename: 'studentData.js',
+		filename: 'build_studentData.js',
 		path: path.resolve(__dirname, 'src/js')
 	},
 	resolve: {
