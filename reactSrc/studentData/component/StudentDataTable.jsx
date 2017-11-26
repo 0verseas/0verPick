@@ -8,7 +8,7 @@ export default class StudentDataTable extends React.Component {
 	render() {
 		return (
 			<div style={{overflow: 'auto'}}>
-				<Table style={{minWidth: '1000px'}}>
+				<Table style={{minWidth: '1000px'}} hover bordered>
 					<thead>
 						<tr>
 							<th>申請系所名稱</th>
@@ -22,16 +22,22 @@ export default class StudentDataTable extends React.Component {
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>經營管理系</td>
-							<td>000911</td>
-							<td>林一二</td>
-							<td>港澳生</td>
-							<td>澳門</td>
-							<td>1</td>
-							<td><Button color="secondary" size="sm">個人基本資料</Button></td>
-							<td><Button color="secondary" size="sm">下載審查資料</Button></td>
-						</tr>
+						{
+							this.props.studentList.map((val, i) => {
+								return (
+									<tr key={`${val.no}-${val.name}`}>
+										<td>{val.dept}</td>
+										<td>{val.no}</td>
+										<td>{val.name}</td>
+										<td>{val.identity}</td>
+										<td>{val.resident}</td>
+										<td>{val.order}</td>
+										<td className="text-center"><Button color="secondary" size="sm">個人基本資料</Button></td>
+										<td className="text-center"><Button color="secondary" size="sm">下載審查資料</Button></td>
+									</tr>
+								);
+							})
+						}
 					</tbody>
 				</Table>
 			</div>

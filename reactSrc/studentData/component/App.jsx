@@ -19,6 +19,29 @@ export default class App extends React.Component {
 
 	componentDidMount() {
 		// TODO: get student data
+		this.setState({
+			studentList: [
+				{
+					dept: '經營管理系',
+					no: '2345678',
+					name: '林一二',
+					identity: '港澳生',
+					resident: '澳門',
+					order: '1'
+				},
+				{dept: '經營管2理系', no: '2345678', name: '林4一二', identity: '港澳生', resident: '澳門', order: '2'},
+				{dept: '經營管2理系', no: '2345678', name: '林5一二', identity: '港澳生', resident: '澳門', order: '1'},
+				{dept: '經營管2理系', no: '2345678', name: '林一二', identity: '港澳生', resident: '澳門', order: '4'},
+				{dept: '經營e管2理系', no: '2345678', name: '林64一二', identity: '港澳生', resident: '澳門', order: '3'},
+				{dept: '經營管w2理系', no: '2345678', name: '林7一二', identity: '港澳生', resident: '澳門', order: '7'},
+				{dept: '經營2管2理系', no: '2345678', name: '林8一二', identity: '港澳生', resident: '澳門', order: '2'},
+				{dept: '經營t管2理系', no: '2345678', name: '林3一二', identity: '港澳生', resident: '澳門', order: '3'},
+				{dept: '經營g管2理系', no: '2345678', name: '林2一二', identity: '港澳生', resident: '澳門', order: '4'},
+				{dept: '經營sd管2理系', no: '2345678', name: '林7一二', identity: '港澳生', resident: '澳門', order: '1'},
+				{dept: '經營管n2理系', no: '2345678', name: '林4一二', identity: '港澳生', resident: '澳門', order: '2'},
+				{dept: '經營f管2理系', no: '2345678', name: '林8一二', identity: '港澳生', resident: '澳門', order: '2'}
+			]
+		});
 	}
 
 	render() {
@@ -38,7 +61,7 @@ export default class App extends React.Component {
 				</Row>
 				<Row>
 					<Col>
-						<StudentDataTable />
+						<StudentDataTable studentList={this.state.studentList} />
 					</Col>
 				</Row>
 			</div>
