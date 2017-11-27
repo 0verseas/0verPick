@@ -133,7 +133,6 @@
 					<td class="AccountItem__name">${val.name}</td>
 					<td class="AccountItem__accountPermission">TODO</td>
 					<td class="AccountItem__deptPermission">TODO</td>
-					<td class="AccountItem__orderPermission">TODO</td>
 					<td class="AccountItem__status">${val.deleted_at ? '停用' : '啟用'}</td>
 				</tr>
 			`);
