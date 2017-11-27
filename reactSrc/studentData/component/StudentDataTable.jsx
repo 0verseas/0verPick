@@ -6,6 +6,7 @@ import {
 	PaginationItem,
 	PaginationLink
 } from 'reactstrap';
+import cloneDeep from 'lodash.clonedeep';
 
 class PageBar extends React.Component {
 	render() {
@@ -43,10 +44,12 @@ export default class StudentDataTable extends React.Component {
 		super(props);
 		this.state = {
 			currentPage: 1,
-			pageSize: 5
+			pageSize: 5,
+			sort: '' // 'name.desc'
 		};
 
 		this.handleChangePage = this.handleChangePage.bind(this);
+		this.handleSort = this.handleSort.bind(this);
 	}
 
 	handleChangePage(page) {
@@ -55,23 +58,65 @@ export default class StudentDataTable extends React.Component {
 		});
 	}
 
+	handleSort(key) {
+		let sortKey = key;
+		let sortType = 'asc';
+		if (this.state.sort.split('.')[0] === sortKey) {
+			 if (this.state.sort.split('.')[1] === 'asc') {
+			 	sortType = 'desc';
+			 }
+		}
+
+		this.setState({
+			sort: `${sortKey}.${sortType}`
+		});
+	}
+
+	comapreField(key, type) {
+		const order = type === 'desc' ? -1 : 1;
+		return function (a, b) {
+			if (a[key] < b[key])
+				return order;
+			if (a[key] > b[key])
+				return -order;
+			return 0;
+		}
+	}
+
 	render() {
-		// TODO: sort
+		let studentList = cloneDeep(this.props.studentList)
+		// sort
+		const [sortKey, sortType] = this.state.sort.split('.');
+		let sortIcon;
+		if (sortType === 'desc') {
+			sortIcon = (<i className="fa fa-caret-up" aria-hidden="true"></i>);
+		}
+
+		if (sortType === 'asc') {
+			sortIcon = (<i className="fa fa-caret-down" aria-hidden="true"></i>);
+		}
+
+		if (!!this.state.sort) {
+			studentList = studentList.sort(this.comapreField(sortKey, sortType));
+		}
+
 		// pagination
 		const start = (this.state.currentPage - 1) * this.state.pageSize;
-		const studentList = this.props.studentList.slice(start, start + this.state.pageSize);
+		studentList = studentList.slice(start, start + this.state.pageSize);
+
+		const thStyle = { cursor: 'pointer' };
 		return (
 			<div>
 				<div style={{overflow: 'auto'}}>
 					<Table style={{minWidth: '1000px'}} hover bordered>
 						<thead>
 							<tr>
-								<th>申請系所名稱</th>
-								<th>僑生/港澳生編號</th>
-								<th>姓名</th>
-								<th>身份別</th>
-								<th>僑居地</th>
-								<th>志願序</th>
+								<th style={thStyle} onClick={() => this.handleSort('dept')}>申請系所名稱 {!!this.state.sort && sortKey === 'dept' && sortIcon}</th>
+								<th style={thStyle} onClick={() => this.handleSort('no')}>僑生/港澳生編號 {!!this.state.sort && sortKey === 'no' && sortIcon}</th>
+								<th style={thStyle} onClick={() => this.handleSort('name')}>姓名 {!!this.state.sort && sortKey === 'name' && sortIcon}</th>
+								<th style={thStyle} onClick={() => this.handleSort('identity')}>身份別 {!!this.state.sort && sortKey === 'identity' && sortIcon}</th>
+								<th style={thStyle} onClick={() => this.handleSort('resident')}>僑居地 {!!this.state.sort && sortKey === 'resident' && sortIcon}</th>
+								<th style={thStyle} onClick={() => this.handleSort('order')}>志願序 {!!this.state.sort && sortKey === 'order' && sortIcon}</th>
 								<th></th>
 								<th></th>
 							</tr>
