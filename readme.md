@@ -6,7 +6,9 @@ For schools to pick students they want.
 git clone https://github.com/0verseas/0verPick.git
 cd 0verPick
 npm install
+cp config.js.example src/js/config.js
 ```
+edit the config file in `src/js/config.js`
 
 ## Run
 ```

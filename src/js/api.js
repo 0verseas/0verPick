@@ -52,8 +52,22 @@ window.API = (() => {
 		.catch((err) => { handleError(err, callback) });
 	}
 
+	function getUser(callback) {
+		fetch(`${_config.apiBase}/reviewers/login`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		.then(parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { handleError(err, callback) });
+	}
+
 	return {
 		login,
-		logout
+		logout,
+		getUser
 	};
 })();
