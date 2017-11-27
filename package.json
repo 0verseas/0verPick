@@ -19,6 +19,8 @@
   "dependencies": {
     "harp": "^0.24.1",
     "lodash.clonedeep": "^4.5.0",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
     "reactstrap": "^5.0.0-alpha.4"
   },
   "devDependencies": {
