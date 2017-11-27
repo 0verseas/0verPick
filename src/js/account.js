@@ -1,8 +1,9 @@
-(() => {
+(async () => {
 	/**
 	 * priveate variable
 	 */
 	let _csvFile;
+	let _userList;
 
 	/**
 	 * cache DOM
@@ -14,6 +15,13 @@
 	const $importAccountBtn = $('.btn-importAccount');
 	const $fileInput = $('.input-file');
 	const $CSVModal = $('.CSVModal');
+
+	/**
+	 * init
+	 */
+	_userList = await _getUserList();
+	_renderAccount(_userList);
+	
 
 	/**
 	 * bind event
@@ -109,8 +117,27 @@
 	/**
 	 * private method
 	 */
-	function _renderAccount() {
-
+	function _renderAccount(list) {
+		$AccountList.find('tbody').empty();
+		list.forEach((val, i) => {
+			$AccountList.find('tbody').append(`
+				<tr class="AccountItem">
+					<td class="text-warning clickable" data-toggle="modal" data-target=".AccountModal" data-type="U">
+						<i class="fa fa-pencil" aria-hidden="true"></i>
+					</td>
+					<td class="text-danger clickable AccountItem__btn-del">
+						<i class="fa fa-times" aria-hidden="true"></i>
+					</td>
+					<td class="AccountItem__username">${val.username}</td>
+					<td class="AccountItem__orgnization">TODO</td>
+					<td class="AccountItem__name">${val.name}</td>
+					<td class="AccountItem__accountPermission">TODO</td>
+					<td class="AccountItem__deptPermission">TODO</td>
+					<td class="AccountItem__orderPermission">TODO</td>
+					<td class="AccountItem__status">TODO</td>
+				</tr>
+			`);
+		});
 	}
 
 	function _renderCSVTable(fileName, data) {
@@ -144,6 +171,20 @@
 		`);
 
 		$CSVModal.modal();
+	}
+
+	function _getUserList() {
+		return new Promise((resolve, reject) => {
+			window.API.getAvailableUsers((err, data) => {
+				if (err) {
+					console.error(err);
+					reject(err);
+					return;
+				}
+
+				resolve(data);
+			});
+		})
 	}
 
 	function _CSVToArray(strData, strDelimiter) {

@@ -65,9 +65,23 @@ window.API = (() => {
 		.catch((err) => { handleError(err, callback) });
 	}
 
+	function getAvailableUsers(callback) {
+		fetch(`${_config.apiBase}/reviewers/available-users`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		.then(parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { handleError(err, callback) });
+	}
+
 	return {
 		login,
 		logout,
-		getUser
+		getUser,
+		getAvailableUsers
 	};
 })();
