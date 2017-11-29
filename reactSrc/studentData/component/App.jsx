@@ -7,14 +7,19 @@ import {
 
 import StudentDataFilter from './StudentDataFilter.jsx';
 import StudentDataTable from './StudentDataTable.jsx';
+import StudentDetailModal from './StudentDetailModal.jsx';
 
 export default class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this._systemID = window.getSystem();
 		this.state = {
-			studentList: []
+			studentList: [],
+			studentDetailModalOpen: false
 		};
+
+		this.handleToggleStudentDetailModal = this.handleToggleStudentDetailModal.bind(this);
+		this.handleShowDetail = this.handleShowDetail.bind(this);
 	}
 
 	componentDidMount() {
@@ -44,6 +49,19 @@ export default class App extends React.Component {
 		});
 	}
 
+	handleShowDetail() {
+		// TODO: get student detail data
+		this.setState({
+			studentDetailModalOpen: true
+		});
+	}
+
+	handleToggleStudentDetailModal() {
+		this.setState((prevState) => ({
+			studentDetailModalOpen: !prevState.studentDetailModalOpen
+		}));
+	}
+
 	render() {
 		const systemName = ['', '學士班', '港二技', '碩士班', '博士班'];
 		return (
@@ -61,9 +79,16 @@ export default class App extends React.Component {
 				</Row>
 				<Row>
 					<Col>
-						<StudentDataTable studentList={this.state.studentList} />
+						<StudentDataTable
+							studentList={this.state.studentList}
+							onDetail={this.handleShowDetail}
+						/>
 					</Col>
 				</Row>
+				<StudentDetailModal
+					open={this.state.studentDetailModalOpen}
+					toggle={this.handleToggleStudentDetailModal}
+				/>
 			</div>
 		)
 	}
