@@ -24,7 +24,7 @@ export default class StudentDetailModal extends React.Component {
 	render() {
 		return (
 			<Modal isOpen={this.props.open} toggle={this.props.toggle} size="lg">
-				<ModalHeader toggle={this.props.toggle}>個人基本資料</ModalHeader>
+				<ModalHeader toggle={this.props.toggle}>學生詳細資料</ModalHeader>
 				<ModalBody>
 					<Table className="StudentDetailTable" bordered>
 						<tbody>
@@ -49,6 +49,12 @@ export default class StudentDetailModal extends React.Component {
 								<td></td>
 								<th>性別</th>
 								<td></td>
+							</tr>
+							<tr>
+								<th>電話</th>
+								<td colSpan={2}></td>
+								<th>手機</th>
+								<td colSpan={2}></td>
 							</tr>
 							<tr>
 								<th>畢業學校</th>
@@ -81,17 +87,6 @@ export default class StudentDetailModal extends React.Component {
 							</CardBody>
 						</Card>
 					</div>
-					<Row className="text-center mb-2">
-						<Col>
-							<Button color="primary" block onClick={this.props.toggle}>通過</Button>
-						</Col>
-					</Row>
-					<Row className="text-center mb-3">
-						<Col>
-							<Input className="mb-1" type="textarea" name="text" id="exampleText" defaultValue="不通過原因" />
-							<Button color="danger" block onClick={this.props.toggle}>不通過</Button>
-						</Col>
-					</Row>
 				</ModalBody>
 			</Modal>
 		);
