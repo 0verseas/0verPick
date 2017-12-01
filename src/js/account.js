@@ -19,7 +19,7 @@
 	/**
 	 * init
 	 */
-	_userList = [...(await _getUserList()), ...(await _getReviewers())];
+	_userList = [...(await _getReviewers()), ...(await _getUserList())];
 	console.log(_userList);
 	_renderAccount(_userList);
 	
@@ -35,16 +35,33 @@
 	$fileInput.on('change', _handleFileChange);
 	$CSVModal.on('click.submit', '.CSVModal__btn-submit', _handleSubmitCSV);
 	$CSVModal.on('hide.bs.modal', _handleCancelCSV);
+
 	/**
 	 * event handler
 	 */
 	function _handleShowAccountModal(e) {
+		// 判斷這個 modal 是要新增帳號還是編輯帳號
 		const type = $(e.relatedTarget).data('type');
 		$AccountModal.find('.AccountModal__input-modalType').val(type);
 		$AccountModal.find('.AccountModal__title').text(type === 'C' ? '新增帳號' : '編輯帳號');
 		$AccountModal.find('.AccountModal__btn-submit').text(type === 'C' ? '新增' : '更新');
-
-		// TODO: set old value
+		
+		if (type === 'C') return;
+		//TODO: reset input fields
+		// set old value
+		const id = $(e.relatedTarget).parents('.AccountItem').data('id');
+		const userData = _userList.filter((val) => val.id === id)[0];
+		console.log(userData);
+		_setUserData({
+			inputText: {
+				username: userData.username,
+				name: userData.name,
+				organization: 'TODO',
+				jobTitle: 'TODO',
+				mail: userData.email,
+				phone: userData.phone
+			}
+		});
 	}
 
 	function _handleDelAccount() {
@@ -135,8 +152,9 @@
 				!!val.school_reviewer.two_year_tech_department_permissions.length && deptPermission.push('港二技');
 				deptPermission = deptPermission.join(', ') || val.school_reviewer.has_admin ? '全部' : '無';
 			}
+
 			$AccountList.find('tbody').append(`
-				<tr class="AccountItem">
+				<tr class="AccountItem" data-id="${val.id}">
 					<td class="text-warning clickable" data-toggle="modal" data-target=".AccountModal" data-type="U">
 						<i class="fa fa-pencil" aria-hidden="true"></i>
 					</td>
@@ -217,6 +235,14 @@
 				resolve(data);
 			});
 		})
+	}
+
+	// 編輯使用者的 modal，帶入現有資料
+	function _setUserData(data) {
+		// set basic info
+		Object.keys(data.inputText).forEach((key, i) => {
+			$AccountModal.find(`.AccountModal__input-${key}`).val(data.inputText[key]);	
+		});
 	}
 
 	function _CSVToArray(strData, strDelimiter) {
