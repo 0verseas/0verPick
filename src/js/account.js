@@ -32,6 +32,7 @@
 	 * bind event
 	 */
 	$AccountModal.on('show.bs.modal', _handleShowAccountModal);
+	$AccountModal.on('click.submit', '.AccountModal__btn-submit', _handleAddUser);
 	$AccountList.on('click.delAccount', '.AccountItem__btn-del', _handleDelAccount);
 	$DeptList.on('click.select', '.DeptList__item .btn-select', _handleSelectDept);
 	$SelectedDeptList.on('click.remove', '.SelectedDeptList__item .btn-remove', _handleremoveDept);
@@ -67,7 +68,7 @@
 				name: userData.name,
 				organization: userData[userType].organization,
 				jobTitle: userData[userType].job_title,
-				mail: userData.email,
+				email: userData.email,
 				phone: userData.phone
 			},
 			status: !userData.editorOnly && !userData.deleted_at
@@ -144,6 +145,62 @@
 	function _handleCancelCSV() {
 		$fileInput.val('');
 		_csvFile = '';
+	}
+
+	function _handleAddUser() {
+		const type = $AccountModal.find('.AccountModal__input-modalType').val();
+		const username = $AccountModal.find('.AccountModal__input-username').val();
+		const name = $AccountModal.find('.AccountModal__input-name').val();
+		const password = $AccountModal.find('.AccountModal__input-password').val();
+		const organization = $AccountModal.find('.AccountModal__input-organization').val();
+		const job_title = $AccountModal.find('.AccountModal__input-jobTitle').val();
+		const email = $AccountModal.find('.AccountModal__input-email').val();
+		const phone = $AccountModal.find('.AccountModal__input-phone').val();
+		const status = $AccountModal.find('.AccountModal__input-status[value=1]').is(':checked');
+		const department_permissions = $('.SelectedDeptList[data-system="bachelor"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
+		const master_permissions = $('.SelectedDeptList[data-system="master"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
+		const phd_permissions = $('.SelectedDeptList[data-system="phd"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
+		const two_year_tech_department_permissions = $('.SelectedDeptList[data-system="twoyear"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
+		if (!username) return alert('帳號不得為空');
+		if (!name) return alert('用戶名稱不得為空');
+		if (type === 'C' && !password) return alert('密碼不得為空');
+		if (!organization) return alert('單位不得為空');
+		if (!job_title) return alert('職稱不得為空');
+		if (!email) return alert('MAIL 不得為空');
+		if (!phone) return alert('TEL 不得為空');
+
+		const data = {
+			username,
+			name,
+			password,
+			organization,
+			job_title,
+			email,
+			phone,
+			status,
+			department_permissions,
+			master_permissions,
+			phd_permissions,
+			two_year_tech_department_permissions
+		};
+
+		type === 'C' && window.API.addUser(data, (err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+
+			console.log(data);
+		});
+
+		type === 'U' && window.API.editUser(data, (err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+
+			console.log(data);
+		});
 	}
 
 	/**

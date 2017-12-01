@@ -104,12 +104,42 @@ window.API = (() => {
 		.catch((err) => { handleError(err, callback) });
 	}
 
+	function addUser(data, callback) {
+		fetch(`${_config.apiBase}/reviewers/users`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
+		})
+		.then(parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { handleError(err, callback) });
+	}
+
+	function editUser(data, callback) {
+		fetch(`${_config.apiBase}/reviewers/users`, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
+		})
+			.then(parseData)
+			.then((data) => { callback && callback(null, data) })
+			.catch((err) => { handleError(err, callback) });
+	}
+
 	return {
 		login,
 		logout,
 		getUser,
 		getAvailableUsers,
 		getReviewers,
-		getDepts
+		getDepts,
+		addUser,
+		editUser
 	};
 })();
