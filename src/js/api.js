@@ -78,10 +78,24 @@ window.API = (() => {
 		.catch((err) => { handleError(err, callback) });
 	}
 
+	function getReviewers(callback) {
+		fetch(`${_config.apiBase}/reviewers/users`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		.then(parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { handleError(err, callback) });
+	}
+
 	return {
 		login,
 		logout,
 		getUser,
-		getAvailableUsers
+		getAvailableUsers,
+		getReviewers
 	};
 })();

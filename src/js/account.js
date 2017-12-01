@@ -19,7 +19,8 @@
 	/**
 	 * init
 	 */
-	_userList = await _getUserList();
+	_userList = [...(await _getUserList()), ...(await _getReviewers())];
+	console.log(_userList);
 	_renderAccount(_userList);
 	
 
@@ -120,6 +121,20 @@
 	function _renderAccount(list) {
 		$AccountList.find('tbody').empty();
 		list.forEach((val, i) => {
+			const status = val.editorOnly ? '無審核權限' : (val.deleted_at ? '停用' : '啟用');
+			let org = '';
+			let accountPermission = '';
+			let deptPermission = '';
+			if (!val.editorOnly) {
+				org = val.school_reviewer.organization;
+				accountPermission = val.school_reviewer.has_admin ? '管理員' : '一般使用者';;
+				deptPermission = [];
+				!!val.school_reviewer.department_permissions.length && deptPermission.push('學士班');
+				!!val.school_reviewer.master_permissions.length && deptPermission.push('碩士班');
+				!!val.school_reviewer.phd_permissions.length && deptPermission.push('博士班');
+				!!val.school_reviewer.two_year_tech_department_permissions.length && deptPermission.push('港二技');
+				deptPermission = deptPermission.join(', ') || val.school_reviewer.has_admin ? '全部' : '無';
+			}
 			$AccountList.find('tbody').append(`
 				<tr class="AccountItem">
 					<td class="text-warning clickable" data-toggle="modal" data-target=".AccountModal" data-type="U">
@@ -129,11 +144,11 @@
 						<i class="fa fa-times" aria-hidden="true"></i>
 					</td>
 					<td class="AccountItem__username">${val.username}</td>
-					<td class="AccountItem__orgnization">TODO</td>
+					<td class="AccountItem__orgnization">${org}</td>
 					<td class="AccountItem__name">${val.name}</td>
-					<td class="AccountItem__accountPermission">TODO</td>
-					<td class="AccountItem__deptPermission">TODO</td>
-					<td class="AccountItem__status">${val.deleted_at ? '停用' : '啟用'}</td>
+					<td class="AccountItem__accountPermission">${accountPermission}</td>
+					<td class="AccountItem__deptPermission">${deptPermission}</td>
+					<td class="AccountItem__status">${status}</td>
 				</tr>
 			`);
 		});
@@ -172,9 +187,27 @@
 		$CSVModal.modal();
 	}
 
+	// 有 editor 權限，沒有 reviewer 全線的使用者
 	function _getUserList() {
 		return new Promise((resolve, reject) => {
 			window.API.getAvailableUsers((err, data) => {
+				if (err) {
+					console.error(err);
+					reject(err);
+					return;
+				}
+
+				resolve(data.map((val, i) => {
+					return Object.assign({}, val, { editorOnly: true });
+				}));
+			});
+		})
+	}
+
+	// 有 reviewer 權限的使用者
+	function _getReviewers() {
+		return new Promise((resolve, reject) => {
+			window.API.getReviewers((err, data) => {
 				if (err) {
 					console.error(err);
 					reject(err);
