@@ -190,6 +190,8 @@
 				return;
 			}
 
+			$AccountModal.modal('hide');
+			_updateUserList();
 			console.log(data);
 		});
 
@@ -200,6 +202,7 @@
 			}
 
 			console.log(data);
+			// TODO: hide modal, rerender user list
 		});
 	}
 
@@ -381,6 +384,11 @@
 
 		// set account status
 		$AccountModal.find(`.AccountModal__input-status[value="${+data.status}"]`).prop('checked', true);
+	}
+
+	async function _updateUserList() {
+		_userList = [...(await _getReviewers()), ...(await _getUserList())];
+		_renderAccount(_userList);
 	}
 
 	function _CSVToArray(strData, strDelimiter) {
