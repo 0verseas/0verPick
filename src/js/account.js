@@ -46,21 +46,27 @@
 		$AccountModal.find('.AccountModal__title').text(type === 'C' ? '新增帳號' : '編輯帳號');
 		$AccountModal.find('.AccountModal__btn-submit').text(type === 'C' ? '新增' : '更新');
 		
-		if (type === 'C') return;
-		//TODO: reset input fields
+		if (type === 'C') {
+			//TODO: reset input fields
+			$AccountModal.find('.AccountModal__input-password').attr('placeholder', '');
+			return;
+		}
 		// set old value
+		$AccountModal.find('.AccountModal__input-password').attr('placeholder', '不更改則無須填寫');
 		const id = $(e.relatedTarget).parents('.AccountItem').data('id');
 		const userData = _userList.filter((val) => val.id === id)[0];
 		console.log(userData);
+		const userType = userData.editorOnly ? 'school_editor' : 'school_reviewer';
 		_setUserData({
 			inputText: {
 				username: userData.username,
 				name: userData.name,
-				organization: 'TODO',
-				jobTitle: 'TODO',
+				organization: userData[userType].organization,
+				jobTitle: userData[userType].job_title,
 				mail: userData.email,
 				phone: userData.phone
-			}
+			},
+			status: !userData.editorOnly && !userData.deleted_at
 		});
 	}
 
@@ -243,6 +249,9 @@
 		Object.keys(data.inputText).forEach((key, i) => {
 			$AccountModal.find(`.AccountModal__input-${key}`).val(data.inputText[key]);	
 		});
+
+		// set account status
+		$AccountModal.find(`.AccountModal__input-status[value="${+data.status}"]`).prop('checked', true);
 	}
 
 	function _CSVToArray(strData, strDelimiter) {
