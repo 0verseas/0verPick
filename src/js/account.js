@@ -4,6 +4,7 @@
 	 */
 	let _csvFile;
 	let _userList;
+	let _deptList = [];
 
 	/**
 	 * cache DOM
@@ -30,7 +31,7 @@
 	$AccountModal.on('show.bs.modal', _handleShowAccountModal);
 	$AccountList.on('click.delAccount', '.AccountItem__btn-del', _handleDelAccount);
 	$DeptList.on('click.select', '.DeptList__item .btn-select', _handleSelectDept);
-	$SelectedDeptList.on('click.select', '.SelectedDeptList__item .btn-remove', _handleremoveDept);
+	$SelectedDeptList.on('click.remove', '.SelectedDeptList__item .btn-remove', _handleremoveDept);
 	$importAccountBtn.on('click', _handleUpload);
 	$fileInput.on('change', _handleFileChange);
 	$CSVModal.on('click.submit', '.CSVModal__btn-submit', _handleSubmitCSV);
@@ -75,7 +76,8 @@
 	}
 
 	function _handleSelectDept() {
-		const $oriItem = $(this).parents('.DeptList__item')
+		const $oriItem = $(this).parents('.DeptList__item');
+		const system = $(this).parents('.DeptList').data('system');
 		const title = $oriItem.find('.title').text();
 		const $newItem = $(`
 			<div class="pb-1 pl-1 pr-1 SelectedDeptList__item">
@@ -88,11 +90,12 @@
 		`);
 
 		$oriItem.remove();
-		$SelectedDeptList.append($newItem);
+		$(`.SelectedDeptList[data-system="${system}"]`).append($newItem);
 	}
 
 	function _handleremoveDept() {
-		const $oriItem = $(this).parents('.SelectedDeptList__item')
+		const $oriItem = $(this).parents('.SelectedDeptList__item');
+		const system = $(this).parents('.SelectedDeptList').data('system');
 		const title = $oriItem.find('.title').text();
 		const $newItem = $(`
 			<div class="pb-1 pl-1 pr-1 DeptList__item">
@@ -105,7 +108,7 @@
 		`);
 
 		$oriItem.remove();
-		$DeptList.append($newItem);
+		$(`.DeptList[data-system="${system}"]`).append($newItem);
 	}
 
 	function _handleUpload() {
