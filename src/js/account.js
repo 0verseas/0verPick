@@ -4,7 +4,7 @@
 	 */
 	let _csvFile;
 	let _userList;
-	let _deptList = [];
+	let _deptList = null;
 
 	/**
 	 * cache DOM
@@ -21,8 +21,11 @@
 	 * init
 	 */
 	_userList = [...(await _getReviewers()), ...(await _getUserList())];
+	_deptList = await _getDeptList();
 	console.log(_userList);
+	console.log(_deptList);
 	_renderAccount(_userList);
+	_renderDeptList(_deptList);
 	
 
 	/**
@@ -78,9 +81,10 @@
 	function _handleSelectDept() {
 		const $oriItem = $(this).parents('.DeptList__item');
 		const system = $(this).parents('.DeptList').data('system');
+		const deptID = $oriItem.data('id');
 		const title = $oriItem.find('.title').text();
 		const $newItem = $(`
-			<div class="pb-1 pl-1 pr-1 SelectedDeptList__item">
+			<div class="pb-1 pl-1 pr-1 SelectedDeptList__item" data-id=${deptID}>
 				<span class="title">${title}</span>
 				<span class="btn-remove">
 					<i class="fa fa-arrow-left d-none d-lg-inline" aria-hidden="true"></i>
@@ -96,9 +100,10 @@
 	function _handleremoveDept() {
 		const $oriItem = $(this).parents('.SelectedDeptList__item');
 		const system = $(this).parents('.SelectedDeptList').data('system');
+		const deptID = $oriItem.data('id');
 		const title = $oriItem.find('.title').text();
 		const $newItem = $(`
-			<div class="pb-1 pl-1 pr-1 DeptList__item">
+			<div class="pb-1 pl-1 pr-1 DeptList__item" data-id=${deptID}>
 				<span class="title">${title}</span>
 				<span class="btn-select">
 					<i class="fa fa-arrow-right d-none d-lg-inline" aria-hidden="true"></i>
@@ -214,6 +219,56 @@
 		$CSVModal.modal();
 	}
 
+	function _renderDeptList(list) {
+		list.departments.forEach((val, i) => {
+			$('.DeptList[data-system="bachelor"]').append(`
+				<div class="pb-1 pl-1 pr-1 DeptList__item" data-id="${val.id}">
+					<span class="title">${val.title}</span>
+					<span class="btn-select">
+						<i class="fa fa-arrow-right d-none d-lg-inline" aria-hidden="true"></i>
+						<i class="fa fa-arrow-down d-inline d-lg-none" aria-hidden="true"></i>
+					</span>
+				</div>
+			`);
+		});
+
+		list.master_departments.forEach((val, i) => {
+			$('.DeptList[data-system="master"]').append(`
+				<div class="pb-1 pl-1 pr-1 DeptList__item" data-id="${val.id}">
+					<span class="title">${val.title}</span>
+					<span class="btn-select">
+						<i class="fa fa-arrow-right d-none d-lg-inline" aria-hidden="true"></i>
+						<i class="fa fa-arrow-down d-inline d-lg-none" aria-hidden="true"></i>
+					</span>
+				</div>
+			`);
+		});
+
+		list.phd_departments.forEach((val, i) => {
+			$('.DeptList[data-system="phd"]').append(`
+				<div class="pb-1 pl-1 pr-1 DeptList__item" data-id="${val.id}">
+					<span class="title">${val.title}</span>
+					<span class="btn-select">
+						<i class="fa fa-arrow-right d-none d-lg-inline" aria-hidden="true"></i>
+						<i class="fa fa-arrow-down d-inline d-lg-none" aria-hidden="true"></i>
+					</span>
+				</div>
+			`);
+		});
+
+		list.two_year_tech_departments.forEach((val, i) => {
+			$('.DeptList[data-system="twoyear"]').append(`
+				<div class="pb-1 pl-1 pr-1 DeptList__item" data-id="${val.id}">
+					<span class="title">${val.title}</span>
+					<span class="btn-select">
+						<i class="fa fa-arrow-right d-none d-lg-inline" aria-hidden="true"></i>
+						<i class="fa fa-arrow-down d-inline d-lg-none" aria-hidden="true"></i>
+					</span>
+				</div>
+			`);
+		});
+	}
+
 	// 有 editor 權限，沒有 reviewer 全線的使用者
 	function _getUserList() {
 		return new Promise((resolve, reject) => {
@@ -244,6 +299,20 @@
 				resolve(data);
 			});
 		})
+	}
+
+	function _getDeptList() {
+		return new Promise((resolve, reject) => {
+			window.API.getDepts((err, data) => {
+				if (err) {
+					console.error(err);
+					reject(err);
+					return;
+				}
+
+				resolve(data);
+			})
+		});
 	}
 
 	// 編輯使用者的 modal，帶入現有資料
