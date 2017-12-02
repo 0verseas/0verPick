@@ -60,10 +60,10 @@
 		$AccountModal.find('.AccountModal__input-email').val('');
 		$AccountModal.find('.AccountModal__input-phone').val('');
 		$AccountModal.find('.AccountModal__input-status[value=1]').prop('checked', true);
-		_renderDeptList(_deptList);
 		
 		if (type === 'C') {
 			$AccountModal.find('.AccountModal__input-password').attr('placeholder', '');
+			_renderDeptList(_deptList);
 			return;
 		}
 
@@ -82,7 +82,11 @@
 				email: userData.email,
 				phone: userData.phone
 			},
-			status: !userData.editorOnly && !userData.deleted_at
+			status: !userData.editorOnly && !userData.deleted_at,
+			department_permissions: userData.editorOnly ? [] : userData.school_reviewer.department_permissions,
+			master_permissions: userData.editorOnly ? [] : userData.school_reviewer.master_permissions,
+			phd_permissions: userData.editorOnly ? [] : userData.school_reviewer.phd_permissions,
+			two_year_tech_department_permissions: userData.editorOnly ? [] : userData.school_reviewer.two_year_tech_department_permissions
 		});
 	}
 
@@ -290,55 +294,28 @@
 		$CSVModal.modal();
 	}
 
-	function _renderDeptList(list) {
+	function _renderDeptList(list, permissions = {}) {
 		$DeptList.empty();
 		$SelectedDeptList.empty();
-		list.departments.forEach((val, i) => {
-			$('.DeptList[data-system="bachelor"]').append(`
-				<div class="pb-1 pl-1 pr-1 DeptList__item" data-id="${val.id}">
-					<span class="title">${val.title}</span>
-					<span class="btn-select">
-						<i class="fa fa-arrow-right d-none d-lg-inline" aria-hidden="true"></i>
-						<i class="fa fa-arrow-down d-inline d-lg-none" aria-hidden="true"></i>
-					</span>
-				</div>
-			`);
-		});
+		const systems = [
+			['departments', 'bachelor'],
+			['master_departments', 'master'],
+			['phd_departments', 'phd'],
+			['two_year_tech_departments', 'twoyear']
+		];
 
-		list.master_departments.forEach((val, i) => {
-			$('.DeptList[data-system="master"]').append(`
-				<div class="pb-1 pl-1 pr-1 DeptList__item" data-id="${val.id}">
-					<span class="title">${val.title}</span>
-					<span class="btn-select">
-						<i class="fa fa-arrow-right d-none d-lg-inline" aria-hidden="true"></i>
-						<i class="fa fa-arrow-down d-inline d-lg-none" aria-hidden="true"></i>
-					</span>
-				</div>
-			`);
-		});
-
-		list.phd_departments.forEach((val, i) => {
-			$('.DeptList[data-system="phd"]').append(`
-				<div class="pb-1 pl-1 pr-1 DeptList__item" data-id="${val.id}">
-					<span class="title">${val.title}</span>
-					<span class="btn-select">
-						<i class="fa fa-arrow-right d-none d-lg-inline" aria-hidden="true"></i>
-						<i class="fa fa-arrow-down d-inline d-lg-none" aria-hidden="true"></i>
-					</span>
-				</div>
-			`);
-		});
-
-		list.two_year_tech_departments.forEach((val, i) => {
-			$('.DeptList[data-system="twoyear"]').append(`
-				<div class="pb-1 pl-1 pr-1 DeptList__item" data-id="${val.id}">
-					<span class="title">${val.title}</span>
-					<span class="btn-select">
-						<i class="fa fa-arrow-right d-none d-lg-inline" aria-hidden="true"></i>
-						<i class="fa fa-arrow-down d-inline d-lg-none" aria-hidden="true"></i>
-					</span>
-				</div>
-			`);
+		systems.forEach((s, i) => {
+			list[s[0]].forEach((val) => {
+				$(`.DeptList[data-system="${s[1]}"]`).append(`
+					<div class="pb-1 pl-1 pr-1 DeptList__item" data-id="${val.id}">
+						<span class="title">${val.title}</span>
+						<span class="btn-select">
+							<i class="fa fa-arrow-right d-none d-lg-inline" aria-hidden="true"></i>
+							<i class="fa fa-arrow-down d-inline d-lg-none" aria-hidden="true"></i>
+						</span>
+					</div>
+				`);
+			});
 		});
 	}
 
@@ -397,6 +374,14 @@
 
 		// set account status
 		$AccountModal.find(`.AccountModal__input-status[value="${+data.status}"]`).prop('checked', true);
+
+		// 可查看系所
+		_renderDeptList(_deptList, {
+			department_permissions: data.department_permissions,
+			master_permissions: data.master_permissions,
+			phd_permissions: data.phd_permissions,
+			two_year_tech_department_permissions: data.two_year_tech_department_permissions
+		});
 	}
 
 	async function _updateUserList() {
