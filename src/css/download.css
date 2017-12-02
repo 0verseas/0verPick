@@ -1,0 +1,8 @@
+.tableWrap {
+    max-height: 350px;
+    overflow: auto
+}
+
+.btn-download {
+    width: 100px;
+}

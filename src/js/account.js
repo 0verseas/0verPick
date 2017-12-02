@@ -217,7 +217,8 @@
 			}
 
 			console.log(data);
-			// TODO: hide modal, rerender user list
+			$AccountModal.modal('hide');
+			_updateUserList();
 		});
 	}
 
