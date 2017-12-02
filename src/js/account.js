@@ -50,12 +50,23 @@
 		$AccountModal.find('.AccountModal__input-modalType').val(type);
 		$AccountModal.find('.AccountModal__title').text(type === 'C' ? '新增帳號' : '編輯帳號');
 		$AccountModal.find('.AccountModal__btn-submit').text(type === 'C' ? '新增' : '更新');
+
+		//TODO: reset input fields
+		$AccountModal.find('.AccountModal__input-username').val('');
+		$AccountModal.find('.AccountModal__input-name').val('');
+		$AccountModal.find('.AccountModal__input-password').val('');
+		$AccountModal.find('.AccountModal__input-organization').val('');
+		$AccountModal.find('.AccountModal__input-jobTitle').val('');
+		$AccountModal.find('.AccountModal__input-email').val('');
+		$AccountModal.find('.AccountModal__input-phone').val('');
+		$AccountModal.find('.AccountModal__input-status[value=1]').prop('checked', true);
+		_renderDeptList(_deptList);
 		
 		if (type === 'C') {
-			//TODO: reset input fields
 			$AccountModal.find('.AccountModal__input-password').attr('placeholder', '');
 			return;
 		}
+
 		// set old value
 		$AccountModal.find('.AccountModal__input-password').attr('placeholder', '不更改則無須填寫');
 		const id = $(e.relatedTarget).parents('.AccountItem').data('id');
@@ -236,7 +247,7 @@
 						<i class="fa fa-times" aria-hidden="true"></i>
 					</td>
 					<td class="AccountItem__username">${val.username}</td>
-					<td class="AccountItem__orgnization">${org}</td>
+					<td class="AccountItem__organization">${org}</td>
 					<td class="AccountItem__name">${val.name}</td>
 					<td class="AccountItem__accountPermission">${accountPermission}</td>
 					<td class="AccountItem__deptPermission">${deptPermission}</td>
@@ -280,6 +291,8 @@
 	}
 
 	function _renderDeptList(list) {
+		$DeptList.empty();
+		$SelectedDeptList.empty();
 		list.departments.forEach((val, i) => {
 			$('.DeptList[data-system="bachelor"]').append(`
 				<div class="pb-1 pl-1 pr-1 DeptList__item" data-id="${val.id}">
