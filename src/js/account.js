@@ -33,6 +33,8 @@
 	 */
 	$AccountModal.on('show.bs.modal', _handleShowAccountModal);
 	$AccountModal.on('click.submit', '.AccountModal__btn-submit', _handleAddUser);
+	$AccountModal.on('click.selectAll', '.btn-selectAll', _handleSelectAll);
+	$AccountModal.on('click.removeAll', '.btn-removeAll', _handleRemoveAll);
 	$AccountList.on('click.delAccount', '.AccountItem__btn-del', _handleDelAccount);
 	$DeptList.on('click.select', '.DeptList__item .btn-select', _handleSelectDept);
 	$SelectedDeptList.on('click.remove', '.SelectedDeptList__item .btn-remove', _handleremoveDept);
@@ -130,6 +132,20 @@
 
 		$oriItem.remove();
 		$(`.DeptList[data-system="${system}"]`).append($newItem);
+	}
+
+	function _handleSelectAll() {
+		const system = $(this).data('system');
+		$AccountModal.find(`.DeptList[data-system="${system}"] .DeptList__item .btn-select`).toArray().forEach((ele) => {
+			_handleSelectDept.call(ele);
+		});
+	}
+
+	function _handleRemoveAll() {
+		const system = $(this).data('system');
+		$AccountModal.find(`.SelectedDeptList[data-system="${system}"] .SelectedDeptList__item .btn-remove`).toArray().forEach((ele) => {
+			_handleremoveDept.call(ele);
+		});
 	}
 
 	function _handleUpload() {
