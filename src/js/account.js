@@ -298,23 +298,36 @@
 		$DeptList.empty();
 		$SelectedDeptList.empty();
 		const systems = [
-			['departments', 'bachelor'],
-			['master_departments', 'master'],
-			['phd_departments', 'phd'],
-			['two_year_tech_departments', 'twoyear']
+			['departments', 'bachelor', 'department_permissions'],
+			['master_departments', 'master', 'master_permissions'],
+			['phd_departments', 'phd', 'phd_permissions'],
+			['two_year_tech_departments', 'twoyear', 'two_year_tech_department_permissions']
 		];
 
-		systems.forEach((s, i) => {
+		systems.forEach((s) => {
 			list[s[0]].forEach((val) => {
-				$(`.DeptList[data-system="${s[1]}"]`).append(`
-					<div class="pb-1 pl-1 pr-1 DeptList__item" data-id="${val.id}">
-						<span class="title">${val.title}</span>
-						<span class="btn-select">
-							<i class="fa fa-arrow-right d-none d-lg-inline" aria-hidden="true"></i>
-							<i class="fa fa-arrow-down d-inline d-lg-none" aria-hidden="true"></i>
-						</span>
-					</div>
-				`);
+				if (permissions[s[2]] && permissions[s[2]].some((v) => +val.id === +v.dept_id)) {
+					// 已被選取的系所
+					$(`.SelectedDeptList[data-system="${s[1]}"]`).append(`
+						<div class="pb-1 pl-1 pr-1 SelectedDeptList__item" data-id=${val.id}>
+							<span class="title">${val.title}</span>
+							<span class="btn-remove">
+								<i class="fa fa-arrow-left d-none d-lg-inline" aria-hidden="true"></i>
+								<i class="fa fa-arrow-up d-inline d-lg-none" aria-hidden="true"></i>
+							</span>
+						</div>
+					`)
+				} else {
+					$(`.DeptList[data-system="${s[1]}"]`).append(`
+						<div class="pb-1 pl-1 pr-1 DeptList__item" data-id="${val.id}">
+							<span class="title">${val.title}</span>
+							<span class="btn-select">
+								<i class="fa fa-arrow-right d-none d-lg-inline" aria-hidden="true"></i>
+								<i class="fa fa-arrow-down d-inline d-lg-none" aria-hidden="true"></i>
+							</span>
+						</div>
+					`);
+				}
 			});
 		});
 	}
