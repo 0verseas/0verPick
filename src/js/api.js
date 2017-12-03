@@ -119,7 +119,7 @@ window.API = (() => {
 	}
 
 	function editUser(data, callback) {
-		fetch(`${_config.apiBase}/reviewers/users`, {
+		fetch(`${_config.apiBase}/reviewers/users/${data.userID}`, {
 			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json'
@@ -127,9 +127,9 @@ window.API = (() => {
 			body: JSON.stringify(data),
 			credentials: 'include'
 		})
-			.then(parseData)
-			.then((data) => { callback && callback(null, data) })
-			.catch((err) => { handleError(err, callback) });
+		.then(parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { handleError(err, callback) });
 	}
 
 	function CSVToArray(strData, strDelimiter) {

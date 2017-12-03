@@ -82,7 +82,8 @@
 				organization: userData[userType].organization,
 				jobTitle: userData[userType].job_title,
 				email: userData.email,
-				phone: userData.phone
+				phone: userData.phone,
+				id: userData.id
 			},
 			status: !userData.editorOnly && !userData.deleted_at,
 			department_permissions: userData.editorOnly ? [] : userData.school_reviewer.department_permissions,
@@ -192,6 +193,7 @@
 		const master_permissions = $('.SelectedDeptList[data-system="master"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
 		const phd_permissions = $('.SelectedDeptList[data-system="phd"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
 		const two_year_tech_department_permissions = $('.SelectedDeptList[data-system="twoyear"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
+		const userID = $AccountModal.find('.AccountModal__input-id').val();
 		if (!username) return alert('帳號不得為空');
 		if (!name) return alert('用戶名稱不得為空');
 		if (type === 'C' && !password) return alert('密碼不得為空');
@@ -226,7 +228,7 @@
 			console.log(data);
 		});
 
-		type === 'U' && window.API.editUser(data, (err, data) => {
+		type === 'U' && window.API.editUser({ ...data, userID }, (err, data) => {
 			if (err) {
 				console.error(err);
 				return;
@@ -323,7 +325,7 @@
 
 		systems.forEach((s) => {
 			list[s[0]].forEach((val) => {
-				if (permissions[s[2]] && permissions[s[2]].some((v) => +val.id === +v.dept_id)) {
+				if (permissions[s[2]] && permissions[s[2]].some((v) => (val.id + '') === (v.dept_id + ''))) {
 					// 已被選取的系所
 					$(`.SelectedDeptList[data-system="${s[1]}"]`).append(`
 						<div class="pb-1 pl-1 pr-1 SelectedDeptList__item" data-id=${val.id}>
