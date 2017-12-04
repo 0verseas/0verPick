@@ -24,7 +24,7 @@
 	PubSub.on('user', (data) => {
 		!data.school_reviewer.has_admin && window.history.back();
 	});
-	
+
 	_userList = [...(await _getReviewers()), ...(await _getUserList())];
 	_deptList = await _getDeptList();
 	console.log(_userList);
@@ -99,7 +99,14 @@
 	}
 
 	function _handleDelAccount() {
-		alert();
+		if (confirm('確定停用？')) {
+			const userID = $(this).parents('.AccountItem').data('id');
+			console.log(userID);
+			window.API.disableUser(userID, (data) => {
+				console.log(data);
+				_updateUserList();
+			});
+		}
 	}
 
 	function _handleSelectDept() {
