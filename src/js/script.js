@@ -37,7 +37,7 @@
 		if (!!admin) return;
 		if (!b) $('.Nav__bachelor').remove();
 		if (!m) $('.Nav__master').remove();
-		if (!b) $('.Nav__phd').remove();
-		if (!b) $('.Nav__twoyear').remove();
+		if (!p) $('.Nav__phd').remove();
+		if (!t) $('.Nav__twoyear').remove();
 	}
 })();
