@@ -1,6 +1,6 @@
 <script>
     PubSub.on('user', (data) => {
-        !data.school_reviewer.master_permissions.length && window.history.back();
+        !data.school_reviewer.has_admin && !data.school_reviewer.master_permissions.length && window.history.back();
     });
 
     window.getSystem = () => 3;
