@@ -85,7 +85,7 @@
 				phone: userData.phone,
 				id: userData.id
 			},
-			status: !userData.editorOnly && !userData.deleted_at,
+			status: !userData.editorOnly && !userData.school_reviewer.deleted_at,
 			department_permissions: userData.editorOnly ? [] : userData.school_reviewer.department_permissions,
 			master_permissions: userData.editorOnly ? [] : userData.school_reviewer.master_permissions,
 			phd_permissions: userData.editorOnly ? [] : userData.school_reviewer.phd_permissions,
@@ -246,7 +246,7 @@
 	function _renderAccount(list) {
 		$AccountList.find('tbody').empty();
 		list.forEach((val, i) => {
-			const status = val.editorOnly ? '無審核權限' : (val.deleted_at ? '停用' : '啟用');
+			const status = val.editorOnly ? '無審核權限' : (val.school_reviewer.deleted_at ? '停用' : '啟用');
 			let org = '';
 			let accountPermission = '';
 			let deptPermission = '';
@@ -274,7 +274,7 @@
 					<td class="AccountItem__name">${val.name}</td>
 					<td class="AccountItem__accountPermission">${accountPermission}</td>
 					<td class="AccountItem__deptPermission">${deptPermission}</td>
-					<td class="AccountItem__status">${status}</td>
+					<td class="AccountItem__status ${status === '啟用' ? 'table-success' : 'table-danger'}">${status}</td>
 				</tr>
 			`);
 		});
