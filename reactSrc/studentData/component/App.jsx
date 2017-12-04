@@ -24,15 +24,28 @@ export default class App extends React.Component {
 					name: '林一二',
 					identity: '港澳生',
 					resident: '澳門',
-					order: '1'
+					order: '1',
+					email: '',
+					school
 				}*/
 			],
-			studentDetailModalOpen: false
+			studentDetailModalOpen: false,
+			filter: {
+				no: '',
+				name: '',
+				email: '',
+				resident: '',
+				order: '',
+				school: '',
+				dept: ''
+			}
 		};
 
 		this.handleToggleStudentDetailModal = this.handleToggleStudentDetailModal.bind(this);
 		this.handleShowDetail = this.handleShowDetail.bind(this);
 		this.updateStudentData = this.updateStudentData.bind(this);
+		this.handleFilter = this.handleFilter.bind(this);
+		this.parseList = this.parseList.bind(this);
 	}
 
 	componentDidMount() {
@@ -70,7 +83,9 @@ export default class App extends React.Component {
 						name: student.student_data.name,
 						identity: this.identityMap[student.student_qualification_verify.identity],
 						resident: student.student_personal_data.resident_location_data.country,
-						order: student.order
+						order: student.order,
+						email: student.student_data.email,
+						school: student.student_personal_data.school_name
 					});
 				});
 			});
@@ -81,8 +96,59 @@ export default class App extends React.Component {
 		});
 	}
 
+	handleFilter(filter) {
+		this.setState({
+			filter
+		});
+	}
+
+	parseList() {
+		if (!this.state.filter.no &&
+			!this.state.filter.name &&
+			!this.state.filter.email &&
+			!this.state.filter.resident &&
+			!this.state.filter.order &&
+			!this.state.filter.school &&
+			!this.state.filter.dept) {
+			return this.state.studentList;
+		}
+
+		return this.state.studentList.filter((val, i) => {
+			if (!!this.state.filter.no) {
+				if (val.no.includes(this.state.filter.no)) return true;
+			}
+
+			if (!!this.state.filter.name) {
+				if (val.name.includes(this.state.filter.name)) return true;
+			}
+
+			if (!!this.state.filter.email) {
+				if (val.email.includes(this.state.filter.email)) return true;
+			}
+
+			if (!!this.state.filter.resident) {
+				if (val.resident.includes(this.state.filter.resident)) return true;
+			}
+
+			if (!!this.state.filter.order) {
+				if (val.order.includes(this.state.filter.order)) return true;
+			}
+
+			if (!!this.state.filter.school) {
+				if (val.school.includes(this.state.filter.school)) return true;
+			}
+
+			if (!!this.state.filter.dept) {
+				if (val.dept.includes(this.state.filter.dept)) return true;
+			}
+
+			return false;
+		});
+	}
+
 	render() {
 		const systemName = ['', '學士班', '港二技', '碩士班', '博士班'];
+		const parsedStudentList = this.parseList();
 		return (
 			<div>
 				<Row className="mb-2">
@@ -97,13 +163,15 @@ export default class App extends React.Component {
 					<div>
 						<Row className="mb-2">
 							<Col>
-								<StudentDataFilter />
+								<StudentDataFilter
+									onFilter={this.handleFilter}
+								/>
 							</Col>
 						</Row>
 						<Row>
 							<Col>
 								<StudentDataTable
-									studentList={this.state.studentList}
+									studentList={parsedStudentList}
 									onDetail={this.handleShowDetail}
 								/>
 							</Col>

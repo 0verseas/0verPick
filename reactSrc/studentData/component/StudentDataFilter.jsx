@@ -34,8 +34,16 @@ export default class StudentDataFilter extends React.Component {
 	}
 
 	handleSubmit(e) {
-		console.log('lalalal');
 		e && e.preventDefault();
+		this.props.onFilter({
+			on: this.state.on,
+			name: this.state.name,
+			email: this.state.email,
+			resident: this.state.resident,
+			order: this.state.order,
+			school: this.state.school,
+			dept: this.state.dept
+		});
 	}
 
 	handleReset() {
