@@ -44,7 +44,7 @@ export default class StudentDataTable extends React.Component {
 		super(props);
 		this.state = {
 			currentPage: 1,
-			pageSize: 5,
+			pageSize: 15,
 			sort: '' // 'name.desc'
 		};
 
