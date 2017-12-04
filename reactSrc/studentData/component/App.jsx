@@ -13,7 +13,7 @@ export default class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.systemID = window.getSystem();
-		this.systemKeyMap = ['', 'department', 'master', 'phd', 'two-year-tech'];
+		this.systemKeyMap = ['', 'department', 'two-year-tech', 'master', 'phd'];
 		this.identityMap = ['', '港澳生', '港澳具外國國籍之華裔學生', '海外僑生', '在臺港澳生', '在臺僑生', '僑先部結業生'];
 		this.state = {
 			studentList: [
