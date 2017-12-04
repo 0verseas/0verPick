@@ -2,7 +2,8 @@ import React from 'react';
 import {
 	Row,
 	Col,
-	Button
+	Button,
+	Alert
 } from 'reactstrap';
 
 import StudentDataFilter from './StudentDataFilter.jsx';
@@ -87,26 +88,36 @@ export default class App extends React.Component {
 				<Row className="mb-2">
 					<Col>
 						<h4 className="d-inline">{ `${systemName[this.systemID]}學生資料` }</h4>
-						<Button className="aligb-top float-right" color="primary" size="sm">下載學生基本資料(Excel)</Button>
+						{!!this.state.studentList.length &&
+							<Button className="aligb-top float-right" color="primary" size="sm">下載學生基本資料(Excel)</Button>
+						}
 					</Col>
 				</Row>
-				<Row className="mb-2">
-					<Col>
-						<StudentDataFilter />
-					</Col>
-				</Row>
-				<Row>
-					<Col>
-						<StudentDataTable
-							studentList={this.state.studentList}
-							onDetail={this.handleShowDetail}
+				{!!this.state.studentList.length ? (
+					<div>
+						<Row className="mb-2">
+							<Col>
+								<StudentDataFilter />
+							</Col>
+						</Row>
+						<Row>
+							<Col>
+								<StudentDataTable
+									studentList={this.state.studentList}
+									onDetail={this.handleShowDetail}
+								/>
+							</Col>
+						</Row>
+						<StudentDetailModal
+							open={this.state.studentDetailModalOpen}
+							toggle={this.handleToggleStudentDetailModal}
 						/>
-					</Col>
-				</Row>
-				<StudentDetailModal
-					open={this.state.studentDetailModalOpen}
-					toggle={this.handleToggleStudentDetailModal}
-				/>
+					</div>
+				) : (
+					<Alert color="danger">
+						無學生資料
+					</Alert>
+				)}
 			</div>
 		)
 	}
