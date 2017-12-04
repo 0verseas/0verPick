@@ -35,6 +35,7 @@
 
 	function _setNavLink(admin, b, m, p, t) {
 		if (!!admin) return;
+		if (!admin) $('.Nav__account').remove();
 		if (!b) $('.Nav__bachelor').remove();
 		if (!m) $('.Nav__master').remove();
 		if (!p) $('.Nav__phd').remove();
