@@ -48,7 +48,7 @@ window.API = (() => {
 			credentials: 'include'
 		})
 		.then(parseData)
-		.then((data) => { window.location.href = './login.html'; })
+		.then((data) => { window.location.replace('./login.html'); })
 		.catch((err) => { handleError(err, callback) });
 	}
 
