@@ -20,6 +20,11 @@
 	/**
 	 * init
 	 */
+	// check permission
+	PubSub.on('user', (data) => {
+		!data.school_reviewer.has_admin && window.history.back();
+	});
+	
 	_userList = [...(await _getReviewers()), ...(await _getUserList())];
 	_deptList = await _getDeptList();
 	console.log(_userList);

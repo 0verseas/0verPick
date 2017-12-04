@@ -15,7 +15,7 @@
 		}
 
 		console.log(data);
-		window.currentUser = data;
+		PubSub.emit('user', data);
 		_setGreeting(data.name, data.school_reviewer.school.title);
 		_setNavLink(
 			data.school_reviewer.has_admin,

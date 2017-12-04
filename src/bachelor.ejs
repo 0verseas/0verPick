@@ -1,2 +1,8 @@
-<script> window.getSystem = () => 1; </script>
+<script>
+    PubSub.on('user', (data) => {
+        !data.school_reviewer.department_permissions.length && window.history.back();
+    });
+
+    window.getSystem = () => 1;
+</script>
 <% include studentData %>
