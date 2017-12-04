@@ -270,7 +270,8 @@
 				!!val.school_reviewer.master_permissions.length && deptPermission.push('碩士班');
 				!!val.school_reviewer.phd_permissions.length && deptPermission.push('博士班');
 				!!val.school_reviewer.two_year_tech_department_permissions.length && deptPermission.push('港二技');
-				deptPermission = deptPermission.join(', ') || val.school_reviewer.has_admin ? '全部' : '無';
+				console.log(deptPermission);
+				deptPermission = val.school_reviewer.has_admin ? '全部' : (!!deptPermission.length ? deptPermission.join(', ') : '無');
 			}
 
 			$AccountList.find('tbody').append(`
