@@ -2,9 +2,10 @@
 <html>
 <head>
 	<title>Login</title>
-	<% include component/header %>
+	<% include component/_header %>
 </head>
 <body>
+	<% include component/_loading %>
 	<div class="container" style="padding-top: 15vh; min-height: calc(100vh - 112px)">
 		<div class="row">
 			<div class="col-12">
@@ -45,7 +46,7 @@
 		</div>
 	</div>
 	<div class="text-center pt-2 pb-2">
-		<% include component/footer %>
+		<% include component/_footer %>
 	</div>
 	<script src="js/login.js"></script>
 </body>

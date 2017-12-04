@@ -1,31 +1,13 @@
 window.API = (() => {
 	const _config = window.getConfig();
-	function parseData(res) {
-		if (!res.ok) {
-			throw res
-		}
-
-		return res.json();
-	}
-
-	function handleError(err, callback) {
-		const status = err.status
-		if (!status) {
-			callback && callback(err);
-			console.error(err);
-			return;
-		}
-
-		console.error(status);
-		err.json().then((msg) => {
-			callback && callback({
-				status,
-				msg
-			});
-		});
-	}
-
+	let _loadingTimeout;
+	let _loadingCount = 0;
+	
+	/**
+	 * public method
+	 */
 	function login(data, callback) {
+		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/login`, {
 			method: 'POST',
 			headers: {
@@ -34,12 +16,13 @@ window.API = (() => {
 			body: JSON.stringify(data),
 			credentials: 'include'
 		})
-		.then(parseData)
+		.then(_parseData)
 		.then((data) => { callback && callback(null, data) })
-		.catch((err) => { handleError(err, callback) });
+		.catch((err) => { _handleError(err, callback) });
 	}
 
 	function logout() {
+		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/logout`, {
 			method: 'POST',
 			headers: {
@@ -47,12 +30,13 @@ window.API = (() => {
 			},
 			credentials: 'include'
 		})
-		.then(parseData)
+		.then(_parseData)
 		.then((data) => { window.location.replace('./login.html'); })
-		.catch((err) => { handleError(err, callback) });
+		.catch((err) => { _handleError(err, callback) });
 	}
 
 	function getUser(callback) {
+		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/login`, {
 			method: 'GET',
 			headers: {
@@ -60,12 +44,13 @@ window.API = (() => {
 			},
 			credentials: 'include'
 		})
-		.then(parseData)
+		.then(_parseData)
 		.then((data) => { callback && callback(null, data) })
-		.catch((err) => { handleError(err, callback) });
+		.catch((err) => { _handleError(err, callback) });
 	}
 
 	function getAvailableUsers(callback) {
+		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/available-users`, {
 			method: 'GET',
 			headers: {
@@ -73,12 +58,13 @@ window.API = (() => {
 			},
 			credentials: 'include'
 		})
-		.then(parseData)
+		.then(_parseData)
 		.then((data) => { callback && callback(null, data) })
-		.catch((err) => { handleError(err, callback) });
+		.catch((err) => { _handleError(err, callback) });
 	}
 
 	function getReviewers(callback) {
+		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/users`, {
 			method: 'GET',
 			headers: {
@@ -86,12 +72,13 @@ window.API = (() => {
 			},
 			credentials: 'include'
 		})
-		.then(parseData)
+		.then(_parseData)
 		.then((data) => { callback && callback(null, data) })
-		.catch((err) => { handleError(err, callback) });
+		.catch((err) => { _handleError(err, callback) });
 	}
 
 	function getDepts(callback) {
+		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/available-departments`, {
 			method: 'GET',
 			headers: {
@@ -99,12 +86,13 @@ window.API = (() => {
 			},
 			credentials: 'include'
 		})
-		.then(parseData)
+		.then(_parseData)
 		.then((data) => { callback && callback(null, data) })
-		.catch((err) => { handleError(err, callback) });
+		.catch((err) => { _handleError(err, callback) });
 	}
 
 	function addUser(data, callback) {
+		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/users`, {
 			method: 'POST',
 			headers: {
@@ -113,12 +101,13 @@ window.API = (() => {
 			body: JSON.stringify(data),
 			credentials: 'include'
 		})
-		.then(parseData)
+		.then(_parseData)
 		.then((data) => { callback && callback(null, data) })
-		.catch((err) => { handleError(err, callback) });
+		.catch((err) => { _handleError(err, callback) });
 	}
 
 	function editUser(data, callback) {
+		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/users/${data.userID}`, {
 			method: 'PATCH',
 			headers: {
@@ -127,9 +116,9 @@ window.API = (() => {
 			body: JSON.stringify(data),
 			credentials: 'include'
 		})
-		.then(parseData)
+		.then(_parseData)
 		.then((data) => { callback && callback(null, data) })
-		.catch((err) => { handleError(err, callback) });
+		.catch((err) => { _handleError(err, callback) });
 	}
 
 	function CSVToArray(strData, strDelimiter) {
@@ -182,6 +171,50 @@ window.API = (() => {
 		}
 		// Return the parsed data.
 		return (arrData);
+	}
+
+	/**
+	 * private method
+	 */
+	function _setLoading() {
+		_loadingCount ++;
+		Loading.start();
+	}
+
+	function _endLoading() {
+		_loadingCount --;
+		if (_loadingCount === 0) {
+			_loadingTimeout && clearTimeout(_loadingTimeout);
+			_loadingTimeout = setTimeout(() => {
+				Loading.stop();
+			}, (Math.random() * 1000) + 500);
+		}
+	}
+
+	function _parseData(res) {
+		if (!res.ok) {
+			throw res
+		}
+		
+		_endLoading();
+		return res.json();
+	}
+
+	function _handleError(err, callback) {
+		const status = err.status
+		if (!status) {
+			callback && callback(err);
+			console.error(err);
+			return;
+		}
+
+		console.error(status);
+		err.json().then((msg) => {
+			callback && callback({
+				status,
+				msg
+			});
+		});
 	}
 
 	return {
