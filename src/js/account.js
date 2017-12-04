@@ -203,9 +203,9 @@
 		if (!phone) return alert('TEL 不得為空');
 
 		const data = {
+			password: password === '' ? '' : sha256(password),
 			username,
 			name,
-			password,
 			organization,
 			job_title,
 			email,
