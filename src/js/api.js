@@ -229,7 +229,8 @@ window.API = (() => {
 	}
 
 	function _handleError(err, callback) {
-		const status = err.status
+		const status = err.status;
+		_endLoading();
 		if (!status) {
 			callback && callback(err);
 			console.error(err);
@@ -238,6 +239,7 @@ window.API = (() => {
 
 		console.error(status);
 		err.json().then((msg) => {
+			alert(msg.messages[0]);
 			callback && callback({
 				status,
 				msg
