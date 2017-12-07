@@ -114,35 +114,11 @@ export default class App extends React.Component {
 		}
 
 		return this.state.studentList.filter((val, i) => {
-			if (!!this.state.filter.no) {
-				if (val.no.includes(this.state.filter.no)) return true;
-			}
-
-			if (!!this.state.filter.name) {
-				if (val.name.includes(this.state.filter.name)) return true;
-			}
-
-			if (!!this.state.filter.email) {
-				if (val.email.includes(this.state.filter.email)) return true;
-			}
-
-			if (!!this.state.filter.resident) {
-				if (val.resident.includes(this.state.filter.resident)) return true;
-			}
-
-			if (!!this.state.filter.order) {
-				if (val.order.includes(this.state.filter.order)) return true;
-			}
-
-			if (!!this.state.filter.school) {
-				if (val.school.includes(this.state.filter.school)) return true;
-			}
-
-			if (!!this.state.filter.dept) {
-				if (val.dept.includes(this.state.filter.dept)) return true;
-			}
-
-			return false;
+			return Object.keys(this.state.filter).some((filterKey, i) => {
+				if (!!this.state.filter[filterKey]) {
+					if ((val[filterKey]+'').includes(this.state.filter[filterKey])) return true;
+				}
+			});
 		});
 	}
 
