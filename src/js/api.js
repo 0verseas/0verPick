@@ -149,6 +149,20 @@ window.API = (() => {
 		.catch((err) => { _handleError(err, callback) });
 	}
 
+	function getOneStudent(data, callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/${data.system}/students/${data.deptID}/${data.userID}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		.then(_parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { _handleError(err, callback) });
+	}
+
 	function CSVToArray(strData, strDelimiter) {
 		// Check to see if the delimiter is defined. If not,
 		// then default to comma.
@@ -258,6 +272,7 @@ window.API = (() => {
 		editUser,
 		disableUser,
 		getStudents,
+		getOneStudent,
 		CSVToArray
 	};
 })();

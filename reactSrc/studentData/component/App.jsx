@@ -38,7 +38,8 @@ export default class App extends React.Component {
 				order: '',
 				school: '',
 				dept: ''
-			}
+			},
+			selectedStudent: null
 		};
 
 		this.handleToggleStudentDetailModal = this.handleToggleStudentDetailModal.bind(this);
@@ -52,10 +53,13 @@ export default class App extends React.Component {
 		this.updateStudentData();
 	}
 
-	handleShowDetail() {
-		// TODO: get student detail data
+	handleShowDetail(userID, deptID) {
 		this.setState({
-			studentDetailModalOpen: true
+			studentDetailModalOpen: true,
+			selectedStudent: {
+				userID,
+				deptID
+			}
 		});
 	}
 
@@ -85,7 +89,9 @@ export default class App extends React.Component {
 						resident: student.student_personal_data.resident_location_data.country,
 						order: student.order,
 						email: student.student_data.email,
-						school: student.student_personal_data.school_name
+						school: student.student_personal_data.school_name,
+						userID: student.user_id,
+						deptID: student.dept_id
 					});
 				});
 			});
@@ -155,6 +161,8 @@ export default class App extends React.Component {
 						<StudentDetailModal
 							open={this.state.studentDetailModalOpen}
 							toggle={this.handleToggleStudentDetailModal}
+							selectedStudent={this.state.selectedStudent}
+							system={this.systemKeyMap[this.systemID]}
 						/>
 					</div>
 				) : (

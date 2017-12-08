@@ -19,6 +19,42 @@ import {
 export default class StudentDetailModal extends React.Component {
 	constructor(props) {
 		super(props);
+		this.renderStudentData = this.renderStudentData.bind(this);
+		this.getStudentData = this.getStudentData.bind(this);
+	}
+
+	componentDidMount() {
+		if (!!this.props.selectedStudent) {
+			this.renderStudentData(this.props.selectedStudent.userID, this.props.selectedStudent.deptID);
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (!this.props.selectedStudent ||
+			nextProps.selectedStudent.userID !== this.props.selectedStudent.userID ||
+			nextProps.selectedStudent.deptID !== this.props.selectedStudent.deptID) {
+			this.renderStudentData(nextProps.selectedStudent.userID, nextProps.selectedStudent.deptID);
+		}
+	}
+
+	renderStudentData(userID, deptID) {
+		console.log(userID, deptID);
+		this.getStudentData(userID, deptID);
+	}
+
+	getStudentData(userID, deptID) {
+		window.API.getOneStudent({
+			system: this.props.system,
+			userID,
+			deptID
+		}, (err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+
+			console.log(data);
+		});
 	}
 
 	render() {

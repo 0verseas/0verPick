@@ -132,7 +132,7 @@ export default class StudentDataTable extends React.Component {
 											<td>{val.identity}</td>
 											<td>{val.resident}</td>
 											<td>{val.order}</td>
-											<td className="text-center"><Button color="secondary" size="sm" onClick={() => { this.props.onDetail() }}>學生詳細資料</Button></td>
+											<td className="text-center"><Button color="secondary" size="sm" onClick={() => { this.props.onDetail(val.userID, val.deptID) }}>學生詳細資料</Button></td>
 											<td className="text-center"><Button color="secondary" size="sm">下載審查資料</Button></td>
 										</tr>
 									);
