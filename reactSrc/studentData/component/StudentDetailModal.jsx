@@ -19,6 +19,23 @@ import {
 export default class StudentDetailModal extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			no: '', // 僑生編號
+			email: '',
+			id: '', // 報名序號
+			name: '',
+			engName: '',
+			birth: '',
+			resident: '', // 僑居地
+			gender: '',
+			tel: '',
+			phone: '',
+			gSchool: '', // 畢業學校
+			gSchoolCountry: '', // 學校國別
+			aSchool: '', // 申請學校
+			dept: ''
+		};
+
 		this.renderStudentData = this.renderStudentData.bind(this);
 		this.getStudentData = this.getStudentData.bind(this);
 	}
@@ -54,6 +71,23 @@ export default class StudentDetailModal extends React.Component {
 			}
 
 			console.log(data);
+			const student = data.students[0];
+			this.setState({
+				no: student.student_misc_data.overseas_student_id, // 僑生編號
+				email: student.student_data.email,
+				id: student.user_id.toString().padStart(6, 0), // 報名序號
+				name: student.student_data.name,
+				engName: student.student_data.eng_name,
+				birth: student.student_personal_data.birthday,
+				resident: `${student.student_personal_data.resident_location_data.continent}/${student.student_personal_data.resident_location_data.country}`, // 國籍
+				gender: student.student_personal_data.gender === 'f' ? '女' : '男',
+				tel: student.student_personal_data.resident_phone,
+				phone: student.student_personal_data.resident_cellphone,
+				gSchool: student.student_personal_data.school_name, // 畢業學校
+				gSchoolCountry: `${student.student_personal_data.school_country_data.continent}/${student.student_personal_data.school_country_data.country}`, // 學校國別
+				aSchool: data.school.title, // 申請學校
+				dept: data.title
+			});
 		});
 	}
 
@@ -66,43 +100,43 @@ export default class StudentDetailModal extends React.Component {
 						<tbody>
 							<tr>
 								<th>港澳生編號</th>
-								<td></td>
+								<td>{ this.state.no }</td>
 								<th>email</th>
-								<td colSpan={3}></td>
+								<td colSpan={3}>{ this.state.email }</td>
 							</tr>
 							<tr>
 								<th>報名序號</th>
-								<td></td>
+								<td>{ this.state.id }</td>
 								<th>姓名</th>
-								<td></td>
+								<td>{ this.state.name }</td>
 								<th>英文姓名</th>
-								<td></td>
+								<td>{ this.state.engName }</td>
 							</tr>
 							<tr>
 								<th>出生日期</th>
-								<td></td>
-								<th>國籍</th>
-								<td></td>
+								<td>{ this.state.birth }</td>
+								<th>僑居地</th>
+								<td>{ this.state.resident }</td>
 								<th>性別</th>
-								<td></td>
+								<td>{ this.state.gender }</td>
 							</tr>
 							<tr>
 								<th>電話</th>
-								<td colSpan={2}></td>
+								<td colSpan={2}>{ this.state.tel }</td>
 								<th>手機</th>
-								<td colSpan={2}></td>
+								<td colSpan={2}>{ this.state.phone }</td>
 							</tr>
 							<tr>
 								<th>畢業學校</th>
-								<td colSpan={3}></td>
+								<td colSpan={3}>{ this.state.gSchool }</td>
 								<th>學校國別</th>
-								<td></td>
+								<td>{ this.state.gSchoolCountry }</td>
 							</tr>
 							<tr>
 								<th>申請學校</th>
-								<td colSpan={2}></td>
+								<td colSpan={2}>{ this.state.aSchool }</td>
 								<th>系所</th>
-								<td colSpan={2}></td>
+								<td colSpan={2}>{ this.state.dept }</td>
 							</tr>
 						</tbody>
 					</Table>
