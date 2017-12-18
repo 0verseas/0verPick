@@ -35,10 +35,18 @@
 
 	function _setNavLink(admin, b, m, p, t) {
 		if (!!admin) return;
-		if (!admin) $('.Nav__account').remove();
+		if (!admin) {
+			$('.Nav__account').remove();
+			$('.Nav__result').remove();
+		}
+
 		if (!b) $('.Nav__bachelor').remove();
 		if (!m) $('.Nav__master').remove();
 		if (!p) $('.Nav__phd').remove();
 		if (!t) $('.Nav__twoyear').remove();
+		if (!b && !m && !p && !t) {
+			$('.Nav__download').remove();
+			$('.Nav__review').remove();
+		}
 	}
 })();
