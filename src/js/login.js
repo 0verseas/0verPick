@@ -33,7 +33,7 @@
 				return;
 			}
 
-			location.href = '/';
+			location.href = './';
 		});
 
 		e.preventDefault();
