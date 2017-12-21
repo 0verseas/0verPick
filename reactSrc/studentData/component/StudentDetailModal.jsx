@@ -92,7 +92,7 @@ export default class StudentDetailModal extends React.Component {
 			});
 		});
 
-		window.API.getStudentUpload({
+		window.API.getStudentDiploma({
 			system: this.props.system,
 			userID,
 			deptID
@@ -105,6 +105,22 @@ export default class StudentDetailModal extends React.Component {
 			console.log(data);
 			this.setState({
 				diploma: data.student_diploma || []
+			});
+		});
+
+		window.API.getStudentTranscripts({
+			system: this.props.system,
+			userID,
+			deptID
+		}, (err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+
+			console.log(data);
+			this.setState({
+				transcripts: data.student_transcripts || []
 			});
 		});
 	}
@@ -177,7 +193,13 @@ export default class StudentDetailModal extends React.Component {
 						<Card>
 							<CardHeader>成績單資料夾 <small>必審資料</small></CardHeader>
 							<CardBody>
-								<img src="https://fakeimg.pl/250x400/" height="120" alt="" />
+								{
+									this.state.transcripts.map((val, i) => {
+										return (
+											<img src={`${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.selectedStudent.deptID}/${this.props.selectedStudent.userID}/transcripts/${val}`} height="120" alt="" />
+										)
+									})
+								}
 							</CardBody>
 						</Card>
 					</div>

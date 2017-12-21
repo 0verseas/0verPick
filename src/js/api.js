@@ -163,9 +163,23 @@ window.API = (() => {
 		.catch((err) => { _handleError(err, callback) });
 	}
 
-	function getStudentUpload(data, callback) {
+	function getStudentDiploma(data, callback) {
 		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/${data.system}/students/${data.deptID}/${data.userID}/diploma`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		.then(_parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { _handleError(err, callback) });
+	}
+
+	function getStudentTranscripts(data, callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/${data.system}/students/${data.deptID}/${data.userID}/transcripts`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -287,7 +301,8 @@ window.API = (() => {
 		disableUser,
 		getStudents,
 		getOneStudent,
-		getStudentUpload,
+		getStudentDiploma,
+		getStudentTranscripts,
 		CSVToArray
 	};
 })();
