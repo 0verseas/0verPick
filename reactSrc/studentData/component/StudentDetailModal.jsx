@@ -15,6 +15,76 @@ import {
 	Col,
 	Input
 } from 'reactstrap';
+import Lightbox from 'react-images';
+
+class UploadImgs extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			lightboxIsOpen: false,
+			currentImage: 0
+		};
+
+		this.openLightbox = this.openLightbox.bind(this);
+		this.closeLightbox = this.closeLightbox.bind(this);
+		this.gotoNext = this.gotoNext.bind(this);
+		this.gotoPrevious = this.gotoPrevious.bind(this);
+	}
+
+	openLightbox(index) {
+		this.setState({
+			currentImage: index,
+			lightboxIsOpen: true
+		});
+	}
+
+	closeLightbox() {
+		this.setState({
+			lightboxIsOpen: false
+		})
+	}
+
+	gotoNext() {
+		this.setState((prevState) => ({
+			currentImage: +prevState.currentImage + 1
+		}));
+	}
+
+	gotoPrevious() {
+		this.setState((prevState) => ({
+			currentImage: +prevState.currentImage - 1
+		}));
+	}
+
+	render() {
+		return (
+			<div>
+				{
+					this.props.imgs.map((val, i) => {
+						return (
+							<img
+								className="ml-2 mr-2 mt-2 mb-2"
+								src={`${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/${this.props.type}/${val}`}
+								onClick={ () => this.openLightbox(i) }
+								height="120"
+								alt=""
+							/>
+						)
+					})
+				}
+
+				<Lightbox
+					images={ this.props.imgs.map((val, i) => ({ src: `${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/${this.props.type}/${val}` })) }
+					isOpen={ this.state.lightboxIsOpen }
+					onClose={ this.closeLightbox }
+					currentImage={ this.state.currentImage }
+					onClickNext={ this.gotoNext }
+					onClickPrev={ this.gotoPrevious }
+				/>
+			</div>
+		);
+	}
+}
 
 export default class StudentDetailModal extends React.Component {
 	constructor(props) {
@@ -179,13 +249,13 @@ export default class StudentDetailModal extends React.Component {
 						<Card>
 							<CardHeader>學歷證明資料夾 <small>必審資料</small></CardHeader>
 							<CardBody>
-								{
-									this.state.diploma.map((val, i) => {
-										return (
-											<img src={`${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.selectedStudent.deptID}/${this.props.selectedStudent.userID}/diploma/${val}`} height="120" alt="" />
-										)
-									})
-								}
+								<UploadImgs
+									imgs={this.state.diploma}
+									system={this.props.system}
+									deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
+									userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
+									type="diploma"
+								/>
 							</CardBody>
 						</Card>
 					</div>
@@ -193,13 +263,13 @@ export default class StudentDetailModal extends React.Component {
 						<Card>
 							<CardHeader>成績單資料夾 <small>必審資料</small></CardHeader>
 							<CardBody>
-								{
-									this.state.transcripts.map((val, i) => {
-										return (
-											<img src={`${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.selectedStudent.deptID}/${this.props.selectedStudent.userID}/transcripts/${val}`} height="120" alt="" />
-										)
-									})
-								}
+								<UploadImgs
+									imgs={this.state.transcripts}
+									system={this.props.system}
+									deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
+									userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
+									type="transcripts"
+								/>
 							</CardBody>
 						</Card>
 					</div>
