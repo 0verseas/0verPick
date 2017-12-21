@@ -33,7 +33,9 @@ export default class StudentDetailModal extends React.Component {
 			gSchool: '', // 畢業學校
 			gSchoolCountry: '', // 學校國別
 			aSchool: '', // 申請學校
-			dept: ''
+			dept: '',
+			diploma: [], // 學歷證明
+			transcripts: [] // 成績單
 		};
 
 		this.renderStudentData = this.renderStudentData.bind(this);
@@ -87,6 +89,22 @@ export default class StudentDetailModal extends React.Component {
 				gSchoolCountry: `${student.student_personal_data.school_country_data.continent}/${student.student_personal_data.school_country_data.country}`, // 學校國別
 				aSchool: data.school.title, // 申請學校
 				dept: data.title
+			});
+		});
+
+		window.API.getStudentUpload({
+			system: this.props.system,
+			userID,
+			deptID
+		}, (err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+
+			console.log(data);
+			this.setState({
+				diploma: data.student_diploma || []
 			});
 		});
 	}
@@ -145,7 +163,13 @@ export default class StudentDetailModal extends React.Component {
 						<Card>
 							<CardHeader>學歷證明資料夾 <small>必審資料</small></CardHeader>
 							<CardBody>
-								<img src="https://fakeimg.pl/250x400/" height="120" alt="" />
+								{
+									this.state.diploma.map((val, i) => {
+										return (
+											<img src={`${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.selectedStudent.deptID}/${this.props.selectedStudent.userID}/diploma/${val}`} height="120" alt="" />
+										)
+									})
+								}
 							</CardBody>
 						</Card>
 					</div>
