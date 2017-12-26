@@ -2,7 +2,22 @@
 	/**
 	 * priveate variable
 	 */
+	const _csvFieldMap = [
+		'username',
+		'password',
+		'name',
+		'email',
+		'phone',
+		'organization',
+		'job_title',
+		'status',
+		'department_permissions',
+		'two_year_tech_department_permissions',
+		'master_permissions',
+		'phd_permissions'
+	];
 	let _csvFile;
+	let _csvAccounts = [];
 	let _userList;
 	let _deptList = null;
 
@@ -182,7 +197,46 @@
 	}
 
 	function _handleSubmitCSV() {
-		console.log(_csvFile);
+		_csvAccounts.forEach((user, i) => {
+			const data = {};
+			user.forEach((val, fieldIndex) => {
+				if (fieldIndex === 7) {
+					// 狀態
+					if (val === '啟用') {
+						data[_csvFieldMap[fieldIndex]] = true;
+					} else {
+						data[_csvFieldMap[fieldIndex]] = false;
+					}
+
+					return;
+				}
+
+				if (fieldIndex > 7 ) {
+					// "學士班權限","二技班權限","碩士班權限","博士班權限"
+					if (val.toLowerCase() === 'all') {
+						data[_csvFieldMap[fieldIndex]] = 'all';
+					} else {
+						data[_csvFieldMap[fieldIndex]] = val === '' ? [] : val.split('#');
+					}
+
+					return;
+				}
+
+				data[_csvFieldMap[fieldIndex]] = val;
+			});
+
+			console.log(data);
+			window.API.addUser(data, (err, data) => {
+				if (err) {
+					console.error(err);
+					return;
+				}
+
+				_updateUserList();
+				console.log(data);
+			});
+		});
+
 		$CSVModal.modal('hide');
 	}
 
@@ -297,6 +351,7 @@
 		$CSVModal.find('.CSVModal__body').empty();
 		const rows = window.API.CSVToArray(data);
 		const header = rows.shift();
+		_csvAccounts = rows;
 		$CSVModal.find('.CSVModal__body').html(`
 			<table class="table table-bordered table-hover">
 				<thead>
