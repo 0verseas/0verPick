@@ -46,6 +46,7 @@ export default class App extends React.Component {
 		this.handleShowDetail = this.handleShowDetail.bind(this);
 		this.updateStudentData = this.updateStudentData.bind(this);
 		this.handleFilter = this.handleFilter.bind(this);
+		this.handleDownload = this.handleDownload.bind(this);
 		this.parseList = this.parseList.bind(this);
 	}
 
@@ -108,6 +109,10 @@ export default class App extends React.Component {
 		});
 	}
 
+	handleDownload() {
+		window.location.href = `${window.getConfig().apiBase}/reviewers/${this.systemKeyMap[this.systemID]}/students?type=file`;
+	}
+
 	parseList() {
 		if (!this.state.filter.no &&
 			!this.state.filter.name &&
@@ -137,7 +142,7 @@ export default class App extends React.Component {
 					<Col>
 						<h4 className="d-inline">{ `${systemName[this.systemID]}學生資料` }</h4>
 						{!!this.state.studentList.length &&
-							<Button className="aligb-top float-right" color="primary" size="sm" onClick={() => { alert('功能尚未開放'); }}>下載學生基本資料(Excel)</Button>
+							<Button className="aligb-top float-right" color="primary" size="sm" onClick={this.handleDownload}>下載學生基本資料(Excel)</Button>
 						}
 					</Col>
 				</Row>
