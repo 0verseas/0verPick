@@ -137,7 +137,7 @@ export default class App extends React.Component {
 					<Col>
 						<h4 className="d-inline">{ `${systemName[this.systemID]}學生資料` }</h4>
 						{!!this.state.studentList.length &&
-							<Button className="aligb-top float-right" color="primary" size="sm">下載學生基本資料(Excel)</Button>
+							<Button className="aligb-top float-right" color="primary" size="sm" onClick={() => { alert('功能尚未開放'); }}>下載學生基本資料(Excel)</Button>
 						}
 					</Col>
 				</Row>
