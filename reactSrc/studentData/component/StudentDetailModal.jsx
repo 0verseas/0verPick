@@ -193,6 +193,19 @@ export default class StudentDetailModal extends React.Component {
 				transcripts: data.student_transcripts || []
 			});
 		});
+
+		window.API.getApplicationDoc({
+			system: this.props.system,
+			userID,
+			deptID
+		}, (err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+
+			console.log(data);
+		});
 	}
 
 	render() {

@@ -65,9 +65,17 @@ export default class App extends React.Component {
 	}
 
 	handleToggleStudentDetailModal() {
-		this.setState((prevState) => ({
-			studentDetailModalOpen: !prevState.studentDetailModalOpen
-		}));
+		this.setState((prevState) => {
+			const s = {
+				studentDetailModalOpen: !prevState.studentDetailModalOpen
+			};
+
+			if (!!prevState.studentDetailModalOpen) {
+				s.selectedStudent = null;
+			}
+
+			return s;
+		});
 	}
 
 	updateStudentData() {
