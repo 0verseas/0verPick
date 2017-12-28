@@ -158,12 +158,14 @@ export default class App extends React.Component {
 								/>
 							</Col>
 						</Row>
-						<StudentDetailModal
-							open={this.state.studentDetailModalOpen}
-							toggle={this.handleToggleStudentDetailModal}
-							selectedStudent={this.state.selectedStudent}
-							system={this.systemKeyMap[this.systemID]}
-						/>
+						{!!this.state.selectedStudent &&
+							<StudentDetailModal
+								open={this.state.studentDetailModalOpen}
+								toggle={this.handleToggleStudentDetailModal}
+								selectedStudent={this.state.selectedStudent}
+								system={this.systemKeyMap[this.systemID]}
+							/>
+						}
 					</div>
 				) : (
 					<Alert color="danger">

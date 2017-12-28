@@ -52,6 +52,14 @@ export default class StudentDataTable extends React.Component {
 		this.handleSort = this.handleSort.bind(this);
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (JSON.stringify(nextProps.studentList) !== JSON.stringify(this.props.studentList)) {
+			this.setState({
+				currentPage: 1
+			});
+		}
+	}
+
 	handleChangePage(page) {
 		this.setState({
 			currentPage: page
