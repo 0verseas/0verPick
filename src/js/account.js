@@ -182,12 +182,17 @@
 
 	function _handleFileChange() {
 		const file = _csvFile = this.files[0];
-		if (file.type !== 'text/csv') {
-			alert('請匯入 .csv 檔');
+		// if (file.type !== 'text/csv') {
+		// 	alert('請匯入 .csv 檔');
+		// 	return;
+		// }
+
+		const fileName = file.name;
+		if (fileName.split('.').pop() !== 'csv') {
+			alert('請匯入 .csv 欓');
 			return;
 		}
 
-		const fileName = file.name;
 		const fr = new FileReader();
 		fr.onload = function () {
 			_renderCSVTable(fileName, fr.result);
