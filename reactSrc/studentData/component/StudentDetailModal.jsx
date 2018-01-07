@@ -57,32 +57,72 @@ class UploadImgs extends React.Component {
 	}
 
 	render() {
-		return (
-			<div>
-				{
-					this.props.imgs.map((val, i) => {
-						return (
-							<img
-								className="ml-2 mr-2 mt-2 mb-2"
-								src={`${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/${this.props.type}/${val}`}
-								onClick={ () => this.openLightbox(i) }
-								height="120"
-								alt=""
-							/>
-						)
-					})
-				}
+		if(this.props.type == "diploma" || this.props.type == "transcripts") {
+			return (
+				<div>
+					{
+						this.props.imgs.map((val, i) => {
+							return (
+								<img
+									className="ml-2 mr-2 mt-2 mb-2"
+									src={`${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/${this.props.type}/${val}`}
+									onClick={ () => this.openLightbox(i) }
+									height="120"
+									alt=""
+								/>
+							)
+						})
+					}
 
-				<Lightbox
-					images={ this.props.imgs.map((val, i) => ({ src: `${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/${this.props.type}/${val}` })) }
-					isOpen={ this.state.lightboxIsOpen }
-					onClose={ this.closeLightbox }
-					currentImage={ this.state.currentImage }
-					onClickNext={ this.gotoNext }
-					onClickPrev={ this.gotoPrevious }
-				/>
-			</div>
-		);
+					<Lightbox
+						images={ this.props.imgs.map((val, i) => ({ src: `${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/${this.props.type}/${val}` })) }
+						isOpen={ this.state.lightboxIsOpen }
+						onClose={ this.closeLightbox }
+						currentImage={ this.state.currentImage }
+						onClickNext={ this.gotoNext }
+						onClickPrev={ this.gotoPrevious }
+					/>
+				</div>
+			);
+		}
+		else{
+			return (
+				<div>
+					{
+						this.props.imgs.map((data, i) => {
+							//console.log("this",data.description);
+							return (
+
+								data.files.map((val, i) => {
+									return (
+										<div>
+											<CardHeader>{data.description}</CardHeader>
+											<img
+												className="ml-2 mr-2 mt-2 mb-2"
+												src={`${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/types/${data.type_id}/${this.props.type}/${val}`}
+												onClick={() => this.openLightbox(i)}
+												height="120"
+												alt=""
+											/>
+											<Lightbox
+												images={ data.files.map((val, i) => ({ src: `${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/types/${data.type_id}/${this.props.type}/${val}` })) }
+												isOpen={ this.state.lightboxIsOpen }
+												onClose={ this.closeLightbox }
+												currentImage={ this.state.currentImage }
+												onClickNext={ this.gotoNext }
+												onClickPrev={ this.gotoPrevious }
+											/>
+										</div>
+									)
+								})
+							)
+						})
+					}
+
+
+				</div>
+			);
+		}
 	}
 }
 
@@ -105,7 +145,8 @@ export default class StudentDetailModal extends React.Component {
 			aSchool: '', // 申請學校
 			dept: '',
 			diploma: [], // 學歷證明
-			transcripts: [] // 成績單
+			transcripts: [], // 成績單
+			applicationDoc: [] // 備審資料
 		};
 
 		this.renderStudentData = this.renderStudentData.bind(this);
@@ -142,7 +183,7 @@ export default class StudentDetailModal extends React.Component {
 				return;
 			}
 
-			console.log(data);
+			//console.log(data);
 			const student = data.students[0];
 			this.setState({
 				no: student.student_misc_data.overseas_student_id, // 僑生編號
@@ -172,7 +213,7 @@ export default class StudentDetailModal extends React.Component {
 				return;
 			}
 
-			console.log(data);
+
 			this.setState({
 				diploma: data.student_diploma || []
 			});
@@ -188,7 +229,7 @@ export default class StudentDetailModal extends React.Component {
 				return;
 			}
 
-			console.log(data);
+
 			this.setState({
 				transcripts: data.student_transcripts || []
 			});
@@ -204,7 +245,11 @@ export default class StudentDetailModal extends React.Component {
 				return;
 			}
 
-			console.log(data);
+			//console.log('getApplicationDoc',data);
+			this.setState({
+				applicationDoc: data || []
+			});
+			console.log('this.state.applicationDoc1',this.state.applicationDoc)
 		});
 	}
 
@@ -282,6 +327,20 @@ export default class StudentDetailModal extends React.Component {
 									deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
 									userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
 									type="transcripts"
+								/>
+							</CardBody>
+						</Card>
+					</div>
+					<div className="mb-2">
+						<Card>
+							<CardHeader>備審資料夾 <small>必審資料</small></CardHeader>
+							<CardBody>
+								<UploadImgs
+									imgs={this.state.applicationDoc}
+									system={this.props.system}
+									deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
+									userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
+									type="admission-selection-application-document"
 								/>
 							</CardBody>
 						</Card>
