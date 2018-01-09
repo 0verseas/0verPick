@@ -44,7 +44,7 @@
 	function _renderDepartments($tbody, depts) {
 		let deptsHtmlString = '';
 
-		for (dept of depts) {
+		for (let dept of depts) {
 			deptsHtmlString += `
 				<tr>
 					<td>${dept.title}系</td>
