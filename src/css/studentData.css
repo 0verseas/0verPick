@@ -1,3 +1,22 @@
 .StudentDetailTable th {
 	width: 110px;
 }
+
+.img-thumbnail {
+	max-width: 200px;
+	max-height: 200px;
+	margin: 2px;
+}
+
+.non-img-file-thumbnail {
+	width: 140px;
+	height: 158px;
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.non-img-file-thumbnail i {
+	display: block;
+	font-size: 9rem;
+}
