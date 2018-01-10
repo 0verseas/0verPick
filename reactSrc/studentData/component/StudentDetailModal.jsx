@@ -17,12 +17,34 @@ import {
 } from 'reactstrap';
 import Lightbox from 'react-images';
 
-class UploadImgs extends React.Component {
+// 備審資料：檔案的 component
+class File extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+
+	render() {
+		// 拿到檔案的連結
+		const src = `${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/types/${this.props.type_id}/${this.props.type}/${this.props.file}`;
+
+		return (
+			<div class="img-thumbnail non-img-file-thumbnail" style={{display: 'inline-block'}}>
+				<a href={src} target="_blank">
+					<i className={`fa fa-file-${this.props.fileType}-o`} aria-hidden="true"></i>
+				</a>
+			</div>
+		);
+	}
+}
+
+// 圖片的 component
+// 僅顯示一張圖片的 lightbox
+class Image extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			lightboxIsOpen: false,
-			currentImage: 0
+			currentImage: 0,
 		};
 
 		this.openLightbox = this.openLightbox.bind(this);
@@ -57,72 +79,34 @@ class UploadImgs extends React.Component {
 	}
 
 	render() {
-		if(this.props.type == "diploma" || this.props.type == "transcripts") {
-			return (
-				<div>
-					{
-						this.props.imgs.map((val, i) => {
-							return (
-								<img
-									className="ml-2 mr-2 mt-2 mb-2"
-									src={`${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/${this.props.type}/${val}`}
-									onClick={ () => this.openLightbox(i) }
-									height="120"
-									alt=""
-								/>
-							)
-						})
-					}
+		// 判斷 src
+		let src = `${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/${this.props.type}/${this.props.img}`;
 
-					<Lightbox
-						images={ this.props.imgs.map((val, i) => ({ src: `${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/${this.props.type}/${val}` })) }
-						isOpen={ this.state.lightboxIsOpen }
-						onClose={ this.closeLightbox }
-						currentImage={ this.state.currentImage }
-						onClickNext={ this.gotoNext }
-						onClickPrev={ this.gotoPrevious }
-					/>
-				</div>
-			);
+		//  如果是備審資料，src 改成備審資料的
+		if (this.props.type == 'admission-selection-application-document') {
+			src = `${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/types/${this.props.type_id}/${this.props.type}/${this.props.img}`;
 		}
-		else{
-			return (
-				<div>
-					{
-						this.props.imgs.map((data, i) => {
-							//console.log("this",data.description);
-							return (
+		// console.log(this.props.img);
+		return (
+			<div className="" style={{display: 'inline-block'}}>
+				<img
+					className="ml-2 mr-2 mt-2 mb-2 img-thumbnail"
+					src={src}
+					onClick={ () => this.openLightbox(0) }
+					height="120"
+					alt=""
+				/>
 
-								data.files.map((val, i) => {
-									return (
-										<div>
-											<CardHeader>{data.description}</CardHeader>
-											<img
-												className="ml-2 mr-2 mt-2 mb-2"
-												src={`${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/types/${data.type_id}/${this.props.type}/${val}`}
-												onClick={() => this.openLightbox(i)}
-												height="120"
-												alt=""
-											/>
-											<Lightbox
-												images={ data.files.map((val, i) => ({ src: `${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/types/${data.type_id}/${this.props.type}/${val}` })) }
-												isOpen={ this.state.lightboxIsOpen }
-												onClose={ this.closeLightbox }
-												currentImage={ this.state.currentImage }
-												onClickNext={ this.gotoNext }
-												onClickPrev={ this.gotoPrevious }
-											/>
-										</div>
-									)
-								})
-							)
-						})
-					}
-
-
-				</div>
-			);
-		}
+				<Lightbox
+					images={[{src: src}]}
+					isOpen={ this.state.lightboxIsOpen }
+					onClose={ this.closeLightbox }
+					currentImage={ this.state.currentImage }
+					onClickNext={ this.gotoNext }
+					onClickPrev={ this.gotoPrevious }
+				/>
+			</div>
+		);
 	}
 }
 
@@ -144,13 +128,15 @@ export default class StudentDetailModal extends React.Component {
 			gSchoolCountry: '', // 學校國別
 			aSchool: '', // 申請學校
 			dept: '',
-			diploma: [], // 學歷證明
+			diplomas: [], // 學歷證明
 			transcripts: [], // 成績單
-			applicationDoc: [] // 備審資料
+			applicationDocs: [] // 備審資料
 		};
 
 		this.renderStudentData = this.renderStudentData.bind(this);
 		this.getStudentData = this.getStudentData.bind(this);
+		this.imgOrFile = this.imgOrFile.bind(this);
+		this.getFileType = this.getFileType.bind(this);
 	}
 
 	componentDidMount() {
@@ -213,10 +199,10 @@ export default class StudentDetailModal extends React.Component {
 				return;
 			}
 
-
 			this.setState({
-				diploma: data.student_diploma || []
+				diplomas: data.student_diploma || []
 			});
+			// console.log(this.state.diplomas);
 		});
 
 		window.API.getStudentTranscripts({
@@ -245,12 +231,66 @@ export default class StudentDetailModal extends React.Component {
 				return;
 			}
 
-			//console.log('getApplicationDoc',data);
+			// console.log('getApplicationDoc',data);
 			this.setState({
-				applicationDoc: data || []
+				applicationDocs: data || []
 			});
-			console.log('this.state.applicationDoc1',this.state.applicationDoc)
+			console.log('this.state.applicationDoc',this.state.applicationDocs);
+			// console.log('this.props', this.props);
 		});
+	}
+
+	// 判斷是 img 還是 file
+	imgOrFile(file, type_id) {
+		const fileType = this.getFileType(file.split('.')[1]);
+		// console.log(fileType);
+		if (fileType === 'img') {
+			return (
+				<Image
+					img={file}
+					system={this.props.system}
+					deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
+					userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
+					type="admission-selection-application-document"
+					type_id={type_id}
+					fileType={fileType}
+				/>
+			);
+		} else {
+			return (
+				<File
+					file={file}
+					system={this.props.system}
+					deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
+					userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
+					type="admission-selection-application-document"
+					type_id={type_id}
+					fileType={fileType}
+				/>
+			);
+		}
+	}
+
+	// 判斷是哪一種副檔名
+	getFileType(fileNameExtension = '') {
+		switch (fileNameExtension) {
+			case 'doc':
+			case 'docx':
+				return 'word';
+
+			case 'mp3':
+				return 'audio';
+
+			case 'mp4':
+			case 'avi':
+				return 'video';
+
+			case 'pdf':
+				return 'pdf';
+
+			default:
+				return 'img';
+		}
 	}
 
 	render() {
@@ -307,13 +347,19 @@ export default class StudentDetailModal extends React.Component {
 						<Card>
 							<CardHeader>學歷證明資料夾 <small>必審資料</small></CardHeader>
 							<CardBody>
-								<UploadImgs
-									imgs={this.state.diploma}
-									system={this.props.system}
-									deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
-									userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
-									type="diploma"
-								/>
+								{
+									this.state.diplomas.map(diploma => {
+										return (
+											<Image
+												img={diploma}
+												system={this.props.system}
+												deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
+												userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
+												type="diploma"
+											/>
+										);
+									})
+								}
 							</CardBody>
 						</Card>
 					</div>
@@ -321,30 +367,42 @@ export default class StudentDetailModal extends React.Component {
 						<Card>
 							<CardHeader>成績單資料夾 <small>必審資料</small></CardHeader>
 							<CardBody>
-								<UploadImgs
-									imgs={this.state.transcripts}
-									system={this.props.system}
-									deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
-									userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
-									type="transcripts"
-								/>
+								{
+									this.state.transcripts.map(transcript => {
+										return (
+											<Image
+												img={transcript}
+												system={this.props.system}
+												deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
+												userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
+												type="transcripts"
+											/>
+										);
+									})
+								}
 							</CardBody>
 						</Card>
 					</div>
-					<div className="mb-2">
-						<Card>
-							<CardHeader>備審資料夾 <small>必審資料</small></CardHeader>
-							<CardBody>
-								<UploadImgs
-									imgs={this.state.applicationDoc}
-									system={this.props.system}
-									deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
-									userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
-									type="admission-selection-application-document"
-								/>
-							</CardBody>
-						</Card>
-					</div>
+
+					{
+						this.state.applicationDocs.map((doc, i) => {
+							return (
+								<div className="mb-2">
+									<Card>
+										<CardHeader>{doc.description} {doc.required ? <small>必審資料</small> : ''}</CardHeader>
+										<CardBody>
+											{
+												doc.files.map(file => {
+													return this.imgOrFile(file, doc.type_id);
+												})
+											}
+										</CardBody>
+									</Card>
+								</div>
+							)
+						})
+					}
+
 				</ModalBody>
 			</Modal>
 		);
