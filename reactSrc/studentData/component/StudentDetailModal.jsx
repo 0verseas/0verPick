@@ -130,7 +130,8 @@ export default class StudentDetailModal extends React.Component {
 			dept: '',
 			diplomas: [], // 學歷證明
 			transcripts: [], // 成績單
-			applicationDocs: [] // 備審資料
+			applicationDocs: [], // 備審資料
+			disability: '', // 身障程度
 		};
 
 		this.renderStudentData = this.renderStudentData.bind(this);
@@ -169,7 +170,7 @@ export default class StudentDetailModal extends React.Component {
 				return;
 			}
 
-			//console.log(data);
+			console.log(data);
 			const student = data.students[0];
 			this.setState({
 				no: student.student_misc_data.overseas_student_id, // 僑生編號
@@ -185,7 +186,8 @@ export default class StudentDetailModal extends React.Component {
 				gSchool: student.student_personal_data.school_name, // 畢業學校
 				gSchoolCountry: `${student.student_personal_data.school_country_data.continent}/${student.student_personal_data.school_country_data.country}`, // 學校國別
 				aSchool: data.school.title, // 申請學校
-				dept: data.title
+				dept: data.title,
+				disability: student.student_personal_data.disability_level ? student.student_personal_data.disability_level+student.student_personal_data.disability_category : '無'
 			});
 		});
 
@@ -303,8 +305,6 @@ export default class StudentDetailModal extends React.Component {
 							<tr>
 								<th>港澳生編號</th>
 								<td>{ this.state.no }</td>
-								<th>email</th>
-								<td colSpan={3}>{ this.state.email }</td>
 							</tr>
 							<tr>
 								<th>報名序號</th>
@@ -321,6 +321,12 @@ export default class StudentDetailModal extends React.Component {
 								<td>{ this.state.resident }</td>
 								<th>性別</th>
 								<td>{ this.state.gender }</td>
+							</tr>
+							<tr>
+								<th>email</th>
+								<td colSpan={2}>{ this.state.email }</td>
+								<th>身障程度</th>
+								<td colSpan={2}>{ this.state.disability }</td>
 							</tr>
 							<tr>
 								<th>電話</th>
