@@ -33,7 +33,12 @@
 				return;
 			}
 
-			location.href = './';
+			const url = window.location.href.split('?url=')[1];
+			if (url) {
+				window.location.href = url;
+			} else {
+				window.location.href = './';
+			}
 		});
 
 		e.preventDefault();
