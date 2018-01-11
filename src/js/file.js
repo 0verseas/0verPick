@@ -12,8 +12,13 @@
 	/**
 	 * init
 	 */
+	if ([_system, _department_id, _student_id, _type_id, _filename].some((val) => val === null)) {
+		alert('Wrong url.');
+		return;
+	}
+
 	_checkLogin().then(() => {
-		window.location.href = `/reviewers/${_system}/students/${_department_id}/${_student_id}/types/${_type_id}/admission-selection-application-document/${_filename}`;
+		window.location.href = `${window.getConfig().apiBase}/reviewers/${_system}/students/${_department_id}/${_student_id}/types/${_type_id}/admission-selection-application-document/${_filename}`;
 	});
 
 	/**
