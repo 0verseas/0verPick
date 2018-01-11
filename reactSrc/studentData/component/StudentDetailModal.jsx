@@ -296,6 +296,11 @@ export default class StudentDetailModal extends React.Component {
 	}
 
 	render() {
+
+		const docs = this.state.applicationDocs.filter((doc) => {
+			return doc.type_id != 18;
+		})
+
 		return (
 			<Modal isOpen={this.props.open} toggle={this.props.toggle} size="lg">
 				<ModalHeader toggle={this.props.toggle}>學生詳細資料</ModalHeader>
@@ -391,7 +396,7 @@ export default class StudentDetailModal extends React.Component {
 					</div>
 
 					{
-						this.state.applicationDocs.map((doc, i) => {
+						docs.map((doc, i) => {
 							return (
 								<div className="mb-2">
 									<Card>
