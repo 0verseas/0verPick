@@ -193,12 +193,23 @@
 			return;
 		}
 
-		const fr = new FileReader();
-		fr.onload = function () {
-			_renderCSVTable(fileName, fr.result);
+		// 需先讀成 binary string 以判斷編碼
+		const fileReaderAsBinaryString = new FileReader();
+		const fileReaderAsText = new FileReader();
+
+		fileReaderAsBinaryString.onload = function (e) {
+			// 偵測檔案編碼
+			const encoding = window.jschardet.detect(e.target.result).encoding;
+			// 使用偵測的編碼來讀取檔案成文字
+			fileReaderAsText.readAsText(file, encoding);
 		};
 
-		fr.readAsText(file);
+		fileReaderAsText.onload = function (e) {
+			_renderCSVTable(fileName, e.target.result);
+		};
+
+		// 讀入檔案判斷編碼
+		fileReaderAsBinaryString.readAsBinaryString(file);
 	}
 
 	function _handleSubmitCSV() {
