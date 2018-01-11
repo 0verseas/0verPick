@@ -19,7 +19,7 @@ class PageBar extends React.Component {
 				{
 					[...Array(pages)].map((val, i) => {
 						return (
-							<PaginationItem 
+							<PaginationItem
 								key={i}
 								active={i + 1 === this.props.currentPage}
 								onClick={() => {this.props.onPage(i + 1)}}
@@ -141,7 +141,7 @@ export default class StudentDataTable extends React.Component {
 											<td>{val.resident}</td>
 											<td>{val.order}</td>
 											<td className="text-center"><Button color="secondary" size="sm" onClick={() => { this.props.onDetail(val.userID, val.deptID) }}>學生詳細資料</Button></td>
-											<td className="text-center"><Button color="secondary" size="sm" onClick={() => { alert('功能尚未開放'); }}>下載審查資料</Button></td>
+											<td className="text-center"><a className='btn btn-success' color="secondary" size="sm" href={`${window.getConfig().apiBase}/reviewers/merged-pdf/systems/${window.getSystem()}/departments/${val.deptID}/students/${val.userID}`}>下載審查資料</a></td>
 										</tr>
 									);
 								})
