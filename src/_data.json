@@ -1,5 +1,8 @@
 {
 	"login": {
 		"layout": false
+	},
+	"file": {
+		"layout": false
 	}
 }

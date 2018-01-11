@@ -193,12 +193,23 @@
 			return;
 		}
 
-		const fr = new FileReader();
-		fr.onload = function () {
-			_renderCSVTable(fileName, fr.result);
+		// 需先讀成 binary string 以判斷編碼
+		const fileReaderAsBinaryString = new FileReader();
+		const fileReaderAsText = new FileReader();
+
+		fileReaderAsBinaryString.onload = function (e) {
+			// 偵測檔案編碼
+			const encoding = window.jschardet.detect(e.target.result).encoding;
+			// 使用偵測的編碼來讀取檔案成文字
+			fileReaderAsText.readAsText(file, encoding);
 		};
 
-		fr.readAsText(file);
+		fileReaderAsText.onload = function (e) {
+			_renderCSVTable(fileName, e.target.result);
+		};
+
+		// 讀入檔案判斷編碼
+		fileReaderAsBinaryString.readAsBinaryString(file);
 	}
 
 	function _handleSubmitCSV() {
@@ -356,7 +367,10 @@
 		$CSVModal.find('.CSVModal__body').empty();
 		const rows = window.API.CSVToArray(data);
 		const header = rows.shift();
-		_csvAccounts = rows;
+		const fieldLength = header.length;
+		_csvAccounts = rows.filter((val, i) => {
+			return val.length === fieldLength;
+		});
 		$CSVModal.find('.CSVModal__body').html(`
 			<table class="table table-bordered table-hover">
 				<thead>
@@ -368,11 +382,11 @@
 				</thead>
 				<tbody>
 					${
-						rows.map((r, i) => {
+						_csvAccounts.map((r, i) => {
 							return `
 								<tr>
 									${
-										rows[i].map((val, j) => `<td>${val}</td>`).join().replace(/,/g, '')
+										_csvAccounts[i].map((val, j) => `<td>${val}</td>`).join().replace(/,/g, '')
 									}
 								</tr>
 							`;

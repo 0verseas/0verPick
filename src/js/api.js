@@ -205,6 +205,20 @@ window.API = (() => {
 		.catch((err) => { _handleError(err, callback) });
 	}
 
+	function getDownloadableDepts(system = 'all', callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+			.then(_parseData)
+			.then((data) => { callback && callback(null, data) })
+			.catch((err) => { _handleError(err, callback) });
+	}
+
 	function CSVToArray(strData, strDelimiter) {
 		// Check to see if the delimiter is defined. If not,
 		// then default to comma.
@@ -257,18 +271,14 @@ window.API = (() => {
 		return (arrData);
 	}
 
-	function getDownloadableDepts(system = 'all', callback) {
-		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			credentials: 'include'
-		})
-		.then(_parseData)
-		.then((data) => { callback && callback(null, data) })
-		.catch((err) => { _handleError(err, callback) });
+	function getUrlParam(name, url) {
+		if (!url) url = window.location.href;
+		name = name.replace(/[\[\]]/g, "\\$&");
+		const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+		const results = regex.exec(url);
+		if (!results) return null;
+		if (!results[2]) return '';
+		return decodeURIComponent(results[2].replace(/\+/g, " "));
 	}
 
 	/**
@@ -332,7 +342,8 @@ window.API = (() => {
 		getStudentDiploma,
 		getStudentTranscripts,
 		getApplicationDoc,
-		CSVToArray,
 		getDownloadableDepts,
+		CSVToArray,
+		getUrlParam
 	};
 })();
