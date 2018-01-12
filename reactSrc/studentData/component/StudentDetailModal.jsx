@@ -8,6 +8,7 @@ import {
 	Table,
 	Card,
 	CardHeader,
+	CardBlock,
 	CardBody,
 	CardTitle,
 	CardText,
@@ -32,6 +33,107 @@ class File extends React.Component {
 				<a href={src} target="_blank">
 					<i className={`fa fa-file-${this.props.fileType}-o`} aria-hidden="true"></i>
 				</a>
+			</div>
+		);
+	}
+}
+
+// 備審資料的作品集 component
+class WorkFiles extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+
+	// 判斷是哪一種副檔名
+	getFileType(fileNameExtension = '') {
+		switch (fileNameExtension) {
+			case 'doc':
+			case 'docx':
+				return 'word';
+
+			case 'mp3':
+				return 'audio';
+
+			case 'mp4':
+			case 'avi':
+				return 'video';
+
+			case 'pdf':
+				return 'pdf';
+
+			default:
+				return 'img';
+		}
+	}
+
+	imgOrFile(file) {
+		const fileType = this.getFileType(file.split('.')[1]);
+
+		if (fileType === 'img') {
+			return (
+				<Image
+					img={file}
+					system={this.props.system}
+					deptID={this.props.deptID}
+					userID={this.props.userID}
+					type="admission-selection-application-document"
+					type_id={18}
+					fileType={fileType}
+				/>
+			);
+		} else {
+			return (
+				<File
+					file={file}
+					system={this.props.system}
+					deptID={this.props.deptID}
+					userID={this.props.userID}
+					type="admission-selection-application-document"
+					type_id={18}
+					fileType={fileType}
+				/>
+			);
+		}
+	}
+
+	render() {
+		return (
+			<div style={{display: "inline-block"}}>
+				<li>作品名稱：{this.props.name}</li>
+				<li>個人參與的職位或項目：{this.props.position}</li>
+				<li>術科類型：{this.props.work_type}</li>
+				<li>備註：{this.props.memo ? this.props.memo : '無'}</li>
+				<li>作品連結：
+					<ul>
+						{
+							this.props.work_urls.map(url => {
+								return (<li><a href={url} target="_blank">{url}</a></li>);
+							})
+						}
+					</ul>
+				</li>
+
+				<Card className="mb-2">
+					<CardHeader>作品授權書</CardHeader>
+					<CardBlock>
+						{
+							this.props.authorization_files.map(file => {
+								return this.imgOrFile(file);
+							})
+						}
+					</CardBlock>
+				</Card>
+
+				<Card>
+					<CardHeader>作品集檔案</CardHeader>
+					<CardBlock>
+						{
+							this.props.work_files.map(file => {
+								return this.imgOrFile(file);
+							})
+						}
+					</CardBlock>
+				</Card>
 			</div>
 		);
 	}
@@ -244,8 +346,27 @@ export default class StudentDetailModal extends React.Component {
 
 	// 判斷是 img 還是 file
 	imgOrFile(file, type_id) {
+		if (type_id === 18) {
+			return (
+				<WorkFiles
+					system={this.props.system}
+					deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
+					userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
+					type="admission-selection-application-document"
+					type_id={type_id}
+					name={file.name}
+					position={file.position}
+					work_type={file.work_type}
+					memo={file.memo}
+					work_urls={file.work_urls}
+					authorization_files={file.authorization_files}
+					work_files={file.work_files}
+				/>
+			);
+		}
+
 		const fileType = this.getFileType(file.split('.')[1]);
-		// console.log(fileType);
+
 		if (fileType === 'img') {
 			return (
 				<Image
@@ -296,11 +417,6 @@ export default class StudentDetailModal extends React.Component {
 	}
 
 	render() {
-
-		const docs = this.state.applicationDocs.filter((doc) => {
-			return doc.type_id != 18;
-		})
-
 		return (
 			<Modal isOpen={this.props.open} toggle={this.props.toggle} size="lg">
 				<ModalHeader toggle={this.props.toggle}>學生詳細資料</ModalHeader>
@@ -396,14 +512,14 @@ export default class StudentDetailModal extends React.Component {
 					</div>
 
 					{
-						docs.map((doc, i) => {
+						this.state.applicationDocs.map((doc, i) => {
 							return (
 								<div className="mb-2">
 									<Card>
-										<CardHeader>{doc.description} {doc.required ? <small>必審資料</small> : ''}</CardHeader>
+										<CardHeader>{doc.type.name} {doc.required ? <small>必審資料</small> : ''}</CardHeader>
 										<CardBody>
 											{
-												doc.files.map(file => {
+												doc.type_id === 18 ? this.imgOrFile(doc.files, doc.type_id) : doc.files.map(file => {
 													return this.imgOrFile(file, doc.type_id);
 												})
 											}
