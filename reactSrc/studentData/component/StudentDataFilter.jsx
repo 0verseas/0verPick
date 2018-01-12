@@ -73,7 +73,7 @@ export default class StudentDataFilter extends React.Component {
 				{ this.state.open &&
 					<Form onSubmit={this.handleSubmit}>
 						<FormGroup row>
-							<Label for="no" sm={2}>僑生/港澳生編號</Label>
+							<Label for="no" sm={2}>僑生編號</Label>
 							<Col sm={10}>
 								<Input type="text" name="no" id="no" value={this.state.no} onChange={(e) => { this.setState({ no: e.target.value })}} />
 							</Col>

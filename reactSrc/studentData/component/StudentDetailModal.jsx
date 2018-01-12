@@ -424,7 +424,7 @@ export default class StudentDetailModal extends React.Component {
 					<Table className="StudentDetailTable" bordered>
 						<tbody>
 							<tr>
-								<th>港澳生編號</th>
+								<th>僑生編號</th>
 								<td>{ this.state.no }</td>
 							</tr>
 							<tr>

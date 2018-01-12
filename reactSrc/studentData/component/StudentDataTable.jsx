@@ -120,7 +120,7 @@ export default class StudentDataTable extends React.Component {
 						<thead>
 							<tr>
 								<th style={thStyle} onClick={() => this.handleSort('dept')}>申請系所名稱 {!!this.state.sort && sortKey === 'dept' && sortIcon}</th>
-								<th style={thStyle} onClick={() => this.handleSort('no')}>僑生/港澳生編號 {!!this.state.sort && sortKey === 'no' && sortIcon}</th>
+								<th style={thStyle} onClick={() => this.handleSort('no')}>僑生編號 {!!this.state.sort && sortKey === 'no' && sortIcon}</th>
 								<th style={thStyle} onClick={() => this.handleSort('name')}>姓名 {!!this.state.sort && sortKey === 'name' && sortIcon}</th>
 								<th style={thStyle} onClick={() => this.handleSort('identity')}>身份別 {!!this.state.sort && sortKey === 'identity' && sortIcon}</th>
 								<th style={thStyle} onClick={() => this.handleSort('resident')}>僑居地 {!!this.state.sort && sortKey === 'resident' && sortIcon}</th>
