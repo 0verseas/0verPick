@@ -346,7 +346,8 @@ export default class StudentDetailModal extends React.Component {
 
 	// 判斷是 img 還是 file
 	imgOrFile(file, type_id) {
-		if (type_id === 18) {
+		// 作品集要另外處理
+		if ([18, 38, 58, 78].includes(type_id)) {
 			return (
 				<WorkFiles
 					system={this.props.system}
@@ -519,7 +520,8 @@ export default class StudentDetailModal extends React.Component {
 										<CardHeader>{doc.type.name} {doc.required ? <small>必審資料</small> : ''}</CardHeader>
 										<CardBody>
 											{
-												doc.type_id === 18 ? this.imgOrFile(doc.files, doc.type_id) : doc.files.map(file => {
+												// 作品集不只是一堆檔案，要另外處理
+												[18, 38, 58, 78].includes(doc.type_id) ? this.imgOrFile(doc.files, doc.type_id) : doc.files.map(file => {
 													return this.imgOrFile(file, doc.type_id);
 												})
 											}
