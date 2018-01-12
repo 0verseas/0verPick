@@ -6,6 +6,10 @@
 	const $downloadPtt = $('#downloadPtt');
 	const $importAccount = $('#importAccount');
 	const $deptID = $('#deptID');
+	const $noAcceptList = $('#noAcceptList');
+	const $annex01 = $('#annex01');
+	const $annex02 = $('#annex02');
+	const $annex03 = $('#annex03');
 	const _config = window.getConfig();
 
 
@@ -48,6 +52,48 @@
 			<span style="font-size: 13px;">（匯入帳號的各學制權限請使用以上提供的系代碼）</span>
 		</div>
 		`;
-    $deptID.html(deptIDHTML);
+	$deptID.html(deptIDHTML);
+
+	let noAcceptListHTML='';
+	noAcceptListHTML += `
+		<div>
+			<a href="${_config.apiBase}/forms/審查結果不通過原因代碼對照表.ods"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 審查結果不通過原因代碼對照表
+			</a>
+		</div>
+		`;
+	$noAcceptList.html(noAcceptListHTML);
+
+
+	let annex01HTML='';
+	annex01HTML += `
+		<div>
+			<a href="${_config.apiBase}/forms/入學大學同等學力認定標準.pdf"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 大學辦理國外學歷採認辦法
+			</a>
+		</div>
+		`;
+	$annex01.html(annex01HTML);
+
+
+	let annex02HTML='';
+	annex02HTML += `
+		<div>
+			<a href="${_config.apiBase}/forms/香港澳門學歷檢覈及採認辦法(含學校認可名冊).pdf"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 香港澳門學歷檢覈及採認辦法
+			</a>
+		</div>
+		`;
+	$annex02.html(annex02HTML);
+
+	let annex03HTML='';
+	annex03HTML += `
+		<div>
+			<a href="${_config.apiBase}/forms/大陸地區學歷採認辦法.pdf"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 大陸地區學歷採認辦法
+			</a>
+		</div>
+		`;
+	$annex03.html(annex03HTML);
 
 })();
