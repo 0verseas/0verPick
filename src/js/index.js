@@ -25,6 +25,7 @@
 			<a href="${_config.apiBase}/forms/下載系統匯入帳號範例.csv"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 匯入帳號範例.csv
 			</a>
+			<span style="font-size:13px">因目前測試以國立台灣大學為範例，故匯入時學士、港二技、碩士、博士，請改以國立台灣大學科系代碼表做測試。</span>
 		</div>
 		`;
 	$importAccount.html(importAccountHTML);
@@ -44,7 +45,7 @@
 			<a href="${_config.apiBase}/forms/博士系代碼對照表.ods"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 博士班系代碼代碼表
 			</a>
-			<span style="font-size: 15px;">（匯入帳號的各學制權限請使用以上提供的系代碼）</span>
+			<span style="font-size: 13px;">（匯入帳號的各學制權限請使用以上提供的系代碼）</span>
 		</div>
 		`;
     $deptID.html(deptIDHTML);
