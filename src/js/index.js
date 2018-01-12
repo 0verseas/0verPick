@@ -22,13 +22,9 @@
 	let importAccountHTML='';
 	importAccountHTML += `
 		<div>
-			<!--
 			<a href="${_config.apiBase}/forms/下載系統匯入帳號範例.csv"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 匯入帳號範例.csv
 			</a>
-			-->
-			<span style="color:grey"><i class="fa fa-download" aria-hidden="true"></i> 匯入帳號範例</span>
-			<span style="font-size:13px">因編碼不同，目前系統修復中</span>
 		</div>
 		`;
 	$importAccount.html(importAccountHTML);
