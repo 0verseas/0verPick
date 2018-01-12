@@ -92,7 +92,7 @@ export default class App extends React.Component {
 				dept.students.forEach((student) => {
 					studentList.push({
 						dept: deptName,
-						on: student.student_misc_data.overseas_student_id,
+						no: student.student_misc_data.overseas_student_id,
 						name: student.student_data.name,
 						identity: this.identityMap[student.student_qualification_verify.identity],
 						resident: student.student_personal_data.resident_location_data.country,
