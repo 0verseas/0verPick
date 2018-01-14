@@ -216,6 +216,7 @@ export default class StudentDetailModal extends React.Component {
 		super(props);
 		this.state = {
 			no: '', // 僑生編號
+			remark: '', // 師培生註記
 			email: '',
 			id: '', // 報名序號
 			name: '',
@@ -275,6 +276,10 @@ export default class StudentDetailModal extends React.Component {
 			const student = data.students[0];
 			this.setState({
 				no: student.student_misc_data.overseas_student_id, // 僑生編號
+				remark: student.student_misc_data.overseas_student_id.toString().substr(0,2) == '06' ||
+						student.student_misc_data.overseas_student_id.toString().substr(0,2) == '07' ||
+						student.student_misc_data.overseas_student_id.toString().substr(0,2) == '08' ||
+						student.student_misc_data.overseas_student_id.toString().substr(0,2) == '09'? '師培計畫' : '', //師培生註記
 				email: student.student_data.email,
 				id: student.user_id.toString().padStart(6, 0), // 報名序號
 				name: student.student_data.name,
@@ -426,6 +431,8 @@ export default class StudentDetailModal extends React.Component {
 							<tr>
 								<th>僑生編號</th>
 								<td>{ this.state.no }</td>
+								<th>備註</th>
+								<td>{ this.state.remark}</td>
 							</tr>
 							<tr>
 								<th>報名序號</th>
