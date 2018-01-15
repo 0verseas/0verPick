@@ -36,7 +36,7 @@ export default class StudentDataFilter extends React.Component {
 	handleSubmit(e) {
 		e && e.preventDefault();
 		this.props.onFilter({
-			on: this.state.on,
+			no: this.state.no,
 			name: this.state.name,
 			email: this.state.email,
 			resident: this.state.resident,
