@@ -219,6 +219,20 @@ window.API = (() => {
 			.catch((err) => { _handleError(err, callback) });
 	}
 
+	function getStudentMergedFile(system, userID, deptID) {
+		_setLoading();
+		return  fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptID}/students/${userID}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		}).then(res => {
+			_endLoading();
+			return res;
+		})
+	}
+
 	function CSVToArray(strData, strDelimiter) {
 		// Check to see if the delimiter is defined. If not,
 		// then default to comma.
@@ -343,6 +357,7 @@ window.API = (() => {
 		getStudentTranscripts,
 		getApplicationDoc,
 		getDownloadableDepts,
+		getStudentMergedFile,
 		CSVToArray,
 		getUrlParam
 	};
