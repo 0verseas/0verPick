@@ -97,7 +97,7 @@ class WorkFiles extends React.Component {
 
 	render() {
 		return (
-			<div style={{display: "inline-block"}}>
+			<div>
 				<li>作品名稱：{this.props.name}</li>
 				<li>個人參與的職位或項目：{this.props.position}</li>
 				<li>術科類型：{this.props.work_type}</li>
