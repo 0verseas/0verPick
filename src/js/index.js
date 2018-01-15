@@ -29,7 +29,6 @@
 			<a href="${_config.apiBase}/forms/下載系統匯入帳號範例.csv"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 匯入帳號範例.csv
 			</a>
-			<span style="font-size:13px">因目前測試以國立台灣大學為範例，故匯入時學士、港二技、碩士、博士，請改以國立台灣大學科系代碼表做測試。</span>
 		</div>
 		`;
 	$importAccount.html(importAccountHTML);
