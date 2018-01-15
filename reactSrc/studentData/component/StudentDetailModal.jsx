@@ -286,7 +286,7 @@ export default class StudentDetailModal extends React.Component {
 				engName: student.student_data.eng_name,
 				birth: student.student_personal_data.birthday,
 				resident: `${student.student_personal_data.resident_location_data.continent}/${student.student_personal_data.resident_location_data.country}`, // 國籍
-				gender: student.student_personal_data.gender === 'f' ? '女' : '男',
+				gender: student.student_personal_data.gender === 'F' ? '女' : '男',
 				tel: student.student_personal_data.resident_phone,
 				phone: student.student_personal_data.resident_cellphone,
 				gSchool: student.student_personal_data.school_name, // 畢業學校
