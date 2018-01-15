@@ -219,18 +219,54 @@ window.API = (() => {
 			.catch((err) => { _handleError(err, callback) });
 	}
 
-	function getStudentMergedFile(system, userID, deptID) {
+	function getStudentMergedFile(system, studentId, deptId, studentNo, studentName, deptName) {
 		_setLoading();
-		return  fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptID}/students/${userID}`, {
+
+		fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptId}/students/${studentId}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			credentials: 'include'
 		}).then(res => {
+			// 有問題彈出問題
+			if (!res.ok) {
+				if (res.status === 404) {
+					window.alert('檔案尚未合併完成');
+				} else if (res.status === 401) {
+					window.alert('無權限下載，請重新登入');
+					window.location.href = './login.html';
+				}
+
+				throw res;
+			}
+
+			// 沒問題取得檔案
+			return res.blob();
+		}).then(blob => {
+			// 建立 a 物件供下載用
+			const a = document.createElement('a');
+
+			// 建立 blob 物件網址
+			const url = window.URL.createObjectURL(blob);
+
+			// 設定檔名（`系所名稱-學生姓名-僑生編號`）
+			const filename = `${deptName}-${studentName}-${studentNo}-審查資料.pdf`;
+			a.href = url;
+
+			// 直接下載
+			a.download = filename;
+			a.click();
+
+			// 釋放 blob 物件網址
+			window.URL.revokeObjectURL(url);
+
 			_endLoading();
-			return res;
-		})
+		}).catch(err => {
+			_endLoading();
+
+			console.error(err);
+		});
 	}
 
 	function CSVToArray(strData, strDelimiter) {
