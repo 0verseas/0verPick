@@ -47,7 +47,7 @@
 		for (let dept of depts) {
 			deptsHtmlString += `
 				<tr>
-					<td>${dept.title}系</td>
+					<td>${dept.title}</td>
 					<td class="text-center btn-download">
 						<button class="btn btn-success btn-sm">
 							<i class="fa fa-download" aria-hidden="true"></i> 下載
