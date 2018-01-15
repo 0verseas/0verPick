@@ -245,21 +245,26 @@ window.API = (() => {
 			return res.blob();
 		}).then(blob => {
 			// 建立 a 物件供下載用
-			const a = document.createElement('a');
+			const pom = document.createElement('a');
 
 			// 建立 blob 物件網址
 			const url = window.URL.createObjectURL(blob);
 
 			// 設定檔名（`系所名稱-學生姓名-僑生編號`）
 			const filename = `${deptName}-${studentName}-${studentNo}-審查資料.pdf`;
-			a.href = url;
+			pom.href = url;
+			pom.download = filename;
+			pom.target="_self"; // required in Firefox
 
-			// 直接下載
-			a.download = filename;
-			a.click();
+			// 將 pom 綁到 body 中
+			document.body.appendChild(pom); // required in Firefox
 
-			// 釋放 blob 物件網址
+			// 下載囉
+			pom.click();
+
+			// 釋放 blob 物件網址並移除元素
 			window.URL.revokeObjectURL(url);
+			pom.remove();
 
 			_endLoading();
 		}).catch(err => {
