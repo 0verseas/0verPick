@@ -82,7 +82,8 @@ export default class StudentDataTable extends React.Component {
 	}
 
 	getStudentMergedFile(studentId, deptId, studentNo, studentName, deptName) {
-		window.API.getStudentMergedFile(window.getSystem(), studentId, deptId, studentNo, studentName, deptName);
+		const filename = `${deptName}-${studentName}-${studentNo}-審查資料.pdf`;
+		window.API.getStudentMergedFile(window.getSystem(), studentId, deptId, filename);
 	}
 
 	comapreField(key, type) {

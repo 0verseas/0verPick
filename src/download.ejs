@@ -1,6 +1,16 @@
 <div class="row mb-2">
     <div class="col-12">
-        <h3>學士班</h3>
+        <div class="row">
+            <div class="col-5">
+                <h3>學士班</h3>
+            </div>
+            <div class="col-2 ml-auto text-right pr-5">
+                <button class="btn btn-info btn-sm" onclick="app.getStudentApplicationDocsFile('all', 'all', '全校', '所有系所')">
+                    <i class="fa fa-download" aria-hidden="true"></i> 全校下載
+                </button>
+            </div>
+        </div>
+
         <div class="tableWrap">
             <table class="table table-hover">
                 <tbody id="bachelorTbody">

@@ -219,59 +219,32 @@ window.API = (() => {
 			.catch((err) => { _handleError(err, callback) });
 	}
 
-	function getStudentMergedFile(system, studentId, deptId, studentNo, studentName, deptName) {
+	function getStudentMergedFile(system, studentId, deptId, filename) {
 		_setLoading();
 
-		fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptId}/students/${studentId}`, {
+		const request = fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptId}/students/${studentId}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			credentials: 'include'
-		}).then(res => {
-			// 有問題彈出問題
-			if (!res.ok) {
-				if (res.status === 404) {
-					window.alert('檔案尚未合併完成');
-				} else if (res.status === 401) {
-					window.alert('無權限下載，請重新登入');
-					window.location.href = './login.html';
-				}
-
-				throw res;
-			}
-
-			// 沒問題取得檔案
-			return res.blob();
-		}).then(blob => {
-			// 建立 a 物件供下載用
-			const pom = document.createElement('a');
-
-			// 建立 blob 物件網址
-			const url = window.URL.createObjectURL(blob);
-
-			// 設定檔名（`系所名稱-學生姓名-僑生編號`）
-			const filename = `${deptName}-${studentName}-${studentNo}-審查資料.pdf`;
-			pom.href = url;
-			pom.download = filename;
-			pom.target="_self"; // required in Firefox
-
-			// 將 pom 綁到 body 中
-			document.body.appendChild(pom); // required in Firefox
-
-			// 下載囉
-			pom.click();
-
-			// 釋放 blob 物件網址並移除元素
-			window.URL.revokeObjectURL(url);
-			pom.remove();
-
-			_endLoading();
-		}).catch(err => {
-			_endLoading();
-
-			console.error(err);
 		});
+
+		_parseMergedFile(request, filename);
+	}
+
+	function getAllStudentMergedFile(system, deptId, filename) {
+		_setLoading();
+
+		const request = fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptId}/students`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		});
+
+		_parseMergedFile(request, filename);
 	}
 
 	function CSVToArray(strData, strDelimiter) {
@@ -363,6 +336,52 @@ window.API = (() => {
 		return res.json();
 	}
 
+	function _parseMergedFile(request, filename) {
+		return request.then(res => {
+			// 有問題彈出問題
+			if (!res.ok) {
+				if (res.status === 404) {
+					window.alert('檔案尚未合併完成');
+				} else if (res.status === 401) {
+					window.alert('無權限下載，請重新登入');
+					// window.location.href = './login.html';
+				}
+
+				throw res;
+			}
+
+			// 沒問題取得檔案
+			return res.blob();
+		}).then(blob => {
+			// 建立 a 物件供下載用
+			const pom = document.createElement('a');
+
+			// 建立 blob 物件網址
+			const url = window.URL.createObjectURL(blob);
+
+			// 設定檔名（`系所名稱-學生姓名-僑生編號`）
+			pom.href = url;
+			pom.download = filename;
+			pom.target="_self"; // required in Firefox
+
+			// 將 pom 綁到 body 中
+			document.body.appendChild(pom); // required in Firefox
+
+			// 下載囉
+			pom.click();
+
+			// 釋放 blob 物件網址並移除元素
+			window.URL.revokeObjectURL(url);
+			pom.remove();
+
+			_endLoading();
+		}).catch(err => {
+			_endLoading();
+
+			console.error(err);
+		});
+	}
+
 	function _handleError(err, callback) {
 		const status = err.status;
 		_endLoading();
@@ -399,6 +418,7 @@ window.API = (() => {
 		getApplicationDoc,
 		getDownloadableDepts,
 		getStudentMergedFile,
+		getAllStudentMergedFile,
 		CSVToArray,
 		getUrlParam
 	};
