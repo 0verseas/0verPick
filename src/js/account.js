@@ -216,6 +216,13 @@
 		_csvAccounts.forEach((user, i) => {
 			const data = {};
 			user.forEach((val, fieldIndex) => {
+				if (fieldIndex === 1) {
+					// 密碼加密
+					data[_csvFieldMap[fieldIndex]] = sha256(val);
+
+					return;
+				}
+
 				if (fieldIndex === 7) {
 					// 狀態
 					if (val === '啟用') {
