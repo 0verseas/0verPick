@@ -219,10 +219,10 @@ window.API = (() => {
 			.catch((err) => { _handleError(err, callback) });
 	}
 
-	function getStudentMergedFile(system, studentId, deptId, filename) {
+	function getStudentMergedFile(system, studentId, deptId) {
 		_setLoading();
 
-		const request = fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptId}/students/${studentId}`, {
+		const request = fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptId}/students/${studentId}?mode=check`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -230,13 +230,13 @@ window.API = (() => {
 			credentials: 'include'
 		});
 
-		_parseMergedFile(request, filename);
+		_parseMergedFile(request);
 	}
 
-	function getAllStudentMergedFile(system, deptId, filename) {
+	function getAllStudentMergedFile(system, deptId) {
 		_setLoading();
 
-		const request = fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptId}/students`, {
+		const request = fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptId}/students?mode=check`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -244,7 +244,7 @@ window.API = (() => {
 			credentials: 'include'
 		});
 
-		_parseMergedFile(request, filename);
+		_parseMergedFile(request);
 	}
 
 	function CSVToArray(strData, strDelimiter) {
@@ -336,7 +336,7 @@ window.API = (() => {
 		return res.json();
 	}
 
-	function _parseMergedFile(request, filename) {
+	function _parseMergedFile(request) {
 		return request.then(res => {
 			// 有問題彈出問題
 			if (!res.ok) {
@@ -351,17 +351,16 @@ window.API = (() => {
 			}
 
 			// 沒問題取得檔案
-			return res.blob();
-		}).then(blob => {
+			return res.json();
+		}).then(({ url }) => {
 			// 建立 a 物件供下載用
 			const pom = document.createElement('a');
 
-			// 建立 blob 物件網址
-			const url = window.URL.createObjectURL(blob);
-
-			// 設定檔名（`系所名稱-學生姓名-僑生編號`）
+			// 設定下載連結
 			pom.href = url;
-			pom.download = filename;
+
+			// 強制下載為檔案
+			pom.download = true;
 			pom.target="_self"; // required in Firefox
 
 			// 將 pom 綁到 body 中
@@ -370,8 +369,7 @@ window.API = (() => {
 			// 下載囉
 			pom.click();
 
-			// 釋放 blob 物件網址並移除元素
-			window.URL.revokeObjectURL(url);
+			// 移除下載用連結
 			pom.remove();
 
 			_endLoading();
