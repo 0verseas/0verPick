@@ -25,9 +25,8 @@ const app = ( () => {
 	 * event handler
 	 */
 
-	function getStudentApplicationDocsFile(system, deptId, systemName, deptName) {
-		const filename = `${systemName}-${deptName}-審查資料.zip`;
-		window.API.getAllStudentMergedFile(system, deptId, filename);
+	function getStudentApplicationDocsFile(system, deptId) {
+		window.API.getAllStudentMergedFile(system, deptId);
 	}
 
 	function _init() {
@@ -55,7 +54,7 @@ const app = ( () => {
 				<tr>
 					<td>${dept.title}</td>
 					<td class="text-center btn-download">
-						<button class="btn btn-success btn-sm" onclick="app.getStudentApplicationDocsFile('${system}', '${dept.id}', '${systemName}', '${dept.title}')">
+						<button class="btn btn-success btn-sm" onclick="app.getStudentApplicationDocsFile('${system}', '${dept.id}')">
 							<i class="fa fa-download" aria-hidden="true"></i> 下載
 						</button>
 					</td>
