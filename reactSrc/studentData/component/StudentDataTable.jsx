@@ -146,7 +146,7 @@ export default class StudentDataTable extends React.Component {
 											<td>{val.resident}</td>
 											<td>{val.order}</td>
 											<td className="text-center"><Button color="primary" size="sm" onClick={() => { this.props.onDetail(val.userID, val.deptID) }}>學生詳細資料</Button></td>
-											<td className="text-center"><Button color="success" size="sm" onClick={() => { this.getStudentMergedFile(val.userID, val.deptID) }}>下載審查資料</Button></td>
+											<td className="text-center"><Button color="success" size="sm" onClick={() => { javascript: alert('功能尚未開放') }}>下載審查資料</Button></td>
 										</tr>
 									);
 								})
