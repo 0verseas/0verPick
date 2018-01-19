@@ -2,7 +2,7 @@ window.API = (() => {
 	const _config = window.getConfig();
 	let _loadingTimeout;
 	let _loadingCount = 0;
-	
+
 	/**
 	 * public method
 	 */
@@ -12,7 +12,7 @@ window.API = (() => {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
-			}, 
+			},
 			body: JSON.stringify(data),
 			credentials: 'include'
 		})
@@ -219,10 +219,10 @@ window.API = (() => {
 			.catch((err) => { _handleError(err, callback) });
 	}
 
-	function getStudentMergedFile(system, studentId, deptId) {
+	function getStudentMergedFile(system, studentId, deptId, filetype) {
 		_setLoading();
 
-		const request = fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptId}/students/${studentId}?mode=check`, {
+		const request = fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptId}/students/${studentId}?mode=check&filetype=${filetype}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -233,10 +233,10 @@ window.API = (() => {
 		_parseMergedFile(request);
 	}
 
-	function getAllStudentMergedFile(system, deptId) {
+	function getAllStudentMergedFile(system, deptId, filetype) {
 		_setLoading();
 
-		const request = fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptId}/students?mode=check`, {
+		const request = fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptId}/students?mode=check&filetype=${filetype}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -331,7 +331,7 @@ window.API = (() => {
 		if (!res.ok) {
 			throw res
 		}
-		
+
 		_endLoading();
 		return res.json();
 	}
