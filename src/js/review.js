@@ -5,7 +5,7 @@
 	 */
 
 	const _reasonMapping = [
-	{val: "-1", text: "未填寫不合格原因"},
+	{val: "", text: "未填寫不合格原因"},
 	{val: "1", text: "＊未繳交報名"},
 	{val: "2", text: "＊學歷資格不符"},
 	{val: "3", text: "＊資料不完整，未符合系所規定"},
@@ -56,6 +56,10 @@
 
 	let _departments = {};
 	let _csvReviews = [];
+	let _reasonOptionHTML = '';
+	let _reviewPending = [];
+	let _reviewPass = [];
+	let _reviewFailed = [];
 
 	/**
 	 * cache DOM
@@ -65,6 +69,7 @@
 	const $deptSel = $('#sel-dept');
 	const $uploadBtn = $('#btn-upload');
 	const $fileInput = $('#file-input');
+	const $pendingTbody = $('#tbody-pending');
 	const $passTbody = $('#tbody-pass');
 	const $failedTbody = $('#tbody-failed');
 
@@ -96,6 +101,10 @@
 			}
 			_departments = data;
 		});
+
+		_reasonMapping.forEach(el => {
+			_reasonOptionHTML += `<option value="${el.val}">${el.text}</option>`;
+		})
 
 		// 檢查某學制某系所是否有上傳過結果，有的話渲染合格、不合格名單
 	}
@@ -160,52 +169,26 @@
 			}
 		});
 
-		let reviewNeeded = _csvReviews.filter(el => { return el.sortNum < 0; });
-		let reviewPass = _csvReviews.filter(el => { return el.sortNum > 0; });
-		let reviewFailed = _csvReviews.filter(el => { return el.sortNum === 0; });
+		_reviewPending = _csvReviews.filter(el => { return el.sortNum < 0; });
+		_reviewPass = _csvReviews.filter(el => { return el.sortNum > 0; });
+		_reviewFailed = _csvReviews.filter(el => { return el.sortNum === 0; });
 
-		reviewPass.sort(function (a, b) {
+		_reviewPass.sort(function (a, b) {
 			return a.sortNum - b.sortNum;
 		});
 
-		let passHTML = '';
-		let failedHTML = '';
-
-		reviewPass.forEach((data, index) => {
-			passHTML += `
-			<tr>
-				<td>${index}</td>
-				<td>${data.no}</td>
-				<td>${data.name}</td>
-			</tr>
-			`
-		})
-
-		reviewFailed.forEach((data, index) => {
-			const reasonMsg = _reasonMapping.find(el => {
-				return el.val == data.failedCode;
-			}).text;
-			failedHTML += `
-			<tr>
-				<td>${data.no}</td>
-				<td>${data.name}</td>
-				<td>(${data.failedCode}) ${reasonMsg}</td>
-				<td>${data.comment}</td>
-			</tr>
-			`
-		})
-
-		$passTbody.html(passHTML);
-		$failedTbody.html(failedHTML);
+		_reRenderPending();
+		_reRenderPass();
+		_reRenderFailed();
 
 		console.log("========== _csvReviews ==========");
 		console.log(_csvReviews);
-		console.log("========== reviewFailed ==========");
-		console.log(reviewFailed);
-		console.log("========== reviewPass ==========");
-		console.log(reviewPass);
-		console.log("========== reviewNeeded ==========");
-		console.log(reviewNeeded);
+		console.log("========== _reviewFailed ==========");
+		console.log(_reviewFailed);
+		console.log("========== _reviewPass ==========");
+		console.log(_reviewPass);
+		console.log("========== _reviewPending ==========");
+		console.log(_reviewPending);
 	}
 
 	function _handleSystemChange() {
@@ -224,6 +207,145 @@
 
 	function _handleDeptChange() {
 		console.log(this.value);
+	}
+
+	function _reRenderPending() {
+		let pendingHTML = '';
+		_reviewPending.forEach((data, index) => {
+			pendingHTML += `
+			<tr>
+				<td>${index + 1}</td>
+				<td>${data.no}</td>
+				<td>${data.name}</td>
+				<td class="text-right">
+					<button class="btn btn-success btn-judge" data-pass="1" data-index="${index}">
+						<i class="fa fa-circle-o" aria-hidden="true"></i>
+						合格
+					</button>
+					<button class="btn btn-danger btn-judge" data-pass="0" data-index="${index}">
+						<i class="fa fa-times" aria-hidden="true"></i>
+						不合格
+					</button>
+				</td>
+			</tr>
+			`
+		})
+		$pendingTbody.html(pendingHTML);
+		$('.btn-judge').on('click', _handlePass);
+	}
+
+	function _reRenderPass() {
+		let passHTML = '';
+		_reviewPass.forEach((data, index) => {
+			passHTML += `
+			<tr>
+				<td>${index + 1}</td>
+				<td>${data.no}</td>
+				<td>${data.name}</td>
+				<td class="text-center">
+					<button class="btn btn-secondary up-arrow" data-index="${index}"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+					<button class="btn btn-secondary down-arrow" data-index="${index}"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+					<button class="btn btn-warning btn-pass-return" data-pass="1" data-index="${index}"> 退回 </button>
+				</td>
+			</tr>
+			`
+		})
+		$passTbody.html(passHTML);
+		$('.btn-pass-return').on('click', _handleToPending);
+		$('.up-arrow').on('click', _prevWish);
+		$('.down-arrow').on('click', _nextWish);
+	}
+
+	function _reRenderFailed() {
+		let failedHTML = '';
+
+		_reviewFailed.forEach((data, index) => {
+			const reasonMsg = _reasonMapping.find(el => {
+				return el.val == data.failedCode;
+			}).text;
+			failedHTML += `
+			<tr>
+				<td>${data.no}</td>
+				<td>${data.name}</td>
+				<td>
+					<select id="failedReason-${index}" data-index="${index}" class="form-control form-control-sm sel-reason">
+						${_reasonOptionHTML}
+					</select>
+				</td>
+				<td>${data.comment}</td>
+				<td class="text-center">
+					<button class="btn btn-warning btn-failed-return" data-pass="0" data-index="${index}"> 退回 </button>
+				</td>
+			</tr>
+			`
+		})
+		$failedTbody.html(failedHTML);
+		_reviewFailed.forEach((data, index) => {
+			$('#failedReason-' + index).val(data.failedCode);
+		})
+		$('.btn-failed-return').on('click', _handleToPending);
+		$('.sel-reason').on('change', _handleReasonChange);
+	}
+
+	function _handlePass() {
+		const index = $(this).data('index');
+		if (!!$(this).data('pass')) {
+			_reviewPass.push(_reviewPending[index]);
+			_reviewPending.splice(index, 1);
+			_reRenderPass();
+		} else {
+			_reviewFailed.push(_reviewPending[index]);
+			_reviewPending.splice(index, 1);
+			_reRenderFailed();
+		}
+		_reRenderPending();
+	}
+
+	function _handleToPending() {
+		const index = $(this).data('index');
+		if (!!$(this).data('pass')) {
+			_reviewPass[index].sortNum = -1;
+			_reviewPass[index].failedCode = "";
+			_reviewPending.push(_reviewPass[index]);
+			_reviewPass.splice(index, 1);
+			_reRenderPass();
+		} else {
+			_reviewFailed[index].sortNum = -1;
+			_reviewFailed[index].failedCode = "";
+			_reviewPending.push(_reviewFailed[index]);
+			_reviewFailed.splice(index, 1);
+			_reRenderFailed();
+		}
+		_reRenderPending();
+	}
+
+	function _prevWish() { // 排序上調
+		const index = $(this).data("index");
+		console.log(index);
+		if (index > 0) {
+			const swap = _reviewPass[index];
+			_reviewPass[index] = _reviewPass[index - 1];
+			_reviewPass[index - 1] = swap;
+			_reRenderPass();
+		}
+	}
+
+	function _nextWish() { // 排序下調
+		const index = $(this).data("index");
+		console.log(index);
+		if (index < _reviewPass.length - 1) {
+			const swap = _reviewPass[index];
+			_reviewPass[index] = _reviewPass[index + 1];
+			_reviewPass[index + 1] = swap;
+			_reRenderPass();
+		}
+	}
+
+	function _handleReasonChange() {
+		const index = $(this).data("index");
+		const failedCode = $(this).val();
+		_reviewFailed[index].failedCode = failedCode;
+		console.log(_reviewFailed[index]);
 	}
 
 })();
