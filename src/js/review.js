@@ -54,6 +54,7 @@
 	{val: "46", text: "＊審查資料─學業成績不完整"},
 	]
 
+	let _departments = {};
 	let _csvReviews = [];
 
 	/**
@@ -77,6 +78,8 @@
 	 * bind event
 	 */
 
+	$systemSel.on('change', _handleSystemChange);
+	$deptSel.on('change', _handleDeptChange);
 	$uploadBtn.on('click', _handleUpload);
 	$fileInput.on('change', _handleFileChange);
 
@@ -86,6 +89,13 @@
 
 	function _init() {
 		// 取得某學制某系所的審查名冊檔案（.csv）
+		window.API.getDownloadableDepts('all', (err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+			_departments = data;
+		});
 
 		// 檢查某學制某系所是否有上傳過結果，有的話渲染合格、不合格名單
 	}
@@ -196,6 +206,24 @@
 		console.log(reviewPass);
 		console.log("========== reviewNeeded ==========");
 		console.log(reviewNeeded);
+	}
+
+	function _handleSystemChange() {
+		console.log(this.value);
+
+		let deptHTML = '<option value="-1">請選擇</option>';
+
+		if (this.value !== "-1") {
+			const deptList = _departments[this.value];
+			deptList.forEach(el => {
+				deptHTML += `<option value="${el.id}">${el.title}</option>`;
+			})
+		}
+		$deptSel.html(deptHTML);
+	}
+
+	function _handleDeptChange() {
+		console.log(this.value);
 	}
 
 })();
