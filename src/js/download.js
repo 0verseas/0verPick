@@ -55,6 +55,9 @@ const app = ( () => {
 					<td>${dept.title}</td>
 					<td class="text-center btn-download">
 						<button class="btn btn-success btn-sm" onclick="app.getStudentApplicationDocsFile('${system}', '${dept.id}')">
+							<i class="fa fa-download" aria-hidden="true"></i> 下載原始檔
+						</button>
+						<button class="btn btn-success btn-sm" onclick="app.getStudentApplicationDocsFile('${system}', '${dept.id}')">
 							<i class="fa fa-download" aria-hidden="true"></i> 下載
 						</button>
 					</td>
