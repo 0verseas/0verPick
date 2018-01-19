@@ -155,9 +155,7 @@
 		let reviewFailed = _csvReviews.filter(el => { return el.sortNum === 0; });
 
 		reviewPass.sort(function (a, b) {
-			if (a.sortNum > b.sortNum) { return 1; }
-			if (a.sortNum < b.sortNum) { return -1; }
-			return 0;
+			return a.sortNum - b.sortNum;
 		});
 
 		let passHTML = '';
@@ -181,7 +179,8 @@
 			<tr>
 				<td>${data.no}</td>
 				<td>${data.name}</td>
-				<td>${reasonMsg}</td>
+				<td>(${data.failedCode}) ${reasonMsg}</td>
+				<td>${data.comment}</td>
 			</tr>
 			`
 		})
@@ -197,35 +196,6 @@
 		console.log(reviewPass);
 		console.log("========== reviewNeeded ==========");
 		console.log(reviewNeeded);
-		// $CSVModal.find('.CSVModal__body').html(`
-		// 	<table class="table table-bordered table-hover">
-		// 		<thead>
-		// 			<tr>
-		// 				${
-		// 					header.map((val, i) => `<th>${val}</th>`).join().replace(/,/g, '')
-		// 				}
-		// 			</tr>
-		// 		</thead>
-		// 		<tbody>
-		// 			${
-		// 				_csvReviews.map((r, i) => {
-		// 					return `
-		// 						<tr>
-		// 							${
-		// 								_csvReviews[i].map((val, j) => `<td>${val}</td>`).join().replace(/,/g, '')
-		// 							}
-		// 						</tr>
-		// 					`;
-		// 				}).join().replace(/,/g, '')
-		// 			}
-		// 		</tbody>
-		// 	</table>
-		// `);
-
-		// $CSVModal.modal();
 	}
-
-
-
 
 })();
