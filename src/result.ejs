@@ -1,73 +1,68 @@
 <div class="row mb-5">
-    <div class="col-12">
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link active" href="#">學士班</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">碩士班</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">博士班</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">港二技</a>
-            </li>
-        </ul>
-    </div>
+	<div class="col-12">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link active" href="#">學士班</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">碩士班</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">博士班</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">港二技</a>
+			</li>
+		</ul>
+	</div>
 </div>
 <div class="row mb-3">
-    <div class="col-12">
-        <h3 class="border-success pl-2" style="border-left: 5px solid">合格清單</h3>
-        <div style="max-height: 500px; overflow: auto">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>排序</th>
-                        <th>系所</th>
-                        <th>僑生編號</th>
-                        <th>學生姓名</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>87101 應用外語系</td>
-                        <td>001</td>
-                        <td>John Cena</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-<div class="row mb-3">
-    <div class="col-12">
-        <h3 class="border-danger pl-2" style="border-left: 5px solid">不合格清單</h3>
-        <div style="max-height: 500px; overflow: auto">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>系所</th>
-                        <th>僑生編號</th>
-                        <th>學生姓名</th>
-                        <th>不合格原因</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>87101 應用外語系</td>
-                        <td>001</td>
-                        <td>John Cena</td>
-                        <td>*審查資料─學業成績不完整</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+	<div class="col-12">
+		<h3 class="border-danger pl-2" style="border-left: 5px solid">系所狀態</h3>
+		<button class="btn btn-success">
+			<i class="fa fa-download" aria-hidden="true"></i> 
+			下載審查結果回覆表
+		</button>
+		<div style="max-height: 500px; overflow: auto; margin-top: 12px;">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>系所代碼</th>
+						<th>系所名稱</th>
+						<th>審查狀態</th>
+						<th>最後審核者</th>
+						<th>最後審核時間</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>87101</td>
+						<td>資訊管理系</td>
+						<td>已儲存</td>
+						<td>俞旭昇</td>
+						<td>2018/01/19 20:17</td>
+					</tr>
+					<tr>
+						<td>87102</td>
+						<td>資訊應用外語系</td>
+						<td>已鎖定</td>
+						<td>蔡🥚🥚</td>
+						<td>2018/01/18 18:17</td>
+					</tr>
+					<tr>
+						<td>87103</td>
+						<td>資訊工程系</td>
+						<td>未審查</td>
+						<td>李悅悅</td>
+						<td>2018/01/16 17:17</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 <div class="row mb-5">
-    <div class="col-md-10 offset-md-1 text-center">
-        <button class="btn btn-danger btn-block">確認班審核結果</button>
-    </div>
+	<div class="col-md-10 offset-md-1 text-center">
+		<button class="btn btn-danger btn-block">確認該學制審查結果並鎖定</button>
+	</div>
 </div>
