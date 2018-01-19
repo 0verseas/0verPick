@@ -76,7 +76,7 @@ class WorkFiles extends React.Component {
 					deptID={this.props.deptID}
 					userID={this.props.userID}
 					type="admission-selection-application-document"
-					type_id={18}
+					type_id={this.props.type_id}
 					fileType={fileType}
 				/>
 			);
@@ -88,7 +88,7 @@ class WorkFiles extends React.Component {
 					deptID={this.props.deptID}
 					userID={this.props.userID}
 					type="admission-selection-application-document"
-					type_id={18}
+					type_id={this.props.type_id}
 					fileType={fileType}
 				/>
 			);
