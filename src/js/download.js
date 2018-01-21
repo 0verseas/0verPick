@@ -50,11 +50,14 @@ const app = ( () => {
 		let deptsHtmlString = '';
 
 		for (let dept of depts) {
+			// PDF 的 onclick
+			// app.getStudentApplicationDocsFile('${system}', '${dept.id}', 'pdf')
+
 			deptsHtmlString += `
 				<tr>
 					<td>${dept.title}</td>
 					<td class="text-center btn-download">
-						<button class="btn btn-success btn-sm" onclick="app.getStudentApplicationDocsFile('${system}', '${dept.id}', 'pdf')">
+						<button class="btn btn-success btn-sm" onclick="alert('尚未開放');">
 							<i class="fa fa-download" aria-hidden="true"></i> PDF 合併檔
 						</button>
 					</td>
