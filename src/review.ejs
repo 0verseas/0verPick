@@ -4,16 +4,20 @@
 			<div class="form-group row">
 				<label for="staticEmail" class="col-sm-2 col-form-label">學制</label>
 				<div class="col-sm-10">
-					<select class="form-control form-control-sm">
-						<option>請選擇</option>
+					<select id="sel-system" class="form-control form-control-sm">
+						<option value="-1">請選擇</option>
+						<option value="bachelor_depts">學士班</option>
+						<option value="two_year_tech_depts">港二技</option>
+						<option value="master_depts">碩士班</option>
+						<option value="phd_depts">博士班</option>
 					</select>
 				</div>
 			</div>
 			<div class="form-group row">
 				<label for="inputPassword" class="col-sm-2 col-form-label">系所</label>
 				<div class="col-sm-10">
-					<select class="form-control form-control-sm">
-						<option>請選擇</option>
+					<select id="sel-dept" class="form-control form-control-sm">
+						<option value="-1">請選擇</option>
 					</select>
 				</div>
 			</div>
@@ -23,123 +27,40 @@
 <hr />
 <div class="row">
 	<div class="col-12 text-center">
-		<button class="btn btn-primary">
-			<i class="fa fa-upload" aria-hidden="true"></i> 
-			匯入士班所有系所審查結果
+		<button class="btn btn-success">
+			<i class="fa fa-download" aria-hidden="true"></i> 
+			下載審查名冊
 		</button>
-		<button class="btn btn-primary">
-			<i class="fa fa-upload" aria-hidden="true"></i> 
-			匯入士班系所審查結果
+		<button id="btn-upload" class="btn btn-primary"><i class="fa fa-sign-in" aria-hidden="true"></i> 匯入學士班資管系審查結果</button>
+		<input id="file-input" type="file" class="file-upload" accept=".csv" style="display: none" />
+		<button class="btn btn-success">
+			<i class="fa fa-download" aria-hidden="true"></i> 
+			下載系所審查結果
 		</button>
 	</div>
 </div>
 <hr />
-<div class="row mb-5 mt-5">
+<div class="row">
 	<div class="col-12">
-		<h3 class="border-secondary pl-2" style="border-left: 5px solid">待審核清單</h3>
+		<h3 class="pl-2" style="border-left: 5px solid">待審查清單</h3>
 		<div style="max-height: 350px; overflow: auto">
 			<table class="table table-hover">
 				<thead>
 					<tr>
+						<th>排序</th>
 						<th>僑生編號</th>
 						<th>學生姓名</th>
-						<th style="width: 120px"></th>
-						<th style="width: 120px"></th>
+						<th></th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>001</td>
-						<td>Joha Cena</td>
-						<td class="text-center">
-							<button class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i> 不合格</button>
-						</td>
-						<td class="text-center">
-							<button class="btn btn-success"><i class="fa fa-circle-o" aria-hidden="true"></i> 合格</button>
-						</td>
-					</tr>
-				</tbody>
+				<tbody id="tbody-pending"></tbody>
 			</table>
 		</div>
 	</div>
 </div>
-<div class="row mb-5">
-	<div class="col-6">
-		<h3 class="border-danger pl-2" style="border-left: 5px solid">不合格清單</h3>
-		<div style="max-height: 350px; overflow: auto">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>僑生編號</th>
-						<th>學生姓名</th>
-						<th style="width: 115px">不合格原因</th>
-						<th style="width: 120px"></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>001</td>
-						<td>John Cena</td>
-						<td>
-							<select class="form-control form-control-sm">
-								<option value="-1">請選擇</option>
-								<option value="1">＊未繳交報名(審查)費用</option>
-								<option value="2">＊學歷資格不符</option>
-								<option value="3">＊資料不完整，未符合系所規定</option>
-								<option value="4">資料不完整－未附作品或作品不完整</option>
-								<option value="5">資料不完整－未附成績單</option>
-								<option value="6">資料不完整－未附研究計畫或研究計畫不完整</option>
-								<option value="7">資料不完整－未附讀書計畫或讀書計畫不完整</option>
-								<option value="8">資料不完整－未附推薦信</option>
-								<option value="9">資料不完整－未附履歷</option>
-								<option value="10">資料不完整－未附自傳</option>
-								<option value="11">資料不完整－未附國際比賽證明</option>
-								<option value="12">資料不完整－未附專業證明或證照或語言證明</option>
-								<option value="13">資料不完整－未附術科成績證明書</option>
-								<option value="14">資料不完整－未附影音作品</option>
-								<option value="15">資料不完整－未附立體作品照片</option>
-								<option value="16">＊審查資料成績未達標準</option>
-								<option value="17">審查資料－學經歷背景與系所不符</option>
-								<option value="18">審查資料－無系所相關專長</option>
-								<option value="19">審查資料－相關的專業課程訓練不足</option>
-								<option value="20">審查資料－專業能力不夠突出</option>
-								<option value="21">審查資料－學業成績不夠理想</option>
-								<option value="22">審查資料－創作能力要加強</option>
-								<option value="23">審查資料－系所無該專長師資</option>
-								<option value="24">審查資料－欠缺就讀的企圖</option>
-								<option value="25">審查資料－缺乏發展潛力</option>
-								<option value="26">審查資料－申請動機與系所宗旨不符</option>
-								<option value="27">審查資料－志趣與系所課程規劃不符</option>
-								<option value="28">審查資料－未能瞭解其就學及專業定向</option>
-								<option value="29">審查資料－語言能力需再加強</option>
-								<option value="30">審查資料－中文能力不佳</option>
-								<option value="31">審查資料－英文能力不佳</option>
-								<option value="32">審查資料－寫作能力不佳</option>
-								<option value="33">審查資料－作品不夠優秀</option>
-								<option value="34">審查資料－程度未達系所要求</option>
-								<option value="35">＊術科測試成績未達錄取標準</option>
-								<option value="36">＊筆試成績未達錄取標準</option>
-								<option value="37">＊口試成績未達錄取標準</option>
-								<option value="38">＊依會議決議決定</option>
-								<option value="39">＊未通過委員同意</option>
-								<option value="40">＊未達合格票數</option>
-								<option value="41">＊自行通知放棄申請</option>
-								<option value="42">＊已透過其他管道錄取</option>
-								<option value="43">*資料抄襲</option>
-								<option value="44">*審查資料─學生研究方向與系所不符</option>
-								<option value="45">*審查資料─學生出席情況欠佳</option>
-								<option value="46">*審查資料─學業成績不完整</option>
-							</select>
-						</td>
-						<td class="text-center">
-							<button class="btn btn-warning">退回</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<div class="col-6">
+<hr />
+<div class="row">
+	<div class="col-12">
 		<h3 class="border-success pl-2" style="border-left: 5px solid">合格清單</h3>
 		<div style="max-height: 350px; overflow: auto">
 			<table class="table table-hover">
@@ -151,24 +72,38 @@
 						<th style="width: 200px"></th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>001</td>
-						<td>John Cena</td>
-						<td class="text-center">
-							<button class="btn btn-secondary"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
-							<button class="btn btn-secondary"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
-							<button class="btn btn-warning">退回</button>
-						</td>
-					</tr>
-				</tbody>
+				<tbody id="tbody-pass"></tbody>
 			</table>
 		</div>
 	</div>
 </div>
-<div class="row mb-5">
-	<div class="col-md-10 offset-md-1 text-center">
-		<button class="btn btn-block btn-primary">儲存</button>
+<hr />
+<div class="row">
+	<div class="col-12">
+		<h3 class="border-danger pl-2" style="border-left: 5px solid">不合格清單</h3>
+		<div style="max-height: 350px; overflow: auto">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>僑生編號</th>
+						<th>學生姓名</th>
+						<th>不合格原因</th>
+						<th>備註</th>
+						<th style="width: 120px"></th>
+					</tr>
+				</thead>
+				<tbody id="tbody-failed"></tbody>
+			</table>
+		</div>
 	</div>
 </div>
+<hr />
+<div class="row mb-5">
+	<div class="col-md-10 offset-md-1 text-center">
+		<button class="btn btn-primary">儲存</button>
+		<button class="btn btn-danger">送出資料並鎖定</button>
+	</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jschardet/1.6.0/jschardet.min.js" integrity="sha256-CEf/4H6Uoi1ITLUQxu/mUnVHZdabrr4lVGsTduOHkkQ="
+	crossorigin="anonymous"></script>
+<script src="./js/review.js"></script>

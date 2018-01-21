@@ -81,8 +81,8 @@ export default class StudentDataTable extends React.Component {
 		});
 	}
 
-	getStudentMergedFile(studentId, deptId) {
-		window.API.getStudentMergedFile(window.getSystem(), studentId, deptId);
+	getStudentMergedFile(studentId, deptId, filetype) {
+		window.API.getStudentMergedFile(window.getSystem(), studentId, deptId, filetype);
 	}
 
 	comapreField(key, type) {
@@ -131,6 +131,8 @@ export default class StudentDataTable extends React.Component {
 								<th style={thStyle} onClick={() => this.handleSort('resident')}>僑居地 {!!this.state.sort && sortKey === 'resident' && sortIcon}</th>
 								<th style={thStyle} onClick={() => this.handleSort('order')}>志願序 {!!this.state.sort && sortKey === 'order' && sortIcon}</th>
 								<th></th>
+								<th></th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -145,6 +147,9 @@ export default class StudentDataTable extends React.Component {
 											<td>{val.resident}</td>
 											<td>{val.order}</td>
 											<td className="text-center"><Button color="primary" size="sm" onClick={() => { this.props.onDetail(val.userID, val.deptID) }}>學生詳細資料</Button></td>
+											<td className="text-center"><Button color="success" size="sm" onClick={() => { alert('尚未開放'); } }>下載審查資料（PDF 檔）</Button></td>
+											{/* this.getStudentMergedFile(val.userID, val.deptID, 'pdf') */}
+											<td className="text-center"><Button color="success" size="sm" onClick={() => { this.getStudentMergedFile(val.userID, val.deptID, 'raw') } }>下載審查資料（原始檔）</Button></td>
 										</tr>
 									);
 								})
