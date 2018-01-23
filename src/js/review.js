@@ -4,6 +4,7 @@
 	 * priveate variable
 	 */
 
+	const _config = window.getConfig();
 	let _reasonMapping = [];
 	let _departments = {};
 	let _csvReviews = [];
@@ -25,7 +26,9 @@
 
 	const $systemSel = $('#sel-system');
 	const $deptSel = $('#sel-dept');
+	const $downloadCSVBtn = $('#btn-downloadCSV');
 	const $uploadBtn = $('#btn-upload');
+	const $uploadTextBtn = $('#btn-upload-text')
 	const $fileInput = $('#file-input');
 	const $pendingTbody = $('#tbody-pending');
 	const $passTbody = $('#tbody-pass');
@@ -120,8 +123,6 @@
 		_csvReviews = rows.filter((val, i) => {
 			return val.length === fieldLength;
 		});
-		// 清掉 table header
-		_csvReviews = _csvReviews.slice(2);
 
 		// 格式化 csv 資料
 		// no: 僑生編號
@@ -132,17 +133,47 @@
 
 		_csvReviews = _csvReviews.map(el => {
 			return {
-				no: el[2],
+				overseas_student_id: el[2],
 				name: el[4],
-				sortNum: Number(el[5]),
-				failedCode: el[6],
-				comment: el[7]
+				review_order: Number(el[5]),
+				fail_result: (el[6] === undefined || el[6] === "") ? null : el[6],
+				review_memo: (el[7] === undefined || el[7] === "") ? null : el[7]
 			}
 		});
 
-		_reviewPending = _csvReviews.filter(el => { return el.sortNum < 0; });
-		_reviewPass = _csvReviews.filter(el => { return el.sortNum > 0; });
-		_reviewFailed = _csvReviews.filter(el => { return el.sortNum === 0; });
+		// Review 暫存，整合系統上已有的學生
+		let tempReview = [];
+		tempReview = tempReview.concat(_reviewPending);
+		tempReview = tempReview.concat(_reviewPass);
+		tempReview = tempReview.concat(_reviewFailed);
+
+		// 原有資料與 csv 做 merge
+		_csvReviews.forEach(csv => {
+			const studentIndex = tempReview.findIndex(pen => { return pen.overseas_student_id === csv.overseas_student_id });
+			if (studentIndex > -1) {
+				tempReview[studentIndex].review_order = csv.review_order;
+				tempReview[studentIndex].fail_result = csv.fail_result;
+				tempReview[studentIndex].review_memo = csv.review_memo;
+			}
+		})
+
+		_reviewPending = tempReview.filter(el => { return el.review_order < 0; });
+		_reviewPass = tempReview.filter(el => { return el.review_order > 0; });
+		_reviewFailed = tempReview.filter(el => { return el.review_order === 0; });
+
+		_reviewPending.forEach(el => {
+			el.review_order = null;
+		})
+
+		_reviewPass.forEach(el => {
+			el.fail_result = null;
+			el.review_memo = null;
+		})
+
+		_reviewFailed.forEach(el => {
+			el.fail_result = (el.fail_result === null) ? _reasonMapping[0].id : el.fail_result;
+			el.review_memo = (el.review_memo === null) ? "" : el.review_memo;
+		})
 
 		_reviewPass.sort(function (a, b) {
 			return a.sortNum - b.sortNum;
@@ -152,14 +183,14 @@
 		_reRenderPass();
 		_reRenderFailed();
 
-		console.log("========== _csvReviews ==========");
-		console.log(_csvReviews);
-		console.log("========== _reviewFailed ==========");
-		console.log(_reviewFailed);
-		console.log("========== _reviewPass ==========");
-		console.log(_reviewPass);
-		console.log("========== _reviewPending ==========");
-		console.log(_reviewPending);
+		// console.log("========== _csvReviews ==========");
+		// console.log(_csvReviews);
+		// console.log("========== _reviewFailed ==========");
+		// console.log(_reviewFailed);
+		// console.log("========== _reviewPass ==========");
+		// console.log(_reviewPass);
+		// console.log("========== _reviewPending ==========");
+		// console.log(_reviewPending);
 	}
 
 	function _handleSystemChange() {
@@ -200,11 +231,6 @@
 			_reviewPass = _studentList.filter(el => { return el.review_order > 0 });
 			_reviewFailed = _studentList.filter(el => { return el.review_order === 0 });
 
-			console.log(_studentList);
-			console.log(_reviewPending);
-			console.log(_reviewPass);
-			console.log(_reviewFailed);
-
 			_reRenderPending();
 			_reRenderPass();
 			_reRenderFailed();
@@ -212,6 +238,8 @@
 			$infoDiv.show();
 			$deptHeading.text(data.title);
 			$systemHeading.text(systemName);
+			$downloadCSVBtn.attr("href", `${_config.apiBase}/reviewers/systems/${systemId}/departments/${deptId}?type=file`);
+			$uploadTextBtn.text(systemName + data.title);
 		});
 	}
 
@@ -357,11 +385,13 @@
 		const index = $(this).data("index");
 		const memoText = $(this).val();
 		_reviewFailed[index].review_memo = memoText;
-		console.log(_reviewFailed[index]);
 	}
 
 	function _handleSave() {
 		console.log("Save");
+		console.log(_reviewPending);
+		console.log(_reviewPass);
+		console.log(_reviewFailed);
 	}
 
 	function _handleConfirm() {
