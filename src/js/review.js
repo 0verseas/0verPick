@@ -12,6 +12,12 @@
 	let _reviewPending = [];
 	let _reviewPass = [];
 	let _reviewFailed = [];
+	const _systemMapping = [
+	{id: "1", key: "bachelor_depts", name: "學士班"},
+	{id: "2", key: "two_year_tech_depts", name: "港二技"},
+	{id: "3", key: "master_depts", name: "碩士班"},
+	{id: "4", key: "phd_depts", name: "博士班"}
+	]
 
 	/**
 	 * cache DOM
@@ -24,6 +30,11 @@
 	const $pendingTbody = $('#tbody-pending');
 	const $passTbody = $('#tbody-pass');
 	const $failedTbody = $('#tbody-failed');
+	const $saveBtn = $('#btn-save');
+	const $confirmBtn = $('#btn-confirm');
+	const $infoDiv = $('#div-info');
+	const $deptHeading = $('#heading-dept');
+	const $systemHeading = $('#heading-system');
 
 	/**
 	 * init
@@ -39,6 +50,8 @@
 	$deptSel.on('change', _handleDeptChange);
 	$uploadBtn.on('click', _handleUpload);
 	$fileInput.on('change', _handleFileChange);
+	$saveBtn.on('click', _handleSave);
+	$confirmBtn.on('click', _handleConfirm);
 
 	/**
 	 * event handler
@@ -163,14 +176,9 @@
 	}
 
 	function _handleDeptChange() {
-		const systemMapping = [
-		{id: "1", key: "bachelor_depts"},
-		{id: "2", key: "two_year_tech_depts"},
-		{id: "3", key: "master_depts"},
-		{id: "4", key: "phd_depts"}
-		]
 		const systemKey = $systemSel.val();
-		const systemId = systemMapping.find(el => el.key === systemKey).id;
+		const systemId = _systemMapping.find(el => el.key === systemKey).id;
+		const systemName = _systemMapping.find(el => el.key === systemKey).name;
 		const deptId = this.value;
 
 		window.API.getDeptReviewResult(systemId, deptId, (err, data) => {
@@ -200,6 +208,10 @@
 			_reRenderPending();
 			_reRenderPass();
 			_reRenderFailed();
+
+			$infoDiv.show();
+			$deptHeading.text(data.title);
+			$systemHeading.text(systemName);
 		});
 	}
 
@@ -262,7 +274,9 @@
 						${_reasonOptionHTML}
 					</select>
 				</td>
-				<td>${data.review_memo}</td>
+				<td>
+					<input type="text" data-index="${index}" class="input-memo form-control form-control-sm" value="${data.review_memo}">
+				</td>
 				<td class="text-center">
 					<button class="btn btn-warning btn-failed-return" data-pass="0" data-index="${index}"> 退回 </button>
 				</td>
@@ -275,6 +289,7 @@
 		})
 		$('.btn-failed-return').on('click', _handleToPending);
 		$('.sel-reason').on('change', _handleReasonChange);
+		$('.input-memo').on('change', _handleMemoChange);
 	}
 
 	function _handlePass() {
@@ -336,6 +351,21 @@
 		const index = $(this).data("index");
 		const failedCode = $(this).val();
 		_reviewFailed[index].failedCode = failedCode;
+	}
+
+	function _handleMemoChange() {
+		const index = $(this).data("index");
+		const memoText = $(this).val();
+		_reviewFailed[index].review_memo = memoText;
+		console.log(_reviewFailed[index]);
+	}
+
+	function _handleSave() {
+		console.log("Save");
+	}
+
+	function _handleConfirm() {
+		console.log("confirm");
 	}
 
 })();
