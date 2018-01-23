@@ -395,6 +395,21 @@ window.API = (() => {
 		.catch((err) => { _handleError(err, callback) });
 	}
 
+	// 拿到所有學制的審查狀態
+	function confirmSystem(type_id, callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/systems/${type_id}`, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		.then(_parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { _handleError(err, callback) });
+	}
+
 	function _handleError(err, callback) {
 		const status = err.status;
 		_endLoading();
@@ -434,6 +449,7 @@ window.API = (() => {
 		getAllStudentMergedFile,
 		CSVToArray,
 		getUrlParam,
-		getSystems
+		getSystems,
+		confirmSystem,
 	};
 })();
