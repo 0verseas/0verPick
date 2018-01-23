@@ -380,6 +380,21 @@ window.API = (() => {
 		});
 	}
 
+	// 拿到所有學制的審查狀態
+	function getSystems(callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/systems`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		.then(_parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { _handleError(err, callback) });
+	}
+
 	function _handleError(err, callback) {
 		const status = err.status;
 		_endLoading();
@@ -418,6 +433,7 @@ window.API = (() => {
 		getStudentMergedFile,
 		getAllStudentMergedFile,
 		CSVToArray,
-		getUrlParam
+		getUrlParam,
+		getSystems
 	};
 })();

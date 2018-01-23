@@ -1,68 +1,229 @@
-<div class="row mb-5">
+<div class="row mb-3">
 	<div class="col-12">
 		<ul class="nav nav-tabs">
-			<li class="nav-item">
-				<a class="nav-link active" href="#">學士班</a>
+			<li class="nav-item" id="bachelor-nav-item">
+				<a class="nav-link active" id="bachelor-tab" data-toggle="tab" href="#bachelor" role="tab" aria-controls="bachelor" aria-selected="true">學士班</a>
 			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">碩士班</a>
+			<li class="nav-item" id="master-nav-item">
+				<a class="nav-link" id="master-tab" data-toggle="tab" href="#master" role="tab" aria-controls="master" aria-selected="true">碩士班</a>
 			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">博士班</a>
+			<li class="nav-item" id="phd-nav-item">
+				<a class="nav-link" id="phd-tab" data-toggle="tab" href="#phd" role="tab" aria-controls="phd" aria-selected="true">博士班</a>
 			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">港二技</a>
+			<li class="nav-item" id="two-year-tech-nav-item">
+				<a class="nav-link" id="two-year-tech-tab" data-toggle="tab" href="#two-year-tech" role="tab" aria-controls="two-year-tech" aria-selected="true">港二技</a>
 			</li>
 		</ul>
 	</div>
 </div>
-<div class="row mb-3">
-	<div class="col-12">
-		<h3 class="border-danger pl-2" style="border-left: 5px solid">系所狀態</h3>
-		<button class="btn btn-success">
-			<i class="fa fa-download" aria-hidden="true"></i> 
-			下載審查結果回覆表
-		</button>
-		<div style="max-height: 500px; overflow: auto; margin-top: 12px;">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>系所代碼</th>
-						<th>系所名稱</th>
-						<th>審查狀態</th>
-						<th>最後審查者</th>
-						<th>最後審查時間</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>87101</td>
-						<td>資訊管理系</td>
-						<td>已儲存</td>
-						<td>俞旭昇</td>
-						<td>2018/01/19 20:17</td>
-					</tr>
-					<tr>
-						<td>87102</td>
-						<td>資訊應用外語系</td>
-						<td>已鎖定</td>
-						<td>蔡🥚🥚</td>
-						<td>2018/01/18 18:17</td>
-					</tr>
-					<tr>
-						<td>87103</td>
-						<td>資訊工程系</td>
-						<td>未審查</td>
-						<td></td>
-						<td></td>
-					</tr>
-				</tbody>
-			</table>
+<div class="tab-content" id="myTabContent">
+	<div class="tab-pane fade show active row" id="bachelor" role="tabpanel" aria-labelledby="bachelor-tab">
+		<div class="col-12">
+			<div class="row mx-1">
+				<h3 class="border-danger pl-2 d-inline" style="border-left: 5px solid">學士班 系所狀態</h3>
+				<button class="ml-auto btn btn-success" id="bachelor-download-review-form" disabled>
+					<i class="fa fa-download" aria-hidden="true"></i>
+					下載審查結果回覆表
+				</button>
+			</div>
+			<div style="max-height: 500px; overflow: auto; margin-top: 12px;">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>系所代碼</th>
+							<th>系所名稱</th>
+							<th>審查狀態</th>
+							<th>最後審查者</th>
+							<th>最後審查時間</th>
+						</tr>
+					</thead>
+					<tbody id="bachelorTbody">
+						<tr>
+							<td>87101</td>
+							<td>資訊管理系</td>
+							<td>已儲存</td>
+							<td>俞旭昇</td>
+							<td>2018/01/19 20:17</td>
+						</tr>
+						<tr>
+							<td>87102</td>
+							<td>資訊應用外語系</td>
+							<td>已鎖定</td>
+							<td>蔡🥚🥚</td>
+							<td>2018/01/18 18:17</td>
+						</tr>
+						<tr>
+							<td>87103</td>
+							<td>資訊工程系</td>
+							<td>未審查</td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="col-md-4 text-center mb-5 mx-auto mt-4">
+			<button class="btn btn-danger btn-block" id="bachelor-confirm">確認學士班審查結果並鎖定</button>
+		</div>
+	</div>
+
+	<div class="tab-pane fade row mb-3" id="master" role="tabpanel" aria-labelledby="master-tab">
+		<div class="col-12">
+			<div class="row mx-1">
+				<h3 class="border-danger pl-2 d-inline" style="border-left: 5px solid">碩士班 系所狀態</h3>
+				<button class="ml-auto btn btn-success" id="master-download-review-form" disabled>
+					<i class="fa fa-download" aria-hidden="true"></i>
+					下載審查結果回覆表
+				</button>
+			</div>
+			<div style="max-height: 500px; overflow: auto; margin-top: 12px;">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>系所代碼</th>
+							<th>系所名稱</th>
+							<th>審查狀態</th>
+							<th>最後審查者</th>
+							<th>最後審查時間</th>
+						</tr>
+					</thead>
+					<tbody id="masterTbody">
+						<tr>
+							<td>87101</td>
+							<td>資訊管理系</td>
+							<td>已儲存</td>
+							<td>俞旭昇</td>
+							<td>2018/01/19 20:17</td>
+						</tr>
+						<tr>
+							<td>87102</td>
+							<td>資訊應用外語系</td>
+							<td>已鎖定</td>
+							<td>蔡🥚🥚</td>
+							<td>2018/01/18 18:17</td>
+						</tr>
+						<tr>
+							<td>87103</td>
+							<td>資訊工程系</td>
+							<td>未審查</td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="col-md-4 text-center mb-5 mx-auto mt-4">
+			<button class="btn btn-danger btn-block" id="master-confirm">確認碩士班審查結果並鎖定</button>
+		</div>
+	</div>
+
+	<div class="tab-pane fade row mb-3" id="phd" role="tabpanel" aria-labelledby="phd-tab">
+		<div class="col-12">
+			<div class="row mx-1">
+				<h3 class="border-danger pl-2 d-inline" style="border-left: 5px solid">博士班 系所狀態</h3>
+				<button class="ml-auto btn btn-success" id="phd-download-review-form" disabled>
+					<i class="fa fa-download" aria-hidden="true"></i>
+					下載審查結果回覆表
+				</button>
+			</div>
+			<div style="max-height: 500px; overflow: auto; margin-top: 12px;">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>系所代碼</th>
+							<th>系所名稱</th>
+							<th>審查狀態</th>
+							<th>最後審查者</th>
+							<th>最後審查時間</th>
+						</tr>
+					</thead>
+					<tbody id="phdTbody">
+						<tr>
+							<td>87101</td>
+							<td>資訊管理系</td>
+							<td>已儲存</td>
+							<td>俞旭昇</td>
+							<td>2018/01/19 20:17</td>
+						</tr>
+						<tr>
+							<td>87102</td>
+							<td>資訊應用外語系</td>
+							<td>已鎖定</td>
+							<td>蔡🥚🥚</td>
+							<td>2018/01/18 18:17</td>
+						</tr>
+						<tr>
+							<td>87103</td>
+							<td>資訊工程系</td>
+							<td>未審查</td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="col-md-4 text-center mb-5 mx-auto mt-4">
+			<button class="btn btn-danger btn-block" id="phd-confirm">確認博士班審查結果並鎖定</button>
+		</div>
+	</div>
+
+	<div class="tab-pane fade row mb-3" id="two-year-tech" role="tabpanel" aria-labelledby="two-year-tech-tab">
+		<div class="col-12">
+			<div class="row mx-1">
+				<h3 class="border-danger pl-2 d-inline" style="border-left: 5px solid">港二技 系所狀態</h3>
+				<button class="ml-auto btn btn-success" id="two-year-tech-download-review-form" disabled>
+					<i class="fa fa-download" aria-hidden="true"></i>
+					下載審查結果回覆表
+				</button>
+			</div>
+			<div style="max-height: 500px; overflow: auto; margin-top: 12px;">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>系所代碼</th>
+							<th>系所名稱</th>
+							<th>審查狀態</th>
+							<th>最後審查者</th>
+							<th>最後審查時間</th>
+						</tr>
+					</thead>
+					<tbody id="twoYearTechTbody">
+						<tr>
+							<td>87101</td>
+							<td>資訊管理系</td>
+							<td>已儲存</td>
+							<td>俞旭昇</td>
+							<td>2018/01/19 20:17</td>
+						</tr>
+						<tr>
+							<td>87102</td>
+							<td>資訊應用外語系</td>
+							<td>已鎖定</td>
+							<td>蔡🥚🥚</td>
+							<td>2018/01/18 18:17</td>
+						</tr>
+						<tr>
+							<td>87103</td>
+							<td>資訊工程系</td>
+							<td>未審查</td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="col-md-4 text-center mb-5 mx-auto mt-4">
+			<button class="btn btn-danger btn-block" id="two-year-tech-confirm"確認港二技審查結果並鎖定</button>
 		</div>
 	</div>
 </div>
-<div class="row mb-5">
-	<div class="col-md-10 offset-md-1 text-center">
-		<button class="btn btn-danger btn-block">確認學士班審查結果並鎖定</button>
-	</div>
-</div>
+
+<script src="./js/result.js"></script>
