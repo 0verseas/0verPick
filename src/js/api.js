@@ -323,6 +323,20 @@ window.API = (() => {
 		.catch((err) => { _handleError(err, callback) });
 	}
 
+	function getDeptReviewResult(system, deptId, callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments/${deptId}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		.then(_parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { _handleError(err, callback) });
+	}
+
 	/**
 	 * private method
 	 */
@@ -433,6 +447,7 @@ window.API = (() => {
 		getAllStudentMergedFile,
 		CSVToArray,
 		getUrlParam,
-		getReviewFailResult
+		getReviewFailResult,
+		getDeptReviewResult
 	};
 })();

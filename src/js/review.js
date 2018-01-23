@@ -8,6 +8,7 @@
 	let _departments = {};
 	let _csvReviews = [];
 	let _reasonOptionHTML = '';
+	let _studentList = [];
 	let _reviewPending = [];
 	let _reviewPass = [];
 	let _reviewFailed = [];
@@ -75,7 +76,7 @@
 
 		const fileName = file.name;
 		if (fileName.split('.').pop() !== 'csv') {
-			alert('請匯入 .csv 欓');
+			alert('請匯入 .csv 檔');
 			return;
 		}
 
@@ -150,7 +151,6 @@
 
 	function _handleSystemChange() {
 		console.log(this.value);
-
 		let deptHTML = '<option value="-1">請選擇</option>';
 
 		if (this.value !== "-1") {
@@ -163,7 +163,44 @@
 	}
 
 	function _handleDeptChange() {
-		console.log(this.value);
+		const systemMapping = [
+		{id: "1", key: "bachelor_depts"},
+		{id: "2", key: "two_year_tech_depts"},
+		{id: "3", key: "master_depts"},
+		{id: "4", key: "phd_depts"}
+		]
+		const systemKey = $systemSel.val();
+		const systemId = systemMapping.find(el => el.key === systemKey).id;
+		const deptId = this.value;
+
+		window.API.getDeptReviewResult(systemId, deptId, (err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+			_studentList = data.students.map(el => {
+				return {
+					id: el.user_id,
+					review_order: el.review_order,
+					fail_result: el.fail_result,
+					name: el.name,
+					overseas_student_id: el.overseas_student_id,
+					review_memo: el.review_memo
+				}
+			});
+			_reviewPending = _studentList.filter(el => { return el.review_order === null });
+			_reviewPass = _studentList.filter(el => { return el.review_order > 0 });
+			_reviewFailed = _studentList.filter(el => { return el.review_order === 0 });
+
+			console.log(_studentList);
+			console.log(_reviewPending);
+			console.log(_reviewPass);
+			console.log(_reviewFailed);
+
+			_reRenderPending();
+			_reRenderPass();
+			_reRenderFailed();
+		});
 	}
 
 	function _reRenderPending() {
@@ -171,8 +208,7 @@
 		_reviewPending.forEach((data, index) => {
 			pendingHTML += `
 			<tr>
-				<td>${index + 1}</td>
-				<td>${data.no}</td>
+				<td>${data.overseas_student_id}</td>
 				<td>${data.name}</td>
 				<td class="text-right">
 					<button class="btn btn-success btn-judge" data-pass="1" data-index="${index}">
@@ -197,7 +233,7 @@
 			passHTML += `
 			<tr>
 				<td>${index + 1}</td>
-				<td>${data.no}</td>
+				<td>${data.overseas_student_id}</td>
 				<td>${data.name}</td>
 				<td class="text-center">
 					<button class="btn btn-secondary up-arrow" data-index="${index}"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
@@ -217,19 +253,16 @@
 		let failedHTML = '';
 
 		_reviewFailed.forEach((data, index) => {
-			const reasonMsg = _reasonMapping.find(el => {
-				return el.id == data.failedCode;
-			}).reason;
 			failedHTML += `
 			<tr>
-				<td>${data.no}</td>
+				<td>${data.overseas_student_id}</td>
 				<td>${data.name}</td>
 				<td>
 					<select id="failedReason-${index}" data-index="${index}" class="form-control form-control-sm sel-reason">
 						${_reasonOptionHTML}
 					</select>
 				</td>
-				<td>${data.comment}</td>
+				<td>${data.review_memo}</td>
 				<td class="text-center">
 					<button class="btn btn-warning btn-failed-return" data-pass="0" data-index="${index}"> 退回 </button>
 				</td>
@@ -238,7 +271,7 @@
 		})
 		$failedTbody.html(failedHTML);
 		_reviewFailed.forEach((data, index) => {
-			$('#failedReason-' + index).val(data.failedCode);
+			$('#failedReason-' + index).val(data.fail_result);
 		})
 		$('.btn-failed-return').on('click', _handleToPending);
 		$('.sel-reason').on('change', _handleReasonChange);
@@ -251,6 +284,9 @@
 			_reviewPending.splice(index, 1);
 			_reRenderPass();
 		} else {
+			_reviewPending[index].review_order = 0;
+			_reviewPending[index].fail_result = _reasonMapping[0].id;
+			_reviewPending[index].review_memo = "";
 			_reviewFailed.push(_reviewPending[index]);
 			_reviewPending.splice(index, 1);
 			_reRenderFailed();
@@ -261,14 +297,14 @@
 	function _handleToPending() {
 		const index = $(this).data('index');
 		if (!!$(this).data('pass')) {
-			_reviewPass[index].sortNum = -1;
-			_reviewPass[index].failedCode = "";
+			_reviewPass[index].review_order = null;
 			_reviewPending.push(_reviewPass[index]);
 			_reviewPass.splice(index, 1);
 			_reRenderPass();
 		} else {
-			_reviewFailed[index].sortNum = -1;
-			_reviewFailed[index].failedCode = "";
+			_reviewFailed[index].review_order = null;
+			_reviewFailed[index].fail_result = null;
+			_reviewFailed[index].review_memo = null;
 			_reviewPending.push(_reviewFailed[index]);
 			_reviewFailed.splice(index, 1);
 			_reRenderFailed();
@@ -278,7 +314,6 @@
 
 	function _prevWish() { // 排序上調
 		const index = $(this).data("index");
-		console.log(index);
 		if (index > 0) {
 			const swap = _reviewPass[index];
 			_reviewPass[index] = _reviewPass[index - 1];
@@ -289,7 +324,6 @@
 
 	function _nextWish() { // 排序下調
 		const index = $(this).data("index");
-		console.log(index);
 		if (index < _reviewPass.length - 1) {
 			const swap = _reviewPass[index];
 			_reviewPass[index] = _reviewPass[index + 1];
@@ -302,7 +336,6 @@
 		const index = $(this).data("index");
 		const failedCode = $(this).val();
 		_reviewFailed[index].failedCode = failedCode;
-		console.log(_reviewFailed[index]);
 	}
 
 })();
