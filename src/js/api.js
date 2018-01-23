@@ -309,6 +309,20 @@ window.API = (() => {
 		return decodeURIComponent(results[2].replace(/\+/g, " "));
 	}
 
+	function getReviewFailResult(callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/fail-results`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		.then(_parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { _handleError(err, callback) });
+	}
+
 	/**
 	 * private method
 	 */
@@ -418,6 +432,7 @@ window.API = (() => {
 		getStudentMergedFile,
 		getAllStudentMergedFile,
 		CSVToArray,
-		getUrlParam
+		getUrlParam,
+		getReviewFailResult
 	};
 })();

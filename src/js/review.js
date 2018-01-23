@@ -4,56 +4,7 @@
 	 * priveate variable
 	 */
 
-	const _reasonMapping = [
-	{val: "", text: "未填寫不合格原因"},
-	{val: "1", text: "＊未繳交報名"},
-	{val: "2", text: "＊學歷資格不符"},
-	{val: "3", text: "＊資料不完整，未符合系所規定"},
-	{val: "4", text: "資料不完整－未附作品或作品不完整"},
-	{val: "5", text: "資料不完整－未附成績單"},
-	{val: "6", text: "資料不完整－未附研究計畫或研究計畫不完整"},
-	{val: "7", text: "資料不完整－未附讀書計畫或讀書計畫不完整"},
-	{val: "8", text: "資料不完整－未附推薦信"},
-	{val: "9", text: "資料不完整－未附履歷"},
-	{val: "10", text: "資料不完整－未附自傳"},
-	{val: "11", text: "資料不完整－未附國際比賽證明"},
-	{val: "12", text: "資料不完整－未附專業證明或證照或語言證明"},
-	{val: "13", text: "資料不完整－未附術科成績證明書"},
-	{val: "14", text: "資料不完整－未附影音作品"},
-	{val: "15", text: "資料不完整－未附立體作品照片"},
-	{val: "16", text: "＊審查資料成績未達標準"},
-	{val: "17", text: "審查資料－學經歷背景與系所不符"},
-	{val: "18", text: "審查資料－無系所相關專長"},
-	{val: "19", text: "審查資料－相關的專業課程訓練不足"},
-	{val: "20", text: "審查資料－專業能力不夠突出"},
-	{val: "21", text: "審查資料－學業成績不夠理想"},
-	{val: "22", text: "審查資料－創作能力要加強"},
-	{val: "23", text: "審查資料－系所無該專長師資"},
-	{val: "24", text: "審查資料－欠缺就讀的企圖"},
-	{val: "25", text: "審查資料－缺乏發展潛力"},
-	{val: "26", text: "審查資料－申請動機與系所宗旨不符"},
-	{val: "27", text: "審查資料－志趣與系所課程規劃不符"},
-	{val: "28", text: "審查資料－未能瞭解其就學及專業定向"},
-	{val: "29", text: "審查資料－語言能力需再加強"},
-	{val: "30", text: "審查資料－中文能力不佳"},
-	{val: "31", text: "審查資料－英文能力不佳"},
-	{val: "32", text: "審查資料－寫作能力不佳"},
-	{val: "33", text: "審查資料－作品不夠優秀"},
-	{val: "34", text: "審查資料－程度未達系所要求"},
-	{val: "35", text: "＊術科測試成績未達錄取標準"},
-	{val: "36", text: "＊筆試成績未達錄取標準"},
-	{val: "37", text: "＊口試成績未達錄取標準"},
-	{val: "38", text: "＊依會議決議決定"},
-	{val: "39", text: "＊未通過委員同意"},
-	{val: "40", text: "＊未達合格票數"},
-	{val: "41", text: "＊自行通知放棄申請"},
-	{val: "42", text: "＊已透過其他管道錄取"},
-	{val: "43", text: "＊資料抄襲"},
-	{val: "44", text: "＊審查資料─學生研究方向與系所不符"},
-	{val: "45", text: "＊審查資料─學生出席情況欠佳"},
-	{val: "46", text: "＊審查資料─學業成績不完整"},
-	]
-
+	let _reasonMapping = [];
 	let _departments = {};
 	let _csvReviews = [];
 	let _reasonOptionHTML = '';
@@ -93,7 +44,7 @@
 	 */
 
 	function _init() {
-		// 取得某學制某系所的審查名冊檔案（.csv）
+		// 此 reviewer 可以看到的學系。
 		window.API.getDownloadableDepts('all', (err, data) => {
 			if (err) {
 				console.error(err);
@@ -102,11 +53,17 @@
 			_departments = data;
 		});
 
-		_reasonMapping.forEach(el => {
-			_reasonOptionHTML += `<option value="${el.val}">${el.text}</option>`;
+		// 初始化審查未過原因。
+		window.API.getReviewFailResult((err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+			_reasonMapping = data;
+			_reasonMapping.forEach(el => {
+				_reasonOptionHTML += `<option value="${el.id}">${el.reason}</option>`;
+			})
 		})
-
-		// 檢查某學制某系所是否有上傳過結果，有的話渲染合格、不合格名單
 	}
 
 	function _handleUpload() {
@@ -261,8 +218,8 @@
 
 		_reviewFailed.forEach((data, index) => {
 			const reasonMsg = _reasonMapping.find(el => {
-				return el.val == data.failedCode;
-			}).text;
+				return el.id == data.failedCode;
+			}).reason;
 			failedHTML += `
 			<tr>
 				<td>${data.no}</td>
