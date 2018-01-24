@@ -207,7 +207,7 @@ window.API = (() => {
 
 	function getDownloadableDepts(system = 'all', callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments`, {
+		fetch(`${_config.apiBase}/reviewers/systems`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'

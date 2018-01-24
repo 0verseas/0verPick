@@ -7,18 +7,13 @@
 	const _config = window.getConfig();
 	let _reasonMapping = [];
 	let _reasonOptionHTML = '';
-	let _departments = {};
+	let _systems = {};
 	let _systemId = ""
 	let _deptId = "";
 	let _reviewPending = [];
 	let _reviewPass = [];
 	let _reviewFailed = [];
-	const _systemMapping = [
-	{id: "1", key: "bachelor_depts", name: "學士班"},
-	{id: "2", key: "two_year_tech_depts", name: "港二技"},
-	{id: "3", key: "master_depts", name: "碩士班"},
-	{id: "4", key: "phd_depts", name: "博士班"}
-	]
+	let _systemMapping = [];
 
 	/**
 	 * cache DOM
@@ -70,7 +65,8 @@
 				console.error(err);
 				return;
 			}
-			_departments = data;
+			_systems = data;
+			_setSystems(_systems);
 		});
 
 		// 初始化審查未過原因。
@@ -84,6 +80,30 @@
 				_reasonOptionHTML += `<option value="${el.id}">${el.reason}</option>`;
 			})
 		})
+	}
+
+	function _setSystems(systems = null) {
+		console.log(_systems);
+		let systemSelHtml = '<option value="-1">請選擇</option>';
+
+		if (systems.bachelor) {
+			_systemMapping.push({id: "1", key: "bachelor", name: "學士班"});
+			systemSelHtml += '<option value="bachelor">學士班</option>';
+		}
+		if (systems.two_year_tech) {
+			_systemMapping.push({id: "2", key: "two_year_tech", name: "港二技"});
+			systemSelHtml += '<option value="two_year_tech">港二技</option>';
+		}
+		if (systems.bachelor) {
+			_systemMapping.push({id: "3", key: "master", name: "碩士班"});
+			systemSelHtml += '<option value="master">碩士班</option>';
+		}
+		if (systems.bachelor) {
+			_systemMapping.push({id: "4", key: "phd", name: "博士班"});
+			systemSelHtml += '<option value="phd">博士班</option>';
+		}
+
+		$systemSel.html(systemSelHtml);
 	}
 
 	function _handleUpload() {
@@ -198,10 +218,11 @@
 
 	function _handleSystemChange() {
 		console.log(this.value);
+		console.log(_systems);
 		let deptHTML = '<option value="-1">請選擇</option>';
 
 		if (this.value !== "-1") {
-			const deptList = _departments[this.value];
+			const deptList = _systems[this.value].departments;
 			deptList.forEach(el => {
 				deptHTML += `<option value="${el.id}">${el.title}</option>`;
 			})
