@@ -410,7 +410,8 @@
 					return {
 						id: data.id,
 						review_order: index + 1,
-						review_memo: (data.review_memo === null) ? " " : data.review_memo
+						fail_result: null,
+						review_memo: null
 					}
 				})
 				let failedData = _reviewFailed.map((data, index) => {
@@ -418,7 +419,7 @@
 						id: data.id,
 						review_order: 0,
 						fail_result: data.fail_result,
-						review_memo: (data.review_memo === "") ? " " : data.review_memo
+						review_memo: data.review_memo
 					}
 				})
 				sendData = sendData.concat(passData);
