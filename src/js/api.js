@@ -337,6 +337,21 @@ window.API = (() => {
 		.catch((err) => { _handleError(err, callback) });
 	}
 
+	function patchDeptReviewResult(system, deptId, mode, data, callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments/${deptId}?mode=${mode}`, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
+		})
+		.then(_parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { _handleError(err, callback) });
+	}
+
 	/**
 	 * private method
 	 */
@@ -480,6 +495,7 @@ window.API = (() => {
 		getSystems,
 		confirmSystem,
 		getReviewFailResult,
-		getDeptReviewResult
+		getDeptReviewResult,
+		patchDeptReviewResult
 	};
 })();

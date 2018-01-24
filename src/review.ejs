@@ -107,12 +107,19 @@
 	</div>
 </div>
 <hr />
-<div class="row mb-5">
+<div id="div-submit" class="row mb-5" style="display: none;">
 	<div class="col-md-10 offset-md-1 text-center">
-		<button id="btn-save" class="btn btn-primary">儲存</button>
-		<button id="btn-confirm" class="btn btn-danger">送出資料並鎖定</button>
+		<button class="btn btn-primary btn-patch" data-mode="save">儲存</button>
+		<button class="btn btn-danger btn-patch" data-mode="confirm">送出資料並鎖定</button>
+	</div>
+</div>
+<div id="div-lock-info" class="row mb-5" style="display: none;">
+	<div class="col-md-12 text-center">
+		<button class="btn btn-danger" disabled="disabled">資料已送出並鎖定</button> <br />
+		<small>最後送出者：<span id="text-confirmer"></span></small>
 	</div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jschardet/1.6.0/jschardet.min.js" integrity="sha256-CEf/4H6Uoi1ITLUQxu/mUnVHZdabrr4lVGsTduOHkkQ="
 	crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
 <script src="./js/review.js"></script>

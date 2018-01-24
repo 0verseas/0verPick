@@ -6,10 +6,10 @@
 
 	const _config = window.getConfig();
 	let _reasonMapping = [];
-	let _departments = {};
-	let _csvReviews = [];
 	let _reasonOptionHTML = '';
-	let _studentList = [];
+	let _departments = {};
+	let _systemId = ""
+	let _deptId = "";
 	let _reviewPending = [];
 	let _reviewPass = [];
 	let _reviewFailed = [];
@@ -33,11 +33,15 @@
 	const $pendingTbody = $('#tbody-pending');
 	const $passTbody = $('#tbody-pass');
 	const $failedTbody = $('#tbody-failed');
+	const $patchBtn = $('.btn-patch');
 	const $saveBtn = $('#btn-save');
 	const $confirmBtn = $('#btn-confirm');
 	const $infoDiv = $('#div-info');
 	const $deptHeading = $('#heading-dept');
 	const $systemHeading = $('#heading-system');
+	const $submitDiv = $('#div-submit');
+	const $lockInfoDiv = $('#div-lock-info');
+	const $confirmerText = $('#text-confirmer');
 
 	/**
 	 * init
@@ -53,8 +57,7 @@
 	$deptSel.on('change', _handleDeptChange);
 	$uploadBtn.on('click', _handleUpload);
 	$fileInput.on('change', _handleFileChange);
-	$saveBtn.on('click', _handleSave);
-	$confirmBtn.on('click', _handleConfirm);
+	$patchBtn.on('click', _handlePatchData);
 
 	/**
 	 * event handler
@@ -120,16 +123,16 @@
 		const header = rows.shift();
 		const fieldLength = header.length;
 		// 清掉奇怪的空行
-		_csvReviews = rows.filter((val, i) => {
+		let _csvReviews = rows.filter((val, i) => {
 			return val.length === fieldLength;
 		});
 
 		// 格式化 csv 資料
-		// no: 僑生編號
+		// overseas_student_id: 僑生編號
 		// name: 姓名
-		// sortNum: 審查結果， -1: 未審查、0: 不及格、其他數字：審查排序
-		// failedCode: 不及格原因代碼
-		// comment: 備註
+		// review_order: 審查結果， -1: 未審查、0: 不及格、其他數字：審查排序
+		// fail_result: 不及格原因代碼
+		// review_memo: 備註
 
 		_csvReviews = _csvReviews.map(el => {
 			return {
@@ -208,16 +211,17 @@
 
 	function _handleDeptChange() {
 		const systemKey = $systemSel.val();
-		const systemId = _systemMapping.find(el => el.key === systemKey).id;
 		const systemName = _systemMapping.find(el => el.key === systemKey).name;
-		const deptId = this.value;
+		_systemId = _systemMapping.find(el => el.key === systemKey).id;
+		_deptId = this.value;
 
-		window.API.getDeptReviewResult(systemId, deptId, (err, data) => {
+		window.API.getDeptReviewResult(_systemId, _deptId, (err, data) => {
 			if (err) {
 				console.error(err);
 				return;
 			}
-			_studentList = data.students.map(el => {
+			console.log(data);
+			let _studentList = data.students.map(el => {
 				return {
 					id: el.user_id,
 					review_order: el.review_order,
@@ -238,8 +242,18 @@
 			$infoDiv.show();
 			$deptHeading.text(data.title);
 			$systemHeading.text(systemName);
-			$downloadCSVBtn.attr("href", `${_config.apiBase}/reviewers/systems/${systemId}/departments/${deptId}?type=file`);
+			$downloadCSVBtn.attr("href", `${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}?type=file`);
 			$uploadTextBtn.text(systemName + data.title);
+			if (!!data.student_order_confirmer) {
+				// 已送出資料並鎖定
+				$submitDiv.hide();
+				$lockInfoDiv.show();
+				let date = moment(data.review_confirmed_at);
+				$confirmerText.text(data.student_order_confirmer.name + " (" + date.format("YYYY/MM/DD HH:mm:ss") + ") ");
+			} else {
+				$submitDiv.show();
+				$lockInfoDiv.hide();
+			}
 		});
 	}
 
@@ -378,7 +392,7 @@
 	function _handleReasonChange() {
 		const index = $(this).data("index");
 		const failedCode = $(this).val();
-		_reviewFailed[index].failedCode = failedCode;
+		_reviewFailed[index].fail_result = failedCode;
 	}
 
 	function _handleMemoChange() {
@@ -387,15 +401,51 @@
 		_reviewFailed[index].review_memo = memoText;
 	}
 
-	function _handleSave() {
-		console.log("Save");
-		console.log(_reviewPending);
-		console.log(_reviewPass);
-		console.log(_reviewFailed);
-	}
+	function _handlePatchData() {
+		const mode = $(this).data('mode');
+		if (_deptId !== "") {
+			if (_reviewPending.length === 0) {
+				let sendData = [];
+				let passData = _reviewPass.map((data, index) => {
+					return {
+						id: data.id,
+						review_order: index + 1,
+						fail_result: null,
+						review_memo: null
+					}
+				})
+				let failedData = _reviewFailed.map((data, index) => {
+					return {
+						id: data.id,
+						review_order: 0,
+						fail_result: data.fail_result,
+						review_memo: data.review_memo
+					}
+				})
+				sendData = sendData.concat(passData);
+				sendData = sendData.concat(failedData);
 
-	function _handleConfirm() {
-		console.log("confirm");
+				const studentsData = { students: sendData }
+
+				window.API.patchDeptReviewResult(_systemId, _deptId, mode, studentsData, (err, data) => {
+					if (err) {
+						console.error(err);
+						return;
+					}
+
+					if (mode === "confirm") {
+						alert("審查結果已送出，並鎖定審查結果。");
+					} else {
+						alert("審查結果已儲存。");
+					}
+				});
+
+			} else {
+				alert("尚有待審查項目，請審查完畢再儲存。");
+			}
+		} else {
+			alert("請先選擇系所。");
+		}
 	}
 
 })();
