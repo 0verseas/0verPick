@@ -24,11 +24,14 @@
 <div id="review-block" class="" style="display: none;">
 	<div id="div-info">
 		<div class="row">
-			<div class="col-12">
+			<div class="col-6">
 				<h3>
-				<span id="heading-dept"></span>
-				<small id="heading-system" class="text-muted"></small>
+					<span id="heading-dept"></span>
+					<small id="heading-system" class="text-muted"></small>
 				</h3>
+			</div>
+			<div class="col-6 text-right" id="confirm-block" style="display: none;">
+				<small class="badge badge-warning">此系審查資料由 <span id="confirm-by">Name</span> 確認送出並鎖定於 <span id="confirm-at">YYYY/MM/DD HH:mm:ss</span></small>
 			</div>
 		</div>
 		<div class="row">
@@ -117,8 +120,7 @@
 	</div>
 	<div id="div-lock-info" class="row mb-5" style="display: none;">
 		<div class="col-md-12 text-center">
-			<button class="btn btn-danger" disabled="disabled">資料已送出並鎖定</button> <br />
-			<small>最後送出者：<span id="text-confirmer"></span></small>
+			<button class="btn btn-danger" disabled>資料已送出並鎖定</button>
 		</div>
 	</div>
 </div>

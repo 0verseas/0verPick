@@ -41,7 +41,9 @@
 	const $submitDiv = $('#div-submit');
 	const $adminSubmitDiv = $('#div-submit-admin');
 	const $lockInfoDiv = $('#div-lock-info');
-	const $confirmerText = $('#text-confirmer');
+	const $confirmBlock = $('#confirm-block');
+	const $confirmBy = $('#confirm-by');
+	const $confirmAT = $('#confirm-at');
 
 	/**
 	 * init
@@ -306,6 +308,12 @@
 				if (!needLock) {
 					$adminSubmitDiv.show();
 				}
+
+				// 顯示系所鎖定狀態
+				const date = moment(data.review_confirmed_at);
+				$confirmAT.text(date.format('YYYY/MM/DD HH:mm:ss'));
+				$confirmBy.text(data.student_order_confirmer.name);
+				$confirmBlock.show();
 			} else {
 				// 系所資料尚未鎖定，顯示儲存按鈕並隱藏「儲存修改」按鈕
 				$adminSubmitDiv.hide();
