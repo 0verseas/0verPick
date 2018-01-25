@@ -112,7 +112,7 @@
 
 	function _handleFileChange() {
 		const file = this.files[0];
-
+		$fileInput.val('');
 		const fileName = file.name;
 		if (fileName.split('.').pop() !== 'csv') {
 			alert('請匯入 .csv 檔');
@@ -474,7 +474,7 @@
 						fail_result: null,
 						review_memo: null
 					}
-				})
+				});
 				let failedData = _reviewFailed.map((data, index) => {
 					return {
 						id: data.id,
@@ -482,11 +482,11 @@
 						fail_result: data.fail_result,
 						review_memo: data.review_memo
 					}
-				})
+				});
 				sendData = sendData.concat(passData);
 				sendData = sendData.concat(failedData);
 
-				const studentsData = { students: sendData }
+				const studentsData = { students: sendData };
 
 				window.API.patchDeptReviewResult(_systemId, _deptId, mode, studentsData, (err, data) => {
 					if (err) {
