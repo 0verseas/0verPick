@@ -2,6 +2,7 @@ window.API = (() => {
 	const _config = window.getConfig();
 	let _loadingTimeout;
 	let _loadingCount = 0;
+	let _loadingStartTime = null;
 
 	/**
 	 * public method
@@ -371,16 +372,23 @@ window.API = (() => {
 	 */
 	function _setLoading() {
 		_loadingCount ++;
+		if (!_loadingStartTime) {
+			_loadingStartTime = $.now();
+		}
+
 		Loading.start();
 	}
 
 	function _endLoading() {
 		_loadingCount --;
 		if (_loadingCount === 0) {
+			const loadingDuration = $.now() - _loadingStartTime;
+			_loadingStartTime = null;
+			const antiOptimize = loadingDuration > 2000 ? 0 : (Math.random() * 1000) + 500;
 			_loadingTimeout && clearTimeout(_loadingTimeout);
 			_loadingTimeout = setTimeout(() => {
 				Loading.stop();
-			}, (Math.random() * 1000) + 500);
+			}, antiOptimize);
 		}
 	}
 
