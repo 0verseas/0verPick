@@ -230,11 +230,18 @@
 		$deptSel.html(deptHTML);
 	}
 
+	// 如果是 dept select 發生事件，取值丟入 renderDept
 	function _handleDeptChange() {
+		const deptId = this.value;
+		_renderDeptReviewResult(deptId);
+	}
+
+	// 改成丟入某系 id render 系所審查結果
+	function _renderDeptReviewResult(deptId) {
 		const systemKey = $systemSel.val();
 		const systemName = _systemMapping.find(el => el.key === systemKey).name;
 		_systemId = _systemMapping.find(el => el.key === systemKey).id;
-		_deptId = this.value;
+		_deptId = deptId;
 
 		window.API.getDeptReviewResult(_systemId, _deptId, (err, data) => {
 			if (err) {
@@ -252,22 +259,30 @@
 					review_memo: el.review_memo
 				}
 			});
+
+			// 判斷是否已鎖定
+			const isConfirmed = !!data.student_order_confirmer;
+
 			_reviewPending = _studentList.filter(el => { return el.review_order === null });
 			_reviewPass = _studentList.filter(el => { return el.review_order > 0 });
 			_reviewFailed = _studentList.filter(el => { return el.review_order === 0 });
 
-			_reRenderPending();
-			_reRenderPass();
-			_reRenderFailed();
+			// reRender 時，丟入參數判斷是否已鎖定，若已鎖定，將所有 input disabled
+			_reRenderPending(isConfirmed);
+			_reRenderPass(isConfirmed);
+			_reRenderFailed(isConfirmed);
 
 			$infoDiv.show();
 			$deptHeading.text(data.title);
 			$systemHeading.text(systemName);
 			$downloadCSVBtn.attr("href", `${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}?type=file`);
 			$uploadTextBtn.text(systemName + data.title);
-			if (!!data.student_order_confirmer) {
-				// 已送出資料並鎖定
+
+			if (isConfirmed) {
+				// 已送出資料並鎖定，同時不能下載系所審查名冊，也不能匯入檔案
 				$submitDiv.hide();
+				$downloadCSVBtn.hide();
+				$uploadBtn.hide();
 				$lockInfoDiv.show();
 				let date = moment(data.review_confirmed_at);
 				$confirmerText.text(data.student_order_confirmer.name + " (" + date.format("YYYY/MM/DD HH:mm:ss") + ") ");
@@ -278,7 +293,13 @@
 		});
 	}
 
-	function _reRenderPending() {
+	function _reRenderPending(isConfirmed) {
+		if (isConfirmed) {
+			isConfirmed = 'disabled';
+		} else {
+			isConfirmed = '';
+		}
+
 		let pendingHTML = '';
 		_reviewPending.forEach((data, index) => {
 			pendingHTML += `
@@ -286,11 +307,11 @@
 				<td>${data.overseas_student_id}</td>
 				<td>${data.name}</td>
 				<td class="text-right">
-					<button class="btn btn-success btn-judge" data-pass="1" data-index="${index}">
+					<button class="btn btn-success btn-judge" data-pass="1" data-index="${index}" ${isConfirmed}>
 						<i class="fa fa-circle-o" aria-hidden="true"></i>
 						合格
 					</button>
-					<button class="btn btn-danger btn-judge" data-pass="0" data-index="${index}">
+					<button class="btn btn-danger btn-judge" data-pass="0" data-index="${index}" ${isConfirmed}>
 						<i class="fa fa-times" aria-hidden="true"></i>
 						不合格
 					</button>
@@ -302,7 +323,13 @@
 		$('.btn-judge').on('click', _handlePass);
 	}
 
-	function _reRenderPass() {
+	function _reRenderPass(isConfirmed) {
+		if (isConfirmed) {
+			isConfirmed = 'disabled';
+		} else {
+			isConfirmed = '';
+		}
+
 		let passHTML = '';
 		_reviewPass.forEach((data, index) => {
 			passHTML += `
@@ -311,9 +338,9 @@
 				<td>${data.overseas_student_id}</td>
 				<td>${data.name}</td>
 				<td class="text-center">
-					<button class="btn btn-secondary up-arrow" data-index="${index}"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
-					<button class="btn btn-secondary down-arrow" data-index="${index}"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
-					<button class="btn btn-warning btn-pass-return" data-pass="1" data-index="${index}"> 退回 </button>
+					<button class="btn btn-secondary up-arrow" data-index="${index}" ${isConfirmed}><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+					<button class="btn btn-secondary down-arrow" data-index="${index}" ${isConfirmed}><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+					<button class="btn btn-warning btn-pass-return" data-pass="1" data-index="${index}" ${isConfirmed}> 退回 </button>
 				</td>
 			</tr>
 			`
@@ -324,24 +351,29 @@
 		$('.down-arrow').on('click', _nextWish);
 	}
 
-	function _reRenderFailed() {
-		let failedHTML = '';
+	function _reRenderFailed(isConfirmed) {
+		if (isConfirmed) {
+			isConfirmed = 'disabled';
+		} else {
+			isConfirmed = '';
+		}
 
+		let failedHTML = '';
 		_reviewFailed.forEach((data, index) => {
 			failedHTML += `
 			<tr>
 				<td>${data.overseas_student_id}</td>
 				<td>${data.name}</td>
 				<td>
-					<select id="failedReason-${index}" data-index="${index}" class="form-control form-control-sm sel-reason">
+					<select id="failedReason-${index}" data-index="${index}" class="form-control form-control-sm sel-reason" ${isConfirmed}>
 						${_reasonOptionHTML}
 					</select>
 				</td>
 				<td>
-					<input type="text" data-index="${index}" class="input-memo form-control form-control-sm" value="${data.review_memo}">
+					<input type="text" data-index="${index}" class="input-memo form-control form-control-sm" value="${data.review_memo}" ${isConfirmed}>
 				</td>
 				<td class="text-center">
-					<button class="btn btn-warning btn-failed-return" data-pass="0" data-index="${index}"> 退回 </button>
+					<button class="btn btn-warning btn-failed-return" data-pass="0" data-index="${index}" ${isConfirmed}> 退回 </button>
 				</td>
 			</tr>
 			`
@@ -454,8 +486,12 @@
 						return;
 					}
 
+					console.log(data);
+
 					if (mode === "confirm") {
 						alert("審查結果已送出，並鎖定審查結果。");
+						// 成功鎖定後，重 render 一次系所審查結果
+						_renderDeptReviewResult(data.id);
 					} else {
 						alert("審查結果已儲存。");
 					}
