@@ -119,6 +119,15 @@
 		}
 
 		$systemSel.html(systemSelHtml);
+
+		// 若過濾結果為只有一個，直接幫使用者選定該學制
+		if (Object.keys(systems).length === 1) {
+			// 提取該學制 id（type name）
+			const systemId = Object.keys(systems)[0];
+			// 幫使用者選定
+			$systemSel.children(`[value=${systemId}]`).prop('selected', true);
+			$systemSel.change();
+		}
 	}
 
 	function _handleUpload() {
@@ -236,15 +245,29 @@
 	}
 
 	function _handleSystemChange() {
-		let deptHTML = '<option value="-1">請選擇</option>';
+		$deptSel.html('<option value="-1">請選擇</option>');
 
-		if (this.value !== "-1") {
-			const deptList = _systems[this.value].departments;
-			deptList.forEach(el => {
-				deptHTML += `<option value="${el.id}">${el.title}</option>`;
-			})
+		// 有值再說
+		if (this.value === '-1') {
+			return;
 		}
-		$deptSel.html(deptHTML);
+
+		// 綁定系所列表
+		let deptHTML = '';
+		const deptList = _systems[this.value].departments;
+		deptList.forEach(el => {
+			deptHTML += `<option value="${el.id}">${el.title}</option>`;
+		})
+		$deptSel.append(deptHTML);
+
+		// 若過濾結果為只有一個，直接幫使用者選定該系所
+		if (deptList.length === 1) {
+			// 提取該學制 id（type name）
+			const deptId = deptList[0].id;
+			// 幫使用者選定
+			$deptSel.children(`[value=${deptId}]`).prop('selected', true);
+			$deptSel.change();
+		}
 	}
 
 	// 如果是 dept select 發生事件，取值丟入 renderDept
