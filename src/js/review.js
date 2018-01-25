@@ -60,7 +60,7 @@
 
 	function _init() {
 		// 此 reviewer 可以看到的學系。
-		window.API.getDownloadableDepts('all', (err, data) => {
+		window.API.getAllCanReviewDepts('all', (err, data) => {
 			if (err) {
 				console.error(err);
 				return;

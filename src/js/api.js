@@ -207,6 +207,20 @@ window.API = (() => {
 
 	function getDownloadableDepts(system = 'all', callback) {
 		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+			.then(_parseData)
+			.then((data) => { callback && callback(null, data) })
+			.catch((err) => { _handleError(err, callback) });
+	}
+
+	function getAllCanReviewDepts(system = 'all', callback) {
+		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/systems`, {
 			method: 'GET',
 			headers: {
@@ -488,6 +502,7 @@ window.API = (() => {
 		getStudentTranscripts,
 		getApplicationDoc,
 		getDownloadableDepts,
+		getAllCanReviewDepts,
 		getStudentMergedFile,
 		getAllStudentMergedFile,
 		CSVToArray,
