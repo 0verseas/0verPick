@@ -44,6 +44,9 @@
 	const $confirmBlock = $('#confirm-block');
 	const $confirmBy = $('#confirm-by');
 	const $confirmAT = $('#confirm-at');
+	const $storeBlock = $('#store-block');
+	const $storeBy = $('#store-by');
+	const $storeAT = $('#store-at');
 
 	/**
 	 * init
@@ -324,6 +327,9 @@
 
 			// 系所資料已鎖定
 			if (isConfirmed) {
+				// 隱藏已儲存狀態
+				$storeBlock.hide();
+
 				// 隱藏儲存按鈕群
 				$submitDiv.hide();
 
@@ -342,6 +348,15 @@
 				$adminSubmitDiv.hide();
 				$submitDiv.show();
 				$confirmBlock.hide();
+				$storeBlock.hide();
+
+				if (data.review_students_at) {
+					// 顯示系所儲存狀態
+					const date = moment(data.review_students_at);
+					$storeAT.text(date.format('YYYY/MM/DD HH:mm:ss'));
+					$storeBy.text(data.student_order_reviewer.name);
+					$storeBlock.show();
+				}
 			}
 
 			if (needLock) {
@@ -562,11 +577,11 @@
 
 					if (mode === 'confirm') {
 						alert('審查結果已送出，並鎖定審查結果。');
-						// 成功鎖定後，重 render 一次系所審查結果
-						_renderDeptReviewResult(data.id);
 					} else {
 						alert('審查結果已儲存。');
 					}
+					// 成功鎖定後，重 render 一次系所審查結果
+					_renderDeptReviewResult(data.id);
 				});
 
 			} else {
