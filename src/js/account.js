@@ -375,9 +375,15 @@
 		const rows = window.API.CSVToArray(data);
 		const header = rows.shift();
 		const fieldLength = header.length;
+		if (fieldLength !== 12) {
+			alert ('匯入之 csv 欄位數量有誤');
+			return;
+		}
+
 		_csvAccounts = rows.filter((val, i) => {
-			return val.length === fieldLength;
+			return val.length === fieldLength && !!val[0] && !!val[1] && !!val[2];
 		});
+
 		$CSVModal.find('.CSVModal__body').html(`
 			<table class="table table-bordered table-hover">
 				<thead>
