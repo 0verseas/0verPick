@@ -182,11 +182,7 @@
 
 	function _handleFileChange() {
 		const file = _csvFile = this.files[0];
-		// if (file.type !== 'text/csv') {
-		// 	alert('請匯入 .csv 檔');
-		// 	return;
-		// }
-
+		$fileInput.val('');
 		const fileName = file.name;
 		if (fileName.split('.').pop() !== 'csv') {
 			alert('請匯入 .csv 欓');
