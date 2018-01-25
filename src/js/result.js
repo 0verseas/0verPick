@@ -146,7 +146,7 @@ const app = ( () => {
 					<tr>
 						<td>${dept.id}</td>
 						<td>${dept.title}</td>
-						<td>${dept.review_confirm_at ? '已鎖定' : dept.review_students_at ? '已儲存' : '未審查'}</</td>
+						<td>${dept.review_confirmed_at ? '已鎖定' : dept.review_students_at ? '已儲存' : '未審查'}</</td>
 						<td>${dept.review_students_by ? dept.student_order_reviewer.name : ''}</</td>
 						<td>${dept.review_students_at ? dateFns.format(dept.review_students_at, 'YYYY/MM/DD HH:mm:ss') : ''}</</td>
 					</tr>
