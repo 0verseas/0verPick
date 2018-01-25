@@ -142,6 +142,14 @@
 		const rows = window.API.CSVToArray(data);
 		const header = rows.shift();
 		const fieldLength = header.length;
+		if (header[2] !== '僑生編號' ||
+			header[4] !== '姓名' ||
+			header[5] !== '審查結果' ||
+			header[6] !== '不合格原因代碼' ||
+			header[7] !== '備註') {
+			alert('匯入之 csv 欄位有誤');
+			return;
+		}
 		// 清掉奇怪的空行
 		let _csvReviews = rows.filter((val, i) => {
 			return val.length === fieldLength;
