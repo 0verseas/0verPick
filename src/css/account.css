@@ -21,3 +21,14 @@
 .SelectedDeptList__item:hover .btn-remove:hover {
 	color: #000;
 }
+
+.CSVModal__body table td,
+.CSVModal__body table th {
+	word-break: keep-all;
+	max-width: 377px;
+	overflow: auto;
+}
+
+.CSVModal .modal-dialog {
+	min-width: 92vw;
+}
