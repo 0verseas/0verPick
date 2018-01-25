@@ -24,7 +24,6 @@
 	const $deptSel = $('#sel-dept');
 	const $downloadCSVBtn = $('#btn-downloadCSV');
 	const $uploadBtn = $('#btn-upload');
-	const $uploadTextBtn = $('#btn-upload-text')
 	const $fileInput = $('#file-input');
 	const $pendingTbody = $('#tbody-pending');
 	const $passTbody = $('#tbody-pass');
@@ -283,7 +282,6 @@
 			$deptHeading.text(data.title);
 			$systemHeading.text(systemName);
 			$downloadCSVBtn.attr('href', `${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}?type=file`);
-			$uploadTextBtn.text(systemName + data.title);
 
 			if (isConfirmed) {
 				// 已送出資料並鎖定，同時不能下載系所審查名冊，也不能匯入檔案
