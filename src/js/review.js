@@ -66,6 +66,7 @@
 				console.error(err);
 				return;
 			}
+
 			_systems = data;
 			_setSystems(_systems);
 		});
@@ -76,10 +77,11 @@
 				console.error(err);
 				return;
 			}
+
 			_reasonMapping = data;
 			_reasonMapping.forEach(el => {
 				_reasonOptionHTML += `<option value="${el.id}">${el.reason}</option>`;
-			})
+			});
 		})
 	}
 
@@ -90,14 +92,17 @@
 			_systemMapping.push({id: "1", key: "bachelor", name: "學士班"});
 			systemSelHtml += '<option value="bachelor">學士班</option>';
 		}
+
 		if (systems.two_year_tech) {
 			_systemMapping.push({id: "2", key: "two_year_tech", name: "港二技"});
 			systemSelHtml += '<option value="two_year_tech">港二技</option>';
 		}
+
 		if (systems.bachelor) {
 			_systemMapping.push({id: "3", key: "master", name: "碩士班"});
 			systemSelHtml += '<option value="master">碩士班</option>';
 		}
+
 		if (systems.bachelor) {
 			_systemMapping.push({id: "4", key: "phd", name: "博士班"});
 			systemSelHtml += '<option value="phd">博士班</option>';
@@ -151,9 +156,7 @@
 			return;
 		}
 		// 清掉奇怪的空行
-		let csvReviews = rows.filter((val, i) => {
-			return val.length === fieldLength;
-		});
+		let csvReviews = rows.filter((val, i) => val.length === fieldLength);
 
 		// 格式化 csv 資料
 		// overseas_student_id: 僑生編號
@@ -162,15 +165,13 @@
 		// fail_result: 不及格原因代碼
 		// review_memo: 備註
 
-		csvReviews = csvReviews.map(el => {
-			return {
-				overseas_student_id: el[2].padStart(6, '0'),
-				name: el[4],
-				review_order: Number(el[5]),
-				fail_result: (el[6] === undefined || el[6] === "") ? null : el[6],
-				review_memo: (el[7] === undefined || el[7] === "") ? null : el[7]
-			}
-		});
+		csvReviews = csvReviews.map(el => ({
+			overseas_student_id: el[2].padStart(6, '0'),
+			name: el[4],
+			review_order: Number(el[5]),
+			fail_result: (el[6] === undefined || el[6] === '') ? null : el[6],
+			review_memo: (el[7] === undefined || el[7] === '') ? null : el[7]
+		}));
 
 		// Review 暫存，整合系統上已有的學生
 		let tempReview = [];
@@ -180,31 +181,31 @@
 
 		// 原有資料與 csv 做 merge
 		csvReviews.forEach(csv => {
-			const studentIndex = tempReview.findIndex(pen => { return pen.overseas_student_id === csv.overseas_student_id });
+			const studentIndex = tempReview.findIndex(pen => pen.overseas_student_id === csv.overseas_student_id);
 			if (studentIndex > -1) {
 				tempReview[studentIndex].review_order = csv.review_order;
 				tempReview[studentIndex].fail_result = csv.fail_result;
 				tempReview[studentIndex].review_memo = csv.review_memo;
 			}
-		})
+		});
 
-		_reviewPending = tempReview.filter(el => { return el.review_order < 0; });
-		_reviewPass = tempReview.filter(el => { return el.review_order > 0; });
-		_reviewFailed = tempReview.filter(el => { return el.review_order === 0; });
+		_reviewPending = tempReview.filter(el => el.review_order < 0);
+		_reviewPass = tempReview.filter(el => el.review_order > 0);
+		_reviewFailed = tempReview.filter(el => el.review_order === 0);
 
 		_reviewPending.forEach(el => {
 			el.review_order = null;
-		})
+		});
 
 		_reviewPass.forEach(el => {
 			el.fail_result = null;
 			el.review_memo = null;
-		})
+		});
 
 		_reviewFailed.forEach(el => {
 			el.fail_result = (el.fail_result === null) ? _reasonMapping[0].id : el.fail_result;
-			el.review_memo = (el.review_memo === null) ? "" : el.review_memo;
-		})
+			el.review_memo = (el.review_memo === null) ? '' : el.review_memo;
+		});
 
 		_reviewPass.sort(function (a, b) {
 			return a.sortNum - b.sortNum;
@@ -269,9 +270,9 @@
 			// 判斷是否已鎖定
 			const isConfirmed = !!data.student_order_confirmer;
 
-			_reviewPending = _studentList.filter(el => { return el.review_order === null });
-			_reviewPass = _studentList.filter(el => { return el.review_order > 0 });
-			_reviewFailed = _studentList.filter(el => { return el.review_order === 0 });
+			_reviewPending = _studentList.filter(el => el.review_order === null);
+			_reviewPass = _studentList.filter(el => el.review_order > 0);
+			_reviewFailed = _studentList.filter(el => el.review_order === 0);
 
 			// reRender 時，丟入參數判斷是否已鎖定，若已鎖定，將所有 input disabled
 			_reRenderPending(isConfirmed);
@@ -281,7 +282,7 @@
 			$infoDiv.show();
 			$deptHeading.text(data.title);
 			$systemHeading.text(systemName);
-			$downloadCSVBtn.attr("href", `${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}?type=file`);
+			$downloadCSVBtn.attr('href', `${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}?type=file`);
 			$uploadTextBtn.text(systemName + data.title);
 
 			if (isConfirmed) {
@@ -291,7 +292,7 @@
 				$uploadBtn.hide();
 				$lockInfoDiv.show();
 				let date = moment(data.review_confirmed_at);
-				$confirmerText.text(data.student_order_confirmer.name + " (" + date.format("YYYY/MM/DD HH:mm:ss") + ") ");
+				$confirmerText.text(data.student_order_confirmer.name + ' (' + date.format('YYYY/MM/DD HH:mm:ss') + ') ');
 			} else {
 				$submitDiv.show();
 				$lockInfoDiv.hide();
@@ -439,7 +440,7 @@
 	}
 
 	function _prevWish() { // 排序上調
-		const index = $(this).data("index");
+		const index = $(this).data('index');
 		if (index > 0) {
 			const swap = _reviewPass[index];
 			_reviewPass[index] = _reviewPass[index - 1];
@@ -449,7 +450,7 @@
 	}
 
 	function _nextWish() { // 排序下調
-		const index = $(this).data("index");
+		const index = $(this).data('index');
 		if (index < _reviewPass.length - 1) {
 			const swap = _reviewPass[index];
 			_reviewPass[index] = _reviewPass[index + 1];
@@ -459,13 +460,13 @@
 	}
 
 	function _handleReasonChange() {
-		const index = $(this).data("index");
+		const index = $(this).data('index');
 		const failedCode = $(this).val();
 		_reviewFailed[index].fail_result = failedCode;
 	}
 
 	function _handleMemoChange() {
-		const index = $(this).data("index");
+		const index = $(this).data('index');
 		const memoText = $(this).val();
 		_reviewFailed[index].review_memo = memoText;
 	}
@@ -502,20 +503,20 @@
 						return;
 					}
 
-					if (mode === "confirm") {
-						alert("審查結果已送出，並鎖定審查結果。");
+					if (mode === 'confirm') {
+						alert('審查結果已送出，並鎖定審查結果。');
 						// 成功鎖定後，重 render 一次系所審查結果
 						_renderDeptReviewResult(data.id);
 					} else {
-						alert("審查結果已儲存。");
+						alert('審查結果已儲存。');
 					}
 				});
 
 			} else {
-				alert("尚有待審查項目，請審查完畢再儲存。");
+				alert('尚有待審查項目，請審查完畢再儲存。');
 			}
 		} else {
-			alert("請先選擇系所。");
+			alert('請先選擇系所。');
 		}
 	}
 
