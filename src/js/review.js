@@ -151,7 +151,7 @@
 			return;
 		}
 		// 清掉奇怪的空行
-		let _csvReviews = rows.filter((val, i) => {
+		let csvReviews = rows.filter((val, i) => {
 			return val.length === fieldLength;
 		});
 
@@ -162,7 +162,7 @@
 		// fail_result: 不及格原因代碼
 		// review_memo: 備註
 
-		_csvReviews = _csvReviews.map(el => {
+		csvReviews = csvReviews.map(el => {
 			return {
 				overseas_student_id: el[2],
 				name: el[4],
@@ -179,7 +179,7 @@
 		tempReview = tempReview.concat(_reviewFailed);
 
 		// 原有資料與 csv 做 merge
-		_csvReviews.forEach(csv => {
+		csvReviews.forEach(csv => {
 			const studentIndex = tempReview.findIndex(pen => { return pen.overseas_student_id === csv.overseas_student_id });
 			if (studentIndex > -1) {
 				tempReview[studentIndex].review_order = csv.review_order;
@@ -214,8 +214,8 @@
 		_reRenderPass();
 		_reRenderFailed();
 
-		// console.log("========== _csvReviews ==========");
-		// console.log(_csvReviews);
+		// console.log("========== csvReviews ==========");
+		// console.log(csvReviews);
 		// console.log("========== _reviewFailed ==========");
 		// console.log(_reviewFailed);
 		// console.log("========== _reviewPass ==========");
