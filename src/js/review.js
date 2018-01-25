@@ -5,6 +5,10 @@
 	 */
 
 	const _config = window.getConfig();
+	let _user = {};
+	let isConfirmed = true;
+	let isSystemConfirmed = true;
+	let needLock = true;
 	let _reasonMapping = [];
 	let _reasonOptionHTML = '';
 	let _systems = {};
@@ -35,6 +39,7 @@
 	const $deptHeading = $('#heading-dept');
 	const $systemHeading = $('#heading-system');
 	const $submitDiv = $('#div-submit');
+	const $adminSubmitDiv = $('#div-submit-admin');
 	const $lockInfoDiv = $('#div-lock-info');
 	const $confirmerText = $('#text-confirmer');
 
@@ -82,6 +87,10 @@
 				_reasonOptionHTML += `<option value="${el.id}">${el.reason}</option>`;
 			});
 		})
+
+		PubSub.on('user', (data) => {
+			_user =  data;
+		});
 	}
 
 	function _setSystems(systems = null) {
@@ -266,33 +275,48 @@
 				}
 			});
 
-			// 判斷是否已鎖定
-			const isConfirmed = !!data.student_order_confirmer;
+			// 判斷是否已確認
+			isConfirmed = !!data.student_order_confirmer;
+			isSystemConfirmed = !!data.system_data.review_confirmed_at
+
+			// 系所鎖 => 一般使用者不得用
+			// 學制鎖 => admin 也不得用
+			needLock = isConfirmed && (!_user.school_reviewer.has_admin || isSystemConfirmed);
 
 			_reviewPending = _studentList.filter(el => el.review_order === null);
 			_reviewPass = _studentList.filter(el => el.review_order > 0);
 			_reviewFailed = _studentList.filter(el => el.review_order === 0);
 
-			// reRender 時，丟入參數判斷是否已鎖定，若已鎖定，將所有 input disabled
-			_reRenderPending(isConfirmed);
-			_reRenderPass(isConfirmed);
-			_reRenderFailed(isConfirmed);
+			// reRender 時，丟入參數判斷是否已鎖定，若已鎖定且非 admin，將所有 input disabled
+			_reRenderPending();
+			_reRenderPass();
+			_reRenderFailed();
 
 			$infoDiv.show();
 			$deptHeading.text(data.title);
 			$systemHeading.text(systemName);
 			$downloadCSVBtn.attr('href', `${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}?type=file`);
 
+			// 系所資料已鎖定
 			if (isConfirmed) {
-				// 已送出資料並鎖定，同時不能下載系所審查名冊，也不能匯入檔案
+				// 隱藏儲存按鈕群
 				$submitDiv.hide();
-				$downloadCSVBtn.hide();
+
+				// 但 admin 仍可「儲存修改」
+				if (!needLock) {
+					$adminSubmitDiv.show();
+				}
+			} else {
+				// 系所資料尚未鎖定，顯示儲存按鈕並隱藏「儲存修改」按鈕
+				$adminSubmitDiv.hide();
+				$submitDiv.show();
+			}
+
+			if (needLock) {
+				// 已送出資料並鎖定，同時不能不能匯入檔案
 				$uploadBtn.hide();
 				$lockInfoDiv.show();
-				let date = moment(data.review_confirmed_at);
-				$confirmerText.text(data.student_order_confirmer.name + ' (' + date.format('YYYY/MM/DD HH:mm:ss') + ') ');
 			} else {
-				$submitDiv.show();
 				$lockInfoDiv.hide();
 			}
 
@@ -301,13 +325,14 @@
 		});
 	}
 
-	function _reRenderPending(isConfirmed) {
+	function _reRenderPending() {
 		const noDataHtml = '<tr><td colspan=3 class="text-center"><h4>無資料</h4></td></tr>';
 
-		if (isConfirmed) {
-			isConfirmed = 'disabled';
+		// 設定鎖定 html
+		if (needLock) {
+			lockHtml = 'disabled';
 		} else {
-			isConfirmed = '';
+			lockHtml = '';
 		}
 
 		let pendingHTML = '';
@@ -317,11 +342,11 @@
 				<td>${data.overseas_student_id}</td>
 				<td>${data.name}</td>
 				<td class="text-right">
-					<button class="btn btn-success btn-judge" data-pass="1" data-index="${index}" ${isConfirmed}>
+					<button class="btn btn-success btn-judge" data-pass="1" data-index="${index}" ${lockHtml}>
 						<i class="fa fa-circle-o" aria-hidden="true"></i>
 						合格
 					</button>
-					<button class="btn btn-danger btn-judge" data-pass="0" data-index="${index}" ${isConfirmed}>
+					<button class="btn btn-danger btn-judge" data-pass="0" data-index="${index}" ${lockHtml}>
 						<i class="fa fa-times" aria-hidden="true"></i>
 						不合格
 					</button>
@@ -334,13 +359,14 @@
 		$('.btn-judge').on('click', _handlePass);
 	}
 
-	function _reRenderPass(isConfirmed) {
+	function _reRenderPass() {
 		const noDataHtml = '<tr><td colspan=4 class="text-center"><h4>無資料</h4></td></tr>';
 
-		if (isConfirmed) {
-			isConfirmed = 'disabled';
+		// 設定鎖定 html
+		if (needLock) {
+			lockHtml = 'disabled';
 		} else {
-			isConfirmed = '';
+			lockHtml = '';
 		}
 
 		let passHTML = '';
@@ -351,9 +377,9 @@
 				<td>${data.overseas_student_id}</td>
 				<td>${data.name}</td>
 				<td class="text-center">
-					<button class="btn btn-secondary up-arrow" data-index="${index}" ${isConfirmed}><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
-					<button class="btn btn-secondary down-arrow" data-index="${index}" ${isConfirmed}><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
-					<button class="btn btn-warning btn-pass-return" data-pass="1" data-index="${index}" ${isConfirmed}> 退回 </button>
+					<button class="btn btn-secondary up-arrow" data-index="${index}" ${lockHtml}><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+					<button class="btn btn-secondary down-arrow" data-index="${index}" ${lockHtml}><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+					<button class="btn btn-warning btn-pass-return" data-pass="1" data-index="${index}" ${lockHtml}> 退回 </button>
 				</td>
 			</tr>
 			`
@@ -364,13 +390,14 @@
 		$('.down-arrow').on('click', _nextWish);
 	}
 
-	function _reRenderFailed(isConfirmed) {
+	function _reRenderFailed() {
 		const noDataHtml = '<tr><td colspan=5 class="text-center"><h4>無資料</h4></td></tr>';
 
-		if (isConfirmed) {
-			isConfirmed = 'disabled';
+		// 設定鎖定 html
+		if (needLock) {
+			lockHtml = 'disabled';
 		} else {
-			isConfirmed = '';
+			lockHtml = '';
 		}
 
 		let failedHTML = '';
@@ -380,15 +407,15 @@
 				<td>${data.overseas_student_id}</td>
 				<td>${data.name}</td>
 				<td>
-					<select id="failedReason-${index}" data-index="${index}" class="form-control form-control-sm sel-reason" ${isConfirmed}>
+					<select id="failedReason-${index}" data-index="${index}" class="form-control form-control-sm sel-reason" ${lockHtml}>
 						${_reasonOptionHTML}
 					</select>
 				</td>
 				<td>
-					<input type="text" data-index="${index}" class="input-memo form-control form-control-sm" value="${data.review_memo}" ${isConfirmed}>
+					<input type="text" data-index="${index}" class="input-memo form-control form-control-sm" value="${data.review_memo}" ${lockHtml}>
 				</td>
 				<td class="text-center">
-					<button class="btn btn-warning btn-failed-return" data-pass="0" data-index="${index}" ${isConfirmed}> 退回 </button>
+					<button class="btn btn-warning btn-failed-return" data-pass="0" data-index="${index}" ${lockHtml}> 退回 </button>
 				</td>
 			</tr>
 			`
