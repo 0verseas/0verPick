@@ -108,12 +108,12 @@
 			systemSelHtml += '<option value="two_year_tech">港二技</option>';
 		}
 
-		if (systems.bachelor) {
+		if (systems.master) {
 			_systemMapping.push({id: "3", key: "master", name: "碩士班"});
 			systemSelHtml += '<option value="master">碩士班</option>';
 		}
 
-		if (systems.bachelor) {
+		if (systems.phd) {
 			_systemMapping.push({id: "4", key: "phd", name: "博士班"});
 			systemSelHtml += '<option value="phd">博士班</option>';
 		}
