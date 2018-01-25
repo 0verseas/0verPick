@@ -131,12 +131,19 @@ const app = ( () => {
 
 	// 渲染某學制系所
 	function _renderSystems($tbody, system = null) {
+		const lock = system.review_confirmed_at;
 		let deptsHtmlString = '';
+		let canConfirm = true;
+		let canDownload = false;
 
 		if (system) {
 			const depts = system.departments;
 
 			for (let dept of depts) {
+				if (!dept.review_confirmed_at) {
+					canConfirm = false;
+				}
+
 				deptsHtmlString += `
 					<tr>
 						<td>${dept.id}</td>
@@ -151,29 +158,36 @@ const app = ( () => {
 
 		$tbody.html(deptsHtmlString);
 
+		if (lock) {
+			canConfirm = false;
+			canDownload = true;
+		}
+
 		// 若學制已確認並鎖定，可以下載審核回覆表
-		if (system.review_confirmed_at) {
-			switch (system.type_id) {
-				case 1:
-					$bachelorDownload.prop('disabled', false);
-					$bachelorConfirm.prop('disabled', true);
-					break;
+		switch (system.type_id) {
+			case 1:
+				$bachelorDownload.prop('disabled', !canDownload);
+				$bachelorConfirm.prop('disabled', !canConfirm);
 
-				case 2:
-					$twoYearTechDownload.prop('disabled', false);
-					$twoYearTechConfirm.prop('disabled', true);
-					break;
+				break;
 
-				case 3:
-					$masterDownload.prop('disabled', false);
-					$masterConfirm.prop('disabled', true);
-					break;
+			case 2:
+				$twoYearTechDownload.prop('disabled', !canDownload);
+				$twoYearTechConfirm.prop('disabled', !canConfirm);
 
-				case 4:
-					$phdDownload.prop('disabled', false);
-					$phdConfirm.prop('disabled', true);
-					break;
-			}
+				break;
+
+			case 3:
+				$masterDownload.prop('disabled', !canDownload);
+				$masterConfirm.prop('disabled', !canConfirm);
+
+				break;
+
+			case 4:
+				$phdDownload.prop('disabled', !canDownload);
+				$phdConfirm.prop('disabled', !canConfirm);
+
+				break;
 		}
 
 
