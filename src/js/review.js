@@ -341,6 +341,7 @@
 				// 系所資料尚未鎖定，顯示儲存按鈕並隱藏「儲存修改」按鈕
 				$adminSubmitDiv.hide();
 				$submitDiv.show();
+				$confirmBlock.hide();
 			}
 
 			if (needLock) {
