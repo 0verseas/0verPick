@@ -164,7 +164,7 @@
 
 		csvReviews = csvReviews.map(el => {
 			return {
-				overseas_student_id: el[2],
+				overseas_student_id: el[2].padStart(6, '0'),
 				name: el[4],
 				review_order: Number(el[5]),
 				fail_result: (el[6] === undefined || el[6] === "") ? null : el[6],
