@@ -111,7 +111,7 @@
 	}
 
 	function _handleFileChange() {
-		const file = _csvFile = this.files[0];
+		const file = this.files[0];
 
 		const fileName = file.name;
 		if (fileName.split('.').pop() !== 'csv') {
