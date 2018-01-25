@@ -77,13 +77,11 @@ const app = ( () => {
 				return;
 			}
 
-			console.log(data);
-
 			// 判斷學制存不存在
 			if (data.bachelor) {
 				_renderSystems($bachelorTbody, data.bachelor);
 				$bachelorDownload.click(() => {
-					systemDownload(1)
+					systemDownload(1);
 				});
 				$bachelorConfirm.click(() =>{
 					systemConfirm(1);
@@ -95,7 +93,7 @@ const app = ( () => {
 			if (data.two_year_tech) {
 				_renderSystems($twoYearTechTbody, data.two_year_tech);
 				$twoYearTechDownload.click(() => {
-					systemDownload(2)
+					systemDownload(2);
 				});
 				$twoYearTechConfirm.click(() =>{
 					systemConfirm(2);
@@ -107,7 +105,7 @@ const app = ( () => {
 			if (data.master) {
 				_renderSystems($masterTbody, data.master);
 				$masterDownload.click(() => {
-					systemDownload(3)
+					systemDownload(3);
 				});
 				$masterConfirm.click(() =>{
 					systemConfirm(3);
@@ -133,9 +131,6 @@ const app = ( () => {
 
 	// 渲染某學制系所
 	function _renderSystems($tbody, system = null) {
-
-		// console.log(system);
-
 		let deptsHtmlString = '';
 
 		if (system) {
@@ -146,14 +141,14 @@ const app = ( () => {
 					<tr>
 						<td>${dept.id}</td>
 						<td>${dept.title}</td>
-						<td>${dept.review_confirmed_at ? '已鎖定' : dept.review_students_at ? '已儲存' : '未審查'}</</td>
-						<td>${dept.review_students_by ? dept.student_order_reviewer.name : ''}</</td>
-						<td>${dept.review_students_at ? dateFns.format(dept.review_students_at, 'YYYY/MM/DD HH:mm:ss') : ''}</</td>
+						<td>${dept.review_confirmed_at ? '已鎖定' : dept.review_students_at ? '已儲存' : '未審查'}</td>
+						<td>${dept.review_students_by ? dept.student_order_reviewer.name : ''}</td>
+						<td>${dept.review_students_at ? dateFns.format(dept.review_students_at, 'YYYY/MM/DD HH:mm:ss') : ''}</td>
 					</tr>
 				`;
 			}
 		}
-		console.log(system);
+
 		$tbody.html(deptsHtmlString);
 
 		// 若學制已確認並鎖定，可以下載審核回覆表
