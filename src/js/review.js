@@ -1,7 +1,7 @@
 (() => {
 
 	/**
-	 * priveate variable
+	 * private variable
 	 */
 
 	const _config = window.getConfig();
@@ -83,7 +83,6 @@
 	}
 
 	function _setSystems(systems = null) {
-		console.log(_systems);
 		let systemSelHtml = '<option value="-1">請選擇</option>';
 
 		if (systems.bachelor) {
@@ -217,8 +216,6 @@
 	}
 
 	function _handleSystemChange() {
-		console.log(this.value);
-		console.log(_systems);
 		let deptHTML = '<option value="-1">請選擇</option>';
 
 		if (this.value !== "-1") {
@@ -248,7 +245,7 @@
 				console.error(err);
 				return;
 			}
-			console.log(data);
+
 			let _studentList = data.students.map(el => {
 				return {
 					id: el.user_id,
@@ -485,8 +482,6 @@
 						console.error(err);
 						return;
 					}
-
-					console.log(data);
 
 					if (mode === "confirm") {
 						alert("審查結果已送出，並鎖定審查結果。");
