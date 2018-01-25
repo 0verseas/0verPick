@@ -21,98 +21,100 @@
 	</div>
 </div>
 <hr />
-<div id="div-info" style="display: none;">
+<div id="review-block" class="" style="display: none;">
+	<div id="div-info">
+		<div class="row">
+			<div class="col-12">
+				<h3>
+				<span id="heading-dept"></span>
+				<small id="heading-system" class="text-muted"></small>
+				</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<a id="btn-downloadCSV" class="btn btn-success" href="#" role="button">
+					<i class="fa fa-download" aria-hidden="true"></i>
+					下載審查名冊
+				</a>
+				<button id="btn-upload" class="btn btn-primary"><i class="fa fa-sign-in" aria-hidden="true"></i> 匯入<span id="btn-upload-text"></span>審查結果</button>
+				<input id="file-input" type="file" class="file-upload" accept=".csv" style="display: none" />
+				<button class="btn btn-success" disabled="disabled">
+					<i class="fa fa-download" aria-hidden="true"></i>
+					下載系所審查結果（尚未開放）
+				</button>
+			</div>
+		</div>
+	</div>
+	<hr />
 	<div class="row">
 		<div class="col-12">
-			<h3>
-			  <span id="heading-dept"></span>
-			  <small id="heading-system" class="text-muted"></small>
-			</h3>
+			<h3 class="pl-2" style="border-left: 5px solid">待審查清單</h3>
+			<div style="max-height: 350px; overflow: auto">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>僑生編號</th>
+							<th>學生姓名</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody id="tbody-pending"></tbody>
+				</table>
+			</div>
 		</div>
 	</div>
+	<hr />
 	<div class="row">
 		<div class="col-12">
-			<a id="btn-downloadCSV" class="btn btn-success" href="#" role="button">
-				<i class="fa fa-download" aria-hidden="true"></i>
-				下載審查名冊
-			</a>
-			<button id="btn-upload" class="btn btn-primary"><i class="fa fa-sign-in" aria-hidden="true"></i> 匯入<span id="btn-upload-text"></span>審查結果</button>
-			<input id="file-input" type="file" class="file-upload" accept=".csv" style="display: none" />
-			<button class="btn btn-success" disabled="disabled">
-				<i class="fa fa-download" aria-hidden="true"></i>
-				下載系所審查結果（尚未開放）
-			</button>
+			<h3 class="border-success pl-2" style="border-left: 5px solid">合格清單</h3>
+			<div style="max-height: 350px; overflow: auto">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>排序</th>
+							<th>僑生編號</th>
+							<th>學生姓名</th>
+							<th style="width: 200px"></th>
+						</tr>
+					</thead>
+					<tbody id="tbody-pass"></tbody>
+				</table>
+			</div>
 		</div>
 	</div>
-</div>
-<hr />
-<div class="row">
-	<div class="col-12">
-		<h3 class="pl-2" style="border-left: 5px solid">待審查清單</h3>
-		<div style="max-height: 350px; overflow: auto">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>僑生編號</th>
-						<th>學生姓名</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody id="tbody-pending"></tbody>
-			</table>
+	<hr />
+	<div class="row">
+		<div class="col-12">
+			<h3 class="border-danger pl-2" style="border-left: 5px solid">不合格清單</h3>
+			<div style="max-height: 350px; overflow: auto">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>僑生編號</th>
+							<th>學生姓名</th>
+							<th>不合格原因</th>
+							<th>備註</th>
+							<th style="width: 120px"></th>
+						</tr>
+					</thead>
+					<tbody id="tbody-failed"></tbody>
+				</table>
+			</div>
 		</div>
 	</div>
-</div>
-<hr />
-<div class="row">
-	<div class="col-12">
-		<h3 class="border-success pl-2" style="border-left: 5px solid">合格清單</h3>
-		<div style="max-height: 350px; overflow: auto">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>排序</th>
-						<th>僑生編號</th>
-						<th>學生姓名</th>
-						<th style="width: 200px"></th>
-					</tr>
-				</thead>
-				<tbody id="tbody-pass"></tbody>
-			</table>
+	<hr />
+	<div id="div-submit" class="row mb-5" style="display: none;">
+		<div class="col-md-10 offset-md-1 text-center">
+			<button class="btn btn-primary btn-patch" data-mode="save">儲存</button>
+			<button class="btn btn-danger btn-patch" data-mode="confirm">送出資料並鎖定</button>
 		</div>
 	</div>
-</div>
-<hr />
-<div class="row">
-	<div class="col-12">
-		<h3 class="border-danger pl-2" style="border-left: 5px solid">不合格清單</h3>
-		<div style="max-height: 350px; overflow: auto">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>僑生編號</th>
-						<th>學生姓名</th>
-						<th>不合格原因</th>
-						<th>備註</th>
-						<th style="width: 120px"></th>
-					</tr>
-				</thead>
-				<tbody id="tbody-failed"></tbody>
-			</table>
+	<div id="div-lock-info" class="row mb-5" style="display: none;">
+		<div class="col-md-12 text-center">
+			<button class="btn btn-danger" disabled="disabled">資料已送出並鎖定</button> <br />
+			<small>最後送出者：<span id="text-confirmer"></span></small>
 		</div>
-	</div>
-</div>
-<hr />
-<div id="div-submit" class="row mb-5" style="display: none;">
-	<div class="col-md-10 offset-md-1 text-center">
-		<button class="btn btn-primary btn-patch" data-mode="save">儲存</button>
-		<button class="btn btn-danger btn-patch" data-mode="confirm">送出資料並鎖定</button>
-	</div>
-</div>
-<div id="div-lock-info" class="row mb-5" style="display: none;">
-	<div class="col-md-12 text-center">
-		<button class="btn btn-danger" disabled="disabled">資料已送出並鎖定</button> <br />
-		<small>最後送出者：<span id="text-confirmer"></span></small>
 	</div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jschardet/1.6.0/jschardet.min.js" integrity="sha256-CEf/4H6Uoi1ITLUQxu/mUnVHZdabrr4lVGsTduOHkkQ="

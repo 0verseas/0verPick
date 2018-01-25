@@ -19,6 +19,7 @@
 	 * cache DOM
 	 */
 
+	const $reviewBlock = $('#review-block');
 	const $systemSel = $('#sel-system');
 	const $deptSel = $('#sel-dept');
 	const $downloadCSVBtn = $('#btn-downloadCSV');
@@ -287,10 +288,15 @@
 				$submitDiv.show();
 				$lockInfoDiv.hide();
 			}
+
+			// 顯示審查區塊
+			$reviewBlock.show();
 		});
 	}
 
 	function _reRenderPending(isConfirmed) {
+		const noDataHtml = '<tr><td colspan=3 class="text-center"><h4>無資料</h4></td></tr>';
+
 		if (isConfirmed) {
 			isConfirmed = 'disabled';
 		} else {
@@ -316,11 +322,14 @@
 			</tr>
 			`
 		})
-		$pendingTbody.html(pendingHTML);
+
+		$pendingTbody.html(_reviewPending.length > 0 ? pendingHTML : noDataHtml);
 		$('.btn-judge').on('click', _handlePass);
 	}
 
 	function _reRenderPass(isConfirmed) {
+		const noDataHtml = '<tr><td colspan=4 class="text-center"><h4>無資料</h4></td></tr>';
+
 		if (isConfirmed) {
 			isConfirmed = 'disabled';
 		} else {
@@ -342,13 +351,15 @@
 			</tr>
 			`
 		})
-		$passTbody.html(passHTML);
+		$passTbody.html(_reviewPass.length > 0 ? passHTML : noDataHtml);
 		$('.btn-pass-return').on('click', _handleToPending);
 		$('.up-arrow').on('click', _prevWish);
 		$('.down-arrow').on('click', _nextWish);
 	}
 
 	function _reRenderFailed(isConfirmed) {
+		const noDataHtml = '<tr><td colspan=5 class="text-center"><h4>無資料</h4></td></tr>';
+
 		if (isConfirmed) {
 			isConfirmed = 'disabled';
 		} else {
@@ -375,7 +386,7 @@
 			</tr>
 			`
 		})
-		$failedTbody.html(failedHTML);
+		$failedTbody.html(_reviewFailed.length > 0 ? failedHTML : noDataHtml);
 		_reviewFailed.forEach((data, index) => {
 			$('#failedReason-' + index).val(data.fail_result);
 		})
