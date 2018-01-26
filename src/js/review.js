@@ -27,6 +27,7 @@
 	const $systemSel = $('#sel-system');
 	const $deptSel = $('#sel-dept');
 	const $downloadCSVBtn = $('#btn-downloadCSV');
+	const $downloadResultFile = $('#download-result-file');
 	const $uploadBtn = $('#btn-upload');
 	const $fileInput = $('#file-input');
 	const $pendingTbody = $('#tbody-pending');
@@ -62,6 +63,7 @@
 	$deptSel.on('change', _handleDeptChange);
 	$uploadBtn.on('click', _handleUpload);
 	$fileInput.on('change', _handleFileChange);
+	$downloadResultFile.on('click', _handleDownloadResultFile);
 	$patchBtn.on('click', _handlePatchData);
 
 	/**
@@ -163,6 +165,10 @@
 		};
 
 		fileReaderAsBinaryString.readAsBinaryString(file);
+	}
+
+	function _handleDownloadResultFile() {
+		window.open(`${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}/review-result`, `_blank`);
 	}
 
 	function _renderCSVTable(fileName, data) {
@@ -338,6 +344,9 @@
 					$adminSubmitDiv.show();
 				}
 
+				// 開放下載回覆表
+				$downloadResultFile.prop('disabled', false);
+
 				// 顯示系所鎖定狀態
 				$confirmAT.text(window.dateFns.format(data.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
 				$confirmBy.text(data.student_order_confirmer.name);
@@ -348,6 +357,9 @@
 				$submitDiv.show();
 				$confirmBlock.hide();
 				$storeBlock.hide();
+
+				// 開放下載回覆表
+				$downloadResultFile.prop('disabled', true);
 
 				if (data.review_students_at) {
 					// 顯示系所儲存狀態
