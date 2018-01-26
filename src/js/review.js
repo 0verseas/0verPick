@@ -287,6 +287,8 @@
 
 	// 改成丟入某系 id render 系所審查結果
 	function _renderDeptReviewResult(deptId) {
+		$reviewBlock.hide();
+
 		const systemKey = $systemSel.val();
 		const systemName = _systemMapping.find(el => el.key === systemKey).name;
 		_systemId = _systemMapping.find(el => el.key === systemKey).id;
