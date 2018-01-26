@@ -60,7 +60,7 @@ const app = ( () => {
 	 * event handler
 	 */
 	function systemDownload(type_id) {
-		// window.open(`${_config.apiBase}/reviewers/systems/${type_id}/review-result`, `_blank`);
+		window.open(`${_config.apiBase}/reviewers/systems/${type_id}/departments/all/review-result`, `_blank`);
 	}
 
 	function systemConfirm(type_id) {
