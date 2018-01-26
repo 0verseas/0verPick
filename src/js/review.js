@@ -339,8 +339,7 @@
 				}
 
 				// 顯示系所鎖定狀態
-				const date = moment(data.review_confirmed_at);
-				$confirmAT.text(date.format('YYYY/MM/DD HH:mm:ss'));
+				$confirmAT.text(window.dateFns.format(data.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
 				$confirmBy.text(data.student_order_confirmer.name);
 				$confirmBlock.show();
 			} else {
@@ -352,8 +351,7 @@
 
 				if (data.review_students_at) {
 					// 顯示系所儲存狀態
-					const date = moment(data.review_students_at);
-					$storeAT.text(date.format('YYYY/MM/DD HH:mm:ss'));
+					$storeAT.text(window.dateFns.format(data.review_students_at, 'YYYY/MM/DD HH:mm:ss'));
 					$storeBy.text(data.student_order_reviewer.name);
 					$storeBlock.show();
 				}
