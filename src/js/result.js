@@ -24,6 +24,12 @@ const app = ( () => {
 	const $phdDownload = $('#phd-download-review-form');
 
 	// 確認並鎖定某學制的審查結果
+	const $bachelorCantComfirm = $('#bachelor-cant-confirm');
+	const $twoYearTechCantConfirm = $('#two-year-tech-cant-confirm');
+	const $masterCantConfirm = $('#master-cant-confirm');
+	const $phdCantConfirm = $('#phd-cant-confirm');
+
+	// 確認並鎖定某學制的審查結果
 	const $bachelorConfirm = $('#bachelor-confirm');
 	const $twoYearTechConfirm = $('#two-year-tech-confirm');
 	const $masterConfirm = $('#master-confirm');
@@ -198,6 +204,7 @@ const app = ( () => {
 					$bachelorConfirmBy.html(system.student_order_confirmer.name);
 					$bachelorConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
 					$bachelorConfirmBlock.show();
+					$bachelorCantConfirmBlock.hide();
 				}
 
 				break;
@@ -210,6 +217,7 @@ const app = ( () => {
 					$twoYearTechConfirmBy.html(system.student_order_confirmer.name);
 					$twoYearTechConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
 					$twoYearTechConfirmBlock.show();
+					$twoYearTechCantConfirm.hide();
 				}
 
 				break;
@@ -222,6 +230,7 @@ const app = ( () => {
 					$masterConfirmBy.html(system.student_order_confirmer.name);
 					$masterConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
 					$masterConfirmBlock.show();
+					$masterCantConfirm.hide();
 				}
 
 				break;
@@ -234,6 +243,7 @@ const app = ( () => {
 					$phdConfirmBy.html(system.student_order_confirmer.name);
 					$phdConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
 					$phdConfirmBlock.show();
+					$phdCantConfirm.hide();
 				}
 
 				break;
