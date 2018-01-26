@@ -19,12 +19,22 @@
 <div class="tab-content" id="myTabContent">
 	<div class="tab-pane fade show active row" id="bachelor" role="tabpanel" aria-labelledby="bachelor-tab">
 		<div class="col-12">
-			<div class="row mx-1">
-				<h3 class="border-danger pl-2 d-inline" style="border-left: 5px solid">學士班 系所狀態</h3>
-				<button class="ml-auto btn btn-success" id="bachelor-download-review-form" disabled>
-					<i class="fa fa-download" aria-hidden="true"></i>
-					下載審查結果回覆表（尚未開放）
-				</button>
+			<div class="row">
+				<div class="col-7">
+					<h3>學士班 系所審查狀態</h3>
+				</div>
+
+				<div class="col-5 text-right" id="bachelor-confirm-block" style="display: none;">
+					<small class="badge badge-danger">由 <span id="bachelor-confirm-by">Name</span> 確認並鎖定於 <span id="bachelor-confirm-at">YYYY/MM/DD HH:mm:ss</span></small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<a id="bachelor-download-review-form" class="btn btn-success" href="#" role="button" disabled>
+						<i class="fa fa-download" aria-hidden="true"></i>
+						下載學士班審查結果回覆表（尚未開放）
+					</a>
+				</div>
 			</div>
 			<div style="max-height: 500px; overflow: auto; margin-top: 12px;">
 				<table class="table table-hover">
@@ -71,12 +81,22 @@
 
 	<div class="tab-pane fade row mb-3" id="master" role="tabpanel" aria-labelledby="master-tab">
 		<div class="col-12">
-			<div class="row mx-1">
-				<h3 class="border-danger pl-2 d-inline" style="border-left: 5px solid">碩士班 系所狀態</h3>
-				<button class="ml-auto btn btn-success" id="master-download-review-form" disabled>
-					<i class="fa fa-download" aria-hidden="true"></i>
-					下載審查結果回覆表（尚未開放）
-				</button>
+			<div class="row">
+				<div class="col-7">
+					<h3>碩士班 系所審查狀態</h3>
+				</div>
+
+				<div class="col-5 text-right" id="master-confirm-block" style="display: none;">
+					<small class="badge badge-danger">由 <span id="master-confirm-by">Name</span> 確認並鎖定於 <span id="master-confirm-at">YYYY/MM/DD HH:mm:ss</span></small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<a id="master-download-review-form" class="btn btn-success" href="#" role="button" disabled>
+						<i class="fa fa-download" aria-hidden="true"></i>
+						下載碩士班審查結果回覆表（尚未開放）
+					</a>
+				</div>
 			</div>
 			<div style="max-height: 500px; overflow: auto; margin-top: 12px;">
 				<table class="table table-hover">
@@ -123,12 +143,22 @@
 
 	<div class="tab-pane fade row mb-3" id="phd" role="tabpanel" aria-labelledby="phd-tab">
 		<div class="col-12">
-			<div class="row mx-1">
-				<h3 class="border-danger pl-2 d-inline" style="border-left: 5px solid">博士班 系所狀態</h3>
-				<button class="ml-auto btn btn-success" id="phd-download-review-form" disabled>
-					<i class="fa fa-download" aria-hidden="true"></i>
-					下載審查結果回覆表（尚未開放）
-				</button>
+			<div class="row">
+				<div class="col-7">
+					<h3>博士班 系所審查狀態</h3>
+				</div>
+
+				<div class="col-5 text-right" id="phd-confirm-block" style="display: none;">
+					<small class="badge badge-danger">由 <span id="phd-confirm-by">Name</span> 確認並鎖定於 <span id="phd-confirm-at">YYYY/MM/DD HH:mm:ss</span></small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<a id="phd-download-review-form" class="btn btn-success" href="#" role="button" disabled>
+						<i class="fa fa-download" aria-hidden="true"></i>
+						下載博士班審查結果回覆表（尚未開放）
+					</a>
+				</div>
 			</div>
 			<div style="max-height: 500px; overflow: auto; margin-top: 12px;">
 				<table class="table table-hover">
@@ -175,12 +205,22 @@
 
 	<div class="tab-pane fade row mb-3" id="two-year-tech" role="tabpanel" aria-labelledby="two-year-tech-tab">
 		<div class="col-12">
-			<div class="row mx-1">
-				<h3 class="border-danger pl-2 d-inline" style="border-left: 5px solid">港二技 系所狀態</h3>
-				<button class="ml-auto btn btn-success" id="two-year-tech-download-review-form" disabled>
-					<i class="fa fa-download" aria-hidden="true"></i>
-					下載審查結果回覆表（尚未開放）
-				</button>
+			<div class="row">
+				<div class="col-7">
+					<h3>港二技 系所審查狀態</h3>
+				</div>
+
+				<div class="col-5 text-right" id="two-year-tech-confirm-block" style="display: none;">
+					<small class="badge badge-danger">由 <span id="bachelor-confirm-by">Name</span> 確認並鎖定於 <span id="two-year-tech-confirm-at">YYYY/MM/DD HH:mm:ss</span></small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<a id="two-year-tech-download-review-form" class="btn btn-success" href="#" role="button" disabled>
+						<i class="fa fa-download" aria-hidden="true"></i>
+						下載港二技審查結果回覆表（尚未開放）
+					</a>
+				</div>
 			</div>
 			<div style="max-height: 500px; overflow: auto; margin-top: 12px;">
 				<table class="table table-hover">

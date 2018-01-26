@@ -29,6 +29,23 @@ const app = ( () => {
 	const $masterConfirm = $('#master-confirm');
 	const $phdConfirm = $('#phd-confirm');
 
+	// 最後送出資訊
+	const $bachelorConfirmBlock = $('#bachelor-confirm-block');
+	const $bachelorConfirmBy = $('#bachelor-confirm-by');
+	const $bachelorConfirmAT = $('#bachelor-confirm-at');
+
+	const $twoYearTechConfirmBlock = $('#two-year-tech-confirm-block');
+	const $twoYearTechConfirmBy = $('#two-year-tech-confirm-by');
+	const $twoYearTechConfirmAT = $('#two-year-tech-confirm-at');
+
+	const $masterConfirmBlock = $('#master-confirm-block');
+	const $masterConfirmBy = $('#master-confirm-by');
+	const $masterConfirmAT = $('#master-confirm-at');
+
+	const $phdConfirmBlock = $('#phd-confirm-block');
+	const $phdConfirmBy = $('#phd-confirm-by');
+	const $phdConfirmAt = $('#phd-confirm-at');
+
 	/**
 	 * init
 	 */
@@ -177,11 +194,23 @@ const app = ( () => {
 				$bachelorDownload.prop('disabled', !canDownload);
 				$bachelorConfirm.prop('disabled', !canConfirm);
 
+				if (lock) {
+					$bachelorConfirmBy.html(system.student_order_confirmer.name);
+					$bachelorConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
+					$bachelorConfirmBlock.show();
+				}
+
 				break;
 
 			case 2:
 				$twoYearTechDownload.prop('disabled', !canDownload);
 				$twoYearTechConfirm.prop('disabled', !canConfirm);
+
+				if (lock) {
+					$twoYearTechConfirmBy.html(system.student_order_confirmer.name);
+					$twoYearTechConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
+					$twoYearTechConfirmBlock.show();
+				}
 
 				break;
 
@@ -189,11 +218,23 @@ const app = ( () => {
 				$masterDownload.prop('disabled', !canDownload);
 				$masterConfirm.prop('disabled', !canConfirm);
 
+				if (lock) {
+					$masterConfirmBy.html(system.student_order_confirmer.name);
+					$masterConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
+					$masterConfirmBlock.show();
+				}
+
 				break;
 
 			case 4:
 				$phdDownload.prop('disabled', !canDownload);
 				$phdConfirm.prop('disabled', !canConfirm);
+
+				if (lock) {
+					$phdConfirmBy.html(system.student_order_confirmer.name);
+					$phdConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
+					$phdConfirmBlock.show();
+				}
 
 				break;
 		}
