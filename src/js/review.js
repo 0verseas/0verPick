@@ -551,6 +551,13 @@
 
 	function _handlePatchData() {
 		const mode = $(this).data('mode');
+		if (mode === 'confirm') {
+			// 問一下是否要鎖定系所？
+			const isConfirmed = confirm('確定要鎖定系所嗎？');
+			if (!isConfirmed) {
+				return;
+			}
+		}
 		if (_deptId !== "") {
 			if (_reviewPending.length === 0) {
 				let sendData = [];

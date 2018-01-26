@@ -47,6 +47,13 @@ const app = ( () => {
 	}
 
 	function systemConfirm(type_id) {
+
+		// 問一下是否要鎖定學制
+		const isConfirmed = confirm('確定要鎖定學制嗎？');
+		if (!isConfirmed) {
+			return;
+		}
+
 		window.API.confirmSystem(type_id, (err, system) => {
 			if (err) {
 				console.error(err);
@@ -77,6 +84,7 @@ const app = ( () => {
 				return;
 			}
 
+			console.log(data);
 			// 判斷學制存不存在
 			if (data.bachelor) {
 				_renderSystems($bachelorTbody, data.bachelor);
