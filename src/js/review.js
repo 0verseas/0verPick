@@ -373,6 +373,8 @@
 	}
 
 	function _reRenderPending() {
+		_reviewPending.sort(_sortStudentsByOverseasId);
+
 		const noDataHtml = '<tr><td colspan=3 class="text-center"><h4>無資料</h4></td></tr>';
 
 		// 設定鎖定 html
@@ -407,6 +409,8 @@
 	}
 
 	function _reRenderPass() {
+		_reviewPass.sort(_sortStudentsByReviewOrder);
+
 		const noDataHtml = '<tr><td colspan=4 class="text-center"><h4>無資料</h4></td></tr>';
 
 		// 設定鎖定 html
@@ -438,6 +442,8 @@
 	}
 
 	function _reRenderFailed() {
+		_reviewFailed.sort(_sortStudentsByOverseasId);
+
 		const noDataHtml = '<tr><td colspan=5 class="text-center"><h4>無資料</h4></td></tr>';
 
 		// 設定鎖定 html
@@ -590,6 +596,14 @@
 		} else {
 			alert('請先選擇系所。');
 		}
+	}
+
+	function _sortStudentsByOverseasId(a, b) {
+		return a.overseas_student_id - b.overseas_student_id;
+	}
+
+	function _sortStudentsByReviewOrder(a, b) {
+		return a.sortNum - b.sortNum;
 	}
 
 })();
