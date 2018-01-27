@@ -184,7 +184,7 @@
 			return;
 		}
 		else{
-			alert("匯入成功！");
+			alert("匯入成功");
 		}
 		// 清掉奇怪的空行
 		let csvReviews = rows.filter((val, i) => val.length === fieldLength);
@@ -325,6 +325,8 @@
 			_reviewPending = _studentList.filter(el => el.review_order === null);
 			_reviewPass = _studentList.filter(el => el.review_order > 0);
 			_reviewFailed = _studentList.filter(el => el.review_order === 0);
+			//渲染前先按照 review_order 排序
+			_reviewPass.sort(_sortStudentByOrder);
 
 			// reRender 時，丟入參數判斷是否已鎖定，若已鎖定且非 admin，將所有 input disabled
 			_reRenderPending();
@@ -422,10 +424,8 @@
 		$pendingTbody.html(_reviewPending.length > 0 ? pendingHTML : noDataHtml);
 		$('.btn-judge').on('click', _handlePass);
 	}
-
 	function _reRenderPass() {
 		_reviewPass.sort(_sortStudentsByReviewOrder);
-
 		const noDataHtml = '<tr><td colspan=4 class="text-center"><h4>無資料</h4></td></tr>';
 
 		// 設定鎖定 html
@@ -434,7 +434,6 @@
 		if (needLock) {
 			lockHtml = 'disabled';
 		}
-
 		let passHTML = '';
 		_reviewPass.forEach((data, index) => {
 			passHTML += `
@@ -573,7 +572,6 @@
 				return;
 			}
 		}
-
 		if (_deptId !== "") {
 			if (_reviewPending.length > 0 && mode === 'confirm') {
 				alert('尚有待審查項目，請審查完畢再儲存。');
@@ -635,6 +633,10 @@
 
 	function _sortStudentsByReviewOrder(a, b) {
 		return a.sortNum - b.sortNum;
+	}
+
+	function _sortStudentByOrder(a,b) {
+		return a.review_order - b.review_order;
 	}
 
 })();
