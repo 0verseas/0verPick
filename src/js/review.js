@@ -183,6 +183,9 @@
 			alert('匯入之 csv 欄位有誤');
 			return;
 		}
+		else{
+			alert("匯入成功！");
+		}
 		// 清掉奇怪的空行
 		let csvReviews = rows.filter((val, i) => val.length === fieldLength);
 
@@ -570,8 +573,12 @@
 				return;
 			}
 		}
+
 		if (_deptId !== "") {
-			if (_reviewPending.length === 0) {
+			if (_reviewPending.length > 0 && mode === 'confirm') {
+				alert('尚有待審查項目，請審查完畢再儲存。');
+			}
+			else{
 				let sendData = [];
 				let passData = _reviewPass.map((data, index) => {
 					return {
@@ -589,9 +596,17 @@
 						review_memo: data.review_memo
 					}
 				});
+				let pedingData = _reviewPending.map((data, index) => {
+					return{
+						id: data.id,
+						review_order: -1,
+						fail_result: null,
+						review_memo: null
+					}
+				});
 				sendData = sendData.concat(passData);
 				sendData = sendData.concat(failedData);
-
+				sendData = sendData.concat(pedingData);
 				const studentsData = { students: sendData };
 
 				window.API.patchDeptReviewResult(_systemId, _deptId, mode, studentsData, (err, data) => {
@@ -608,9 +623,6 @@
 					// 成功鎖定後，重 render 一次系所審查結果
 					_renderDeptReviewResult(data.id);
 				});
-
-			} else {
-				alert('尚有待審查項目，請審查完畢再儲存。');
 			}
 		} else {
 			alert('請先選擇系所。');
