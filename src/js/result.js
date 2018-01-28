@@ -29,6 +29,11 @@ const app = ( () => {
 	const $masterCantConfirm = $('#master-cant-confirm');
 	const $phdCantConfirm = $('#phd-cant-confirm');
 
+	const $bachelorCanComfirm = $('#bachelor-can-confirm');
+	const $twoYearTechCanConfirm = $('#two-year-tech-can-confirm');
+	const $masterCanConfirm = $('#master-can-confirm');
+	const $phdCanConfirm = $('#phd-can-confirm');
+
 	// 確認並鎖定某學制的審查結果
 	const $bachelorConfirm = $('#bachelor-confirm');
 	const $twoYearTechConfirm = $('#two-year-tech-confirm');
@@ -38,15 +43,15 @@ const app = ( () => {
 	// 最後送出資訊
 	const $bachelorConfirmBlock = $('#bachelor-confirm-block');
 	const $bachelorConfirmBy = $('#bachelor-confirm-by');
-	const $bachelorConfirmAT = $('#bachelor-confirm-at');
+	const $bachelorConfirmAt = $('#bachelor-confirm-at');
 
 	const $twoYearTechConfirmBlock = $('#two-year-tech-confirm-block');
 	const $twoYearTechConfirmBy = $('#two-year-tech-confirm-by');
-	const $twoYearTechConfirmAT = $('#two-year-tech-confirm-at');
+	const $twoYearTechConfirmAt = $('#two-year-tech-confirm-at');
 
 	const $masterConfirmBlock = $('#master-confirm-block');
 	const $masterConfirmBy = $('#master-confirm-by');
-	const $masterConfirmAT = $('#master-confirm-at');
+	const $masterConfirmAt = $('#master-confirm-at');
 
 	const $phdConfirmBlock = $('#phd-confirm-block');
 	const $phdConfirmBy = $('#phd-confirm-by');
@@ -193,18 +198,24 @@ const app = ( () => {
 			canConfirm = false;
 			canDownload = true;
 		}
-
 		// 若學制已確認並鎖定，可以下載審核回覆表
 		switch (system.type_id) {
 			case 1:
 				$bachelorDownload.prop('disabled', !canDownload);
 				$bachelorConfirm.prop('disabled', !canConfirm);
 
+				if(canConfirm == true){
+					$bachelorCantComfirm.hide();
+					$bachelorCanComfirm.show();
+				}
+				else{
+					$bachelorCanComfirm.hide();
+				}
 				if (lock) {
 					$bachelorConfirmBy.html(system.student_order_confirmer.name);
 					$bachelorConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
 					$bachelorConfirmBlock.show();
-					$bachelorCantConfirmBlock.hide();
+					$bachelorCantComfirm.hide();
 				}
 
 				break;
@@ -213,6 +224,13 @@ const app = ( () => {
 				$twoYearTechDownload.prop('disabled', !canDownload);
 				$twoYearTechConfirm.prop('disabled', !canConfirm);
 
+				if(canConfirm == true){
+					$twoYearTechCantConfirm.hide();
+					$twoYearTechCanConfirm.show();
+				}
+				else{
+					$twoYearTechCanConfirm.hide();
+				}
 				if (lock) {
 					$twoYearTechConfirmBy.html(system.student_order_confirmer.name);
 					$twoYearTechConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
@@ -226,6 +244,13 @@ const app = ( () => {
 				$masterDownload.prop('disabled', !canDownload);
 				$masterConfirm.prop('disabled', !canConfirm);
 
+				if(canConfirm == true){
+					$masterCantConfirm.hide();
+					$masterCanConfirm.show();
+				}
+				else{
+					$masterCanConfirm.hide();
+				}
 				if (lock) {
 					$masterConfirmBy.html(system.student_order_confirmer.name);
 					$masterConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
@@ -239,6 +264,13 @@ const app = ( () => {
 				$phdDownload.prop('disabled', !canDownload);
 				$phdConfirm.prop('disabled', !canConfirm);
 
+				if(canConfirm == true){
+					$phdCantConfirm.hide();
+					$phdCanConfirm.show();
+				}
+				else{
+					$phdCanConfirm.hide();
+				}
 				if (lock) {
 					$phdConfirmBy.html(system.student_order_confirmer.name);
 					$phdConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
