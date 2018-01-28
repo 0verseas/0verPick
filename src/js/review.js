@@ -239,7 +239,7 @@
 		});
 
 		_reviewPass.sort(function (a, b) {
-			return a.sortNum - b.sortNum;
+			return a.review_order - b.review_order;
 		});
 
 		_reRenderPending();
