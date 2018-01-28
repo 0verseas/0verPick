@@ -1,77 +1,53 @@
 (() => {
 
 	/**
-	 * priveate variable
+	 * private variable
 	 */
 
-	const _reasonMapping = [
-	{val: "", text: "未填寫不合格原因"},
-	{val: "1", text: "＊未繳交報名"},
-	{val: "2", text: "＊學歷資格不符"},
-	{val: "3", text: "＊資料不完整，未符合系所規定"},
-	{val: "4", text: "資料不完整－未附作品或作品不完整"},
-	{val: "5", text: "資料不完整－未附成績單"},
-	{val: "6", text: "資料不完整－未附研究計畫或研究計畫不完整"},
-	{val: "7", text: "資料不完整－未附讀書計畫或讀書計畫不完整"},
-	{val: "8", text: "資料不完整－未附推薦信"},
-	{val: "9", text: "資料不完整－未附履歷"},
-	{val: "10", text: "資料不完整－未附自傳"},
-	{val: "11", text: "資料不完整－未附國際比賽證明"},
-	{val: "12", text: "資料不完整－未附專業證明或證照或語言證明"},
-	{val: "13", text: "資料不完整－未附術科成績證明書"},
-	{val: "14", text: "資料不完整－未附影音作品"},
-	{val: "15", text: "資料不完整－未附立體作品照片"},
-	{val: "16", text: "＊審查資料成績未達標準"},
-	{val: "17", text: "審查資料－學經歷背景與系所不符"},
-	{val: "18", text: "審查資料－無系所相關專長"},
-	{val: "19", text: "審查資料－相關的專業課程訓練不足"},
-	{val: "20", text: "審查資料－專業能力不夠突出"},
-	{val: "21", text: "審查資料－學業成績不夠理想"},
-	{val: "22", text: "審查資料－創作能力要加強"},
-	{val: "23", text: "審查資料－系所無該專長師資"},
-	{val: "24", text: "審查資料－欠缺就讀的企圖"},
-	{val: "25", text: "審查資料－缺乏發展潛力"},
-	{val: "26", text: "審查資料－申請動機與系所宗旨不符"},
-	{val: "27", text: "審查資料－志趣與系所課程規劃不符"},
-	{val: "28", text: "審查資料－未能瞭解其就學及專業定向"},
-	{val: "29", text: "審查資料－語言能力需再加強"},
-	{val: "30", text: "審查資料－中文能力不佳"},
-	{val: "31", text: "審查資料－英文能力不佳"},
-	{val: "32", text: "審查資料－寫作能力不佳"},
-	{val: "33", text: "審查資料－作品不夠優秀"},
-	{val: "34", text: "審查資料－程度未達系所要求"},
-	{val: "35", text: "＊術科測試成績未達錄取標準"},
-	{val: "36", text: "＊筆試成績未達錄取標準"},
-	{val: "37", text: "＊口試成績未達錄取標準"},
-	{val: "38", text: "＊依會議決議決定"},
-	{val: "39", text: "＊未通過委員同意"},
-	{val: "40", text: "＊未達合格票數"},
-	{val: "41", text: "＊自行通知放棄申請"},
-	{val: "42", text: "＊已透過其他管道錄取"},
-	{val: "43", text: "＊資料抄襲"},
-	{val: "44", text: "＊審查資料─學生研究方向與系所不符"},
-	{val: "45", text: "＊審查資料─學生出席情況欠佳"},
-	{val: "46", text: "＊審查資料─學業成績不完整"},
-	]
-
-	let _departments = {};
-	let _csvReviews = [];
+	const _config = window.getConfig();
+	let _user = {};
+	let isConfirmed = true;
+	let isSystemConfirmed = true;
+	let needLock = true;
+	let _reasonMapping = [];
 	let _reasonOptionHTML = '';
+	let _systems = {};
+	let _systemId = ""
+	let _deptId = "";
 	let _reviewPending = [];
 	let _reviewPass = [];
 	let _reviewFailed = [];
+	let _systemMapping = [];
 
 	/**
 	 * cache DOM
 	 */
 
+	const $reviewBlock = $('#review-block');
 	const $systemSel = $('#sel-system');
 	const $deptSel = $('#sel-dept');
+	const $downloadCSVBtn = $('#btn-downloadCSV');
+	const $downloadResultFile = $('#download-result-file');
 	const $uploadBtn = $('#btn-upload');
 	const $fileInput = $('#file-input');
 	const $pendingTbody = $('#tbody-pending');
 	const $passTbody = $('#tbody-pass');
 	const $failedTbody = $('#tbody-failed');
+	const $patchBtn = $('.btn-patch');
+	const $saveBtn = $('#btn-save');
+	const $confirmBtn = $('#btn-confirm');
+	const $infoDiv = $('#div-info');
+	const $deptHeading = $('#heading-dept');
+	const $systemHeading = $('#heading-system');
+	const $submitDiv = $('#div-submit');
+	const $adminSubmitDiv = $('#div-submit-admin');
+	const $lockInfoDiv = $('#div-lock-info');
+	const $confirmBlock = $('#confirm-block');
+	const $confirmBy = $('#confirm-by');
+	const $confirmAT = $('#confirm-at');
+	const $storeBlock = $('#store-block');
+	const $storeBy = $('#store-by');
+	const $storeAT = $('#store-at');
 
 	/**
 	 * init
@@ -87,26 +63,76 @@
 	$deptSel.on('change', _handleDeptChange);
 	$uploadBtn.on('click', _handleUpload);
 	$fileInput.on('change', _handleFileChange);
+	$downloadResultFile.on('click', _handleDownloadResultFile);
+	$patchBtn.on('click', _handlePatchData);
 
 	/**
 	 * event handler
 	 */
 
 	function _init() {
-		// 取得某學制某系所的審查名冊檔案（.csv）
-		window.API.getDownloadableDepts('all', (err, data) => {
+		// 此 reviewer 可以看到的學系。
+		window.API.getAllCanReviewDepts('all', (err, data) => {
 			if (err) {
 				console.error(err);
 				return;
 			}
-			_departments = data;
+
+			_systems = data;
+			_setSystems(_systems);
 		});
 
-		_reasonMapping.forEach(el => {
-			_reasonOptionHTML += `<option value="${el.val}">${el.text}</option>`;
+		// 初始化審查未過原因。
+		window.API.getReviewFailResult((err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+
+			_reasonMapping = data;
+			_reasonMapping.forEach(el => {
+				_reasonOptionHTML += `<option value="${el.id}">${el.reason}</option>`;
+			});
 		})
 
-		// 檢查某學制某系所是否有上傳過結果，有的話渲染合格、不合格名單
+		PubSub.on('user', (data) => {
+			_user =  data;
+		});
+	}
+
+	function _setSystems(systems = null) {
+		let systemSelHtml = '<option value="-1">請選擇</option>';
+
+		if (systems.bachelor) {
+			_systemMapping.push({id: "1", key: "bachelor", name: "學士班"});
+			systemSelHtml += '<option value="bachelor">學士班</option>';
+		}
+
+		if (systems.two_year_tech) {
+			_systemMapping.push({id: "2", key: "two_year_tech", name: "港二技"});
+			systemSelHtml += '<option value="two_year_tech">港二技</option>';
+		}
+
+		if (systems.master) {
+			_systemMapping.push({id: "3", key: "master", name: "碩士班"});
+			systemSelHtml += '<option value="master">碩士班</option>';
+		}
+
+		if (systems.phd) {
+			_systemMapping.push({id: "4", key: "phd", name: "博士班"});
+			systemSelHtml += '<option value="phd">博士班</option>';
+		}
+
+		$systemSel.html(systemSelHtml);
+
+		// 若過濾結果為只有一個，直接幫使用者選定該學制
+		if (Object.keys(systems).length === 1) {
+			// 提取該學制 id（type name）
+			const systemId = Object.keys(systems)[0];
+			// 幫使用者選定
+			$systemSel.children(`[value=${systemId}]`).prop('selected', true);
+			$systemSel.change();
+		}
 	}
 
 	function _handleUpload() {
@@ -114,11 +140,11 @@
 	}
 
 	function _handleFileChange() {
-		const file = _csvFile = this.files[0];
-
+		const file = this.files[0];
+		$fileInput.val('');
 		const fileName = file.name;
 		if (fileName.split('.').pop() !== 'csv') {
-			alert('請匯入 .csv 欓');
+			alert('請匯入 .csv 檔');
 			return;
 		}
 
@@ -141,88 +167,252 @@
 		fileReaderAsBinaryString.readAsBinaryString(file);
 	}
 
+	function _handleDownloadResultFile() {
+		window.open(`${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}/review-result`, `_blank`);
+	}
+
 	function _renderCSVTable(fileName, data) {
 		const rows = window.API.CSVToArray(data);
 		const header = rows.shift();
 		const fieldLength = header.length;
+		if (header[2] !== '僑生編號' ||
+			header[4] !== '姓名' ||
+			header[5] !== '審查結果' ||
+			header[6] !== '不合格原因代碼' ||
+			header[7] !== '備註') {
+			alert('匯入之 csv 欄位有誤');
+			return;
+		}
+		else{
+			alert("匯入成功");
+		}
 		// 清掉奇怪的空行
-		_csvReviews = rows.filter((val, i) => {
-			return val.length === fieldLength;
-		});
-		// 清掉 table header
-		_csvReviews = _csvReviews.slice(2);
+		let csvReviews = rows.filter((val, i) => val.length === fieldLength);
 
 		// 格式化 csv 資料
-		// no: 僑生編號
+		// overseas_student_id: 僑生編號
 		// name: 姓名
-		// sortNum: 審查結果， -1: 未審查、0: 不及格、其他數字：審查排序
-		// failedCode: 不及格原因代碼
-		// comment: 備註
+		// review_order: 審查結果， -1: 未審查、0: 不及格、其他數字：審查排序
+		// fail_result: 不及格原因代碼
+		// review_memo: 備註
 
-		_csvReviews = _csvReviews.map(el => {
-			return {
-				no: el[2],
-				name: el[4],
-				sortNum: Number(el[5]),
-				failedCode: el[6],
-				comment: el[7]
+		csvReviews = csvReviews.map(el => ({
+			overseas_student_id: el[2].padStart(6, '0'),
+			name: el[4],
+			review_order: Number(el[5]),
+			fail_result: (el[6] === undefined || el[6] === '') ? null : el[6],
+			review_memo: (el[7] === undefined || el[7] === '') ? null : el[7]
+		}));
+
+		// Review 暫存，整合系統上已有的學生
+		let tempReview = [];
+		tempReview = tempReview.concat(_reviewPending);
+		tempReview = tempReview.concat(_reviewPass);
+		tempReview = tempReview.concat(_reviewFailed);
+
+		// 原有資料與 csv 做 merge
+		csvReviews.forEach(csv => {
+			const studentIndex = tempReview.findIndex(pen => pen.overseas_student_id === csv.overseas_student_id);
+			if (studentIndex > -1) {
+				tempReview[studentIndex].review_order = csv.review_order;
+				tempReview[studentIndex].fail_result = csv.fail_result;
+				tempReview[studentIndex].review_memo = csv.review_memo;
 			}
 		});
 
-		_reviewPending = _csvReviews.filter(el => { return el.sortNum < 0; });
-		_reviewPass = _csvReviews.filter(el => { return el.sortNum > 0; });
-		_reviewFailed = _csvReviews.filter(el => { return el.sortNum === 0; });
+		_reviewPending = tempReview.filter(el => el.review_order < 0);
+		_reviewPass = tempReview.filter(el => el.review_order > 0);
+		_reviewFailed = tempReview.filter(el => el.review_order === 0);
+
+		_reviewPending.forEach(el => {
+			el.review_order = null;
+		});
+
+		_reviewPass.forEach(el => {
+			el.fail_result = null;
+			el.review_memo = null;
+		});
+
+		_reviewFailed.forEach(el => {
+			el.fail_result = (el.fail_result === null) ? _reasonMapping[0].id : el.fail_result;
+			el.review_memo = (el.review_memo === null) ? '' : el.review_memo;
+		});
 
 		_reviewPass.sort(function (a, b) {
-			return a.sortNum - b.sortNum;
+			return a.review_order - b.review_order;
 		});
 
 		_reRenderPending();
 		_reRenderPass();
 		_reRenderFailed();
 
-		console.log("========== _csvReviews ==========");
-		console.log(_csvReviews);
-		console.log("========== _reviewFailed ==========");
-		console.log(_reviewFailed);
-		console.log("========== _reviewPass ==========");
-		console.log(_reviewPass);
-		console.log("========== _reviewPending ==========");
-		console.log(_reviewPending);
+		// console.log("========== csvReviews ==========");
+		// console.log(csvReviews);
+		// console.log("========== _reviewFailed ==========");
+		// console.log(_reviewFailed);
+		// console.log("========== _reviewPass ==========");
+		// console.log(_reviewPass);
+		// console.log("========== _reviewPending ==========");
+		// console.log(_reviewPending);
 	}
 
 	function _handleSystemChange() {
-		console.log(this.value);
+		$deptSel.html('<option value="-1">請選擇</option>');
 
-		let deptHTML = '<option value="-1">請選擇</option>';
-
-		if (this.value !== "-1") {
-			const deptList = _departments[this.value];
-			deptList.forEach(el => {
-				deptHTML += `<option value="${el.id}">${el.title}</option>`;
-			})
+		// 有值再說
+		if (this.value === '-1') {
+			return;
 		}
-		$deptSel.html(deptHTML);
+
+		// 綁定系所列表
+		let deptHTML = '';
+		const deptList = _systems[this.value].departments;
+		deptList.forEach(el => {
+			deptHTML += `<option value="${el.id}">${el.title}</option>`;
+		})
+		$deptSel.append(deptHTML);
+
+		// 若過濾結果為只有一個，直接幫使用者選定該系所
+		if (deptList.length === 1) {
+			// 提取該學制 id（type name）
+			const deptId = deptList[0].id;
+			// 幫使用者選定
+			$deptSel.children(`[value=${deptId}]`).prop('selected', true);
+			$deptSel.change();
+		}
 	}
 
+	// 如果是 dept select 發生事件，取值丟入 renderDept
 	function _handleDeptChange() {
-		console.log(this.value);
+		const deptId = this.value;
+		_renderDeptReviewResult(deptId);
+	}
+
+	// 改成丟入某系 id render 系所審查結果
+	function _renderDeptReviewResult(deptId) {
+		$reviewBlock.hide();
+
+		const systemKey = $systemSel.val();
+		const systemName = _systemMapping.find(el => el.key === systemKey).name;
+		_systemId = _systemMapping.find(el => el.key === systemKey).id;
+		_deptId = deptId;
+
+		window.API.getDeptReviewResult(_systemId, _deptId, (err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+
+			let _studentList = data.students.map(el => {
+				return {
+					id: el.user_id,
+					review_order: el.review_order,
+					fail_result: el.fail_result,
+					name: el.name,
+					overseas_student_id: el.overseas_student_id,
+					review_memo: el.review_memo
+				}
+			});
+
+			// 判斷是否已確認
+			isConfirmed = !!data.student_order_confirmer;
+			isSystemConfirmed = !!data.system_data.review_confirmed_at
+
+			// 系所鎖 => 一般使用者不得用
+			// 學制鎖 => admin 也不得用
+			needLock = isConfirmed && (!_user.school_reviewer.has_admin || isSystemConfirmed);
+
+			_reviewPending = _studentList.filter(el => el.review_order === null);
+			_reviewPass = _studentList.filter(el => el.review_order > 0);
+			_reviewFailed = _studentList.filter(el => el.review_order === 0);
+			//渲染前先按照 review_order 排序
+			_reviewPass.sort(_sortStudentByOrder);
+
+			// reRender 時，丟入參數判斷是否已鎖定，若已鎖定且非 admin，將所有 input disabled
+			_reRenderPending();
+			_reRenderPass();
+			_reRenderFailed();
+
+			$infoDiv.show();
+			$deptHeading.text(data.title);
+			$systemHeading.text(systemName);
+			$downloadCSVBtn.attr('href', `${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}?type=file`);
+
+			// 系所資料已鎖定
+			if (isConfirmed) {
+				// 隱藏已儲存狀態
+				$storeBlock.hide();
+
+				// 隱藏儲存按鈕群
+				$submitDiv.hide();
+
+				// 但 admin 仍可「儲存修改」
+				if (!needLock) {
+					$adminSubmitDiv.show();
+				}
+
+				// 開放下載回覆表
+				$downloadResultFile.prop('disabled', false);
+
+				// 顯示系所鎖定狀態
+				$confirmAT.text(window.dateFns.format(data.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
+				$confirmBy.text(data.student_order_confirmer.name);
+				$confirmBlock.show();
+			} else {
+				// 系所資料尚未鎖定，顯示儲存按鈕並隱藏「儲存修改」按鈕
+				$adminSubmitDiv.hide();
+				$submitDiv.show();
+				$confirmBlock.hide();
+				$storeBlock.hide();
+
+				// 開放下載回覆表
+				$downloadResultFile.prop('disabled', true);
+
+				if (data.review_students_at) {
+					// 顯示系所儲存狀態
+					$storeAT.text(window.dateFns.format(data.review_students_at, 'YYYY/MM/DD HH:mm:ss'));
+					$storeBy.text(data.student_order_reviewer.name);
+					$storeBlock.show();
+				}
+			}
+
+			if (needLock) {
+				// 已送出資料並鎖定，同時不能不能匯入檔案
+				$uploadBtn.hide();
+				$lockInfoDiv.show();
+			} else {
+				$lockInfoDiv.hide();
+			}
+
+			// 顯示審查區塊
+			$reviewBlock.show();
+		});
 	}
 
 	function _reRenderPending() {
+		_reviewPending.sort(_sortStudentsByOverseasId);
+
+		const noDataHtml = '<tr><td colspan=3 class="text-center"><h4>無資料</h4></td></tr>';
+
+		// 設定鎖定 html
+		let lockHtml = '';
+
+		if (needLock) {
+			lockHtml = 'disabled';
+		}
+
 		let pendingHTML = '';
 		_reviewPending.forEach((data, index) => {
 			pendingHTML += `
 			<tr>
-				<td>${index + 1}</td>
-				<td>${data.no}</td>
+				<td>${data.overseas_student_id}</td>
 				<td>${data.name}</td>
 				<td class="text-right">
-					<button class="btn btn-success btn-judge" data-pass="1" data-index="${index}">
+					<button class="btn btn-success btn-judge" data-pass="1" data-index="${index}" ${lockHtml}>
 						<i class="fa fa-circle-o" aria-hidden="true"></i>
 						合格
 					</button>
-					<button class="btn btn-danger btn-judge" data-pass="0" data-index="${index}">
+					<button class="btn btn-danger btn-judge" data-pass="0" data-index="${index}" ${lockHtml}>
 						<i class="fa fa-times" aria-hidden="true"></i>
 						不合格
 					</button>
@@ -230,61 +420,80 @@
 			</tr>
 			`
 		})
-		$pendingTbody.html(pendingHTML);
+
+		$pendingTbody.html(_reviewPending.length > 0 ? pendingHTML : noDataHtml);
 		$('.btn-judge').on('click', _handlePass);
 	}
-
 	function _reRenderPass() {
+		_reviewPass.sort(_sortStudentsByReviewOrder);
+		const noDataHtml = '<tr><td colspan=4 class="text-center"><h4>無資料</h4></td></tr>';
+
+		// 設定鎖定 html
+		let lockHtml = '';
+
+		if (needLock) {
+			lockHtml = 'disabled';
+		}
 		let passHTML = '';
 		_reviewPass.forEach((data, index) => {
 			passHTML += `
 			<tr>
 				<td>${index + 1}</td>
-				<td>${data.no}</td>
+				<td>${data.overseas_student_id}</td>
 				<td>${data.name}</td>
 				<td class="text-center">
-					<button class="btn btn-secondary up-arrow" data-index="${index}"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
-					<button class="btn btn-secondary down-arrow" data-index="${index}"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
-					<button class="btn btn-warning btn-pass-return" data-pass="1" data-index="${index}"> 退回 </button>
+					<button class="btn btn-secondary up-arrow" data-index="${index}" ${lockHtml}><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+					<button class="btn btn-secondary down-arrow" data-index="${index}" ${lockHtml}><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+					<button class="btn btn-warning btn-pass-return" data-pass="1" data-index="${index}" ${lockHtml}> 退回 </button>
 				</td>
 			</tr>
 			`
 		})
-		$passTbody.html(passHTML);
+		$passTbody.html(_reviewPass.length > 0 ? passHTML : noDataHtml);
 		$('.btn-pass-return').on('click', _handleToPending);
 		$('.up-arrow').on('click', _prevWish);
 		$('.down-arrow').on('click', _nextWish);
 	}
 
 	function _reRenderFailed() {
-		let failedHTML = '';
+		_reviewFailed.sort(_sortStudentsByOverseasId);
 
+		const noDataHtml = '<tr><td colspan=5 class="text-center"><h4>無資料</h4></td></tr>';
+
+		// 設定鎖定 html
+		let lockHtml = '';
+
+		if (needLock) {
+			lockHtml = 'disabled';
+		}
+
+		let failedHTML = '';
 		_reviewFailed.forEach((data, index) => {
-			const reasonMsg = _reasonMapping.find(el => {
-				return el.val == data.failedCode;
-			}).text;
 			failedHTML += `
 			<tr>
-				<td>${data.no}</td>
+				<td>${data.overseas_student_id}</td>
 				<td>${data.name}</td>
 				<td>
-					<select id="failedReason-${index}" data-index="${index}" class="form-control form-control-sm sel-reason">
+					<select id="failedReason-${index}" data-index="${index}" class="form-control form-control-sm sel-reason" ${lockHtml}>
 						${_reasonOptionHTML}
 					</select>
 				</td>
-				<td>${data.comment}</td>
+				<td>
+					<input type="text" data-index="${index}" class="input-memo form-control form-control-sm" value="${data.review_memo}" ${lockHtml}>
+				</td>
 				<td class="text-center">
-					<button class="btn btn-warning btn-failed-return" data-pass="0" data-index="${index}"> 退回 </button>
+					<button class="btn btn-warning btn-failed-return" data-pass="0" data-index="${index}" ${lockHtml}> 退回 </button>
 				</td>
 			</tr>
 			`
 		})
-		$failedTbody.html(failedHTML);
+		$failedTbody.html(_reviewFailed.length > 0 ? failedHTML : noDataHtml);
 		_reviewFailed.forEach((data, index) => {
-			$('#failedReason-' + index).val(data.failedCode);
+			$('#failedReason-' + index).val(data.fail_result);
 		})
 		$('.btn-failed-return').on('click', _handleToPending);
 		$('.sel-reason').on('change', _handleReasonChange);
+		$('.input-memo').on('change', _handleMemoChange);
 	}
 
 	function _handlePass() {
@@ -294,6 +503,9 @@
 			_reviewPending.splice(index, 1);
 			_reRenderPass();
 		} else {
+			_reviewPending[index].review_order = 0;
+			_reviewPending[index].fail_result = _reasonMapping[0].id;
+			_reviewPending[index].review_memo = "";
 			_reviewFailed.push(_reviewPending[index]);
 			_reviewPending.splice(index, 1);
 			_reRenderFailed();
@@ -304,14 +516,14 @@
 	function _handleToPending() {
 		const index = $(this).data('index');
 		if (!!$(this).data('pass')) {
-			_reviewPass[index].sortNum = -1;
-			_reviewPass[index].failedCode = "";
+			_reviewPass[index].review_order = null;
 			_reviewPending.push(_reviewPass[index]);
 			_reviewPass.splice(index, 1);
 			_reRenderPass();
 		} else {
-			_reviewFailed[index].sortNum = -1;
-			_reviewFailed[index].failedCode = "";
+			_reviewFailed[index].review_order = null;
+			_reviewFailed[index].fail_result = null;
+			_reviewFailed[index].review_memo = null;
 			_reviewPending.push(_reviewFailed[index]);
 			_reviewFailed.splice(index, 1);
 			_reRenderFailed();
@@ -320,8 +532,7 @@
 	}
 
 	function _prevWish() { // 排序上調
-		const index = $(this).data("index");
-		console.log(index);
+		const index = $(this).data('index');
 		if (index > 0) {
 			const swap = _reviewPass[index];
 			_reviewPass[index] = _reviewPass[index - 1];
@@ -331,8 +542,7 @@
 	}
 
 	function _nextWish() { // 排序下調
-		const index = $(this).data("index");
-		console.log(index);
+		const index = $(this).data('index');
 		if (index < _reviewPass.length - 1) {
 			const swap = _reviewPass[index];
 			_reviewPass[index] = _reviewPass[index + 1];
@@ -342,10 +552,91 @@
 	}
 
 	function _handleReasonChange() {
-		const index = $(this).data("index");
+		const index = $(this).data('index');
 		const failedCode = $(this).val();
-		_reviewFailed[index].failedCode = failedCode;
-		console.log(_reviewFailed[index]);
+		_reviewFailed[index].fail_result = failedCode;
+	}
+
+	function _handleMemoChange() {
+		const index = $(this).data('index');
+		const memoText = $(this).val();
+		_reviewFailed[index].review_memo = memoText;
+	}
+
+	function _handlePatchData() {
+		const mode = $(this).data('mode');
+		if (mode === 'confirm') {
+			// 問一下是否要鎖定系所？
+			const isConfirmed = confirm('確定要鎖定系所嗎？');
+			if (!isConfirmed) {
+				return;
+			}
+		}
+		if (_deptId !== "") {
+			if (_reviewPending.length > 0 && mode === 'confirm') {
+				alert('尚有待審查項目，請審查完畢再儲存。');
+			}
+			else{
+				let sendData = [];
+				let passData = _reviewPass.map((data, index) => {
+					return {
+						id: data.id,
+						review_order: index + 1,
+						fail_result: null,
+						review_memo: null
+					}
+				});
+				let failedData = _reviewFailed.map((data, index) => {
+					return {
+						id: data.id,
+						review_order: 0,
+						fail_result: data.fail_result,
+						review_memo: data.review_memo
+					}
+				});
+				let pedingData = _reviewPending.map((data, index) => {
+					return{
+						id: data.id,
+						review_order: -1,
+						fail_result: null,
+						review_memo: null
+					}
+				});
+				sendData = sendData.concat(passData);
+				sendData = sendData.concat(failedData);
+				sendData = sendData.concat(pedingData);
+				const studentsData = { students: sendData };
+
+				window.API.patchDeptReviewResult(_systemId, _deptId, mode, studentsData, (err, data) => {
+					if (err) {
+						console.error(err);
+						return;
+					}
+
+					if (mode === 'confirm') {
+						alert('審查結果已送出，並鎖定審查結果。');
+					} else {
+						alert('審查結果已儲存。');
+					}
+					// 成功鎖定後，重 render 一次系所審查結果
+					_renderDeptReviewResult(data.id);
+				});
+			}
+		} else {
+			alert('請先選擇系所。');
+		}
+	}
+
+	function _sortStudentsByOverseasId(a, b) {
+		return a.overseas_student_id - b.overseas_student_id;
+	}
+
+	function _sortStudentsByReviewOrder(a, b) {
+		return a.sortNum - b.sortNum;
+	}
+
+	function _sortStudentByOrder(a,b) {
+		return a.review_order - b.review_order;
 	}
 
 })();

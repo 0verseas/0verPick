@@ -2,6 +2,7 @@ window.API = (() => {
 	const _config = window.getConfig();
 	let _loadingTimeout;
 	let _loadingCount = 0;
+	let _loadingStartTime = null;
 
 	/**
 	 * public method
@@ -219,6 +220,20 @@ window.API = (() => {
 			.catch((err) => { _handleError(err, callback) });
 	}
 
+	function getAllCanReviewDepts(system = 'all', callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/systems`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+			.then(_parseData)
+			.then((data) => { callback && callback(null, data) })
+			.catch((err) => { _handleError(err, callback) });
+	}
+
 	function getStudentMergedFile(system, studentId, deptId, filetype) {
 		_setLoading();
 
@@ -309,21 +324,71 @@ window.API = (() => {
 		return decodeURIComponent(results[2].replace(/\+/g, " "));
 	}
 
+	function getReviewFailResult(callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/fail-results`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		.then(_parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { _handleError(err, callback) });
+	}
+
+	function getDeptReviewResult(system, deptId, callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments/${deptId}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		.then(_parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { _handleError(err, callback) });
+	}
+
+	function patchDeptReviewResult(system, deptId, mode, data, callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments/${deptId}?mode=${mode}`, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
+		})
+		.then(_parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { _handleError(err, callback) });
+	}
+
 	/**
 	 * private method
 	 */
 	function _setLoading() {
 		_loadingCount ++;
+		if (!_loadingStartTime) {
+			_loadingStartTime = $.now();
+		}
+
 		Loading.start();
 	}
 
 	function _endLoading() {
 		_loadingCount --;
 		if (_loadingCount === 0) {
+			const loadingDuration = $.now() - _loadingStartTime;
+			_loadingStartTime = null;
+			const antiOptimize = loadingDuration > 2000 ? 0 : (Math.random() * 1000) + 500;
 			_loadingTimeout && clearTimeout(_loadingTimeout);
 			_loadingTimeout = setTimeout(() => {
 				Loading.stop();
-			}, (Math.random() * 1000) + 500);
+			}, antiOptimize);
 		}
 	}
 
@@ -380,6 +445,36 @@ window.API = (() => {
 		});
 	}
 
+	// 拿到所有學制的審查狀態
+	function getSystems(callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/systems`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		.then(_parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { _handleError(err, callback) });
+	}
+
+	// 拿到所有學制的審查狀態
+	function confirmSystem(type_id, callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/systems/${type_id}`, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		.then(_parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { _handleError(err, callback) });
+	}
+
 	function _handleError(err, callback) {
 		const status = err.status;
 		_endLoading();
@@ -415,9 +510,15 @@ window.API = (() => {
 		getStudentTranscripts,
 		getApplicationDoc,
 		getDownloadableDepts,
+		getAllCanReviewDepts,
 		getStudentMergedFile,
 		getAllStudentMergedFile,
 		CSVToArray,
-		getUrlParam
+		getUrlParam,
+		getSystems,
+		confirmSystem,
+		getReviewFailResult,
+		getDeptReviewResult,
+		patchDeptReviewResult
 	};
 })();

@@ -5,11 +5,7 @@
 				<label for="staticEmail" class="col-sm-2 col-form-label">學制</label>
 				<div class="col-sm-10">
 					<select id="sel-system" class="form-control form-control-sm">
-						<option value="-1">請選擇</option>
-						<option value="bachelor_depts">學士班</option>
-						<option value="two_year_tech_depts">港二技</option>
-						<option value="master_depts">碩士班</option>
-						<option value="phd_depts">博士班</option>
+
 					</select>
 				</div>
 			</div>
@@ -25,85 +21,112 @@
 	</div>
 </div>
 <hr />
-<div class="row">
-	<div class="col-12 text-center">
-		<button class="btn btn-success">
-			<i class="fa fa-download" aria-hidden="true"></i> 
-			下載審查名冊
-		</button>
-		<button id="btn-upload" class="btn btn-primary"><i class="fa fa-sign-in" aria-hidden="true"></i> 匯入學士班資管系審查結果</button>
-		<input id="file-input" type="file" class="file-upload" accept=".csv" style="display: none" />
-		<button class="btn btn-success">
-			<i class="fa fa-download" aria-hidden="true"></i> 
-			下載系所審查結果
-		</button>
+<div id="review-block" class="" style="display: none;">
+	<div id="div-info">
+		<div class="row">
+			<div class="col-7">
+				<h3>
+					<span id="heading-dept"></span>
+					<small id="heading-system" class="text-muted"></small>
+				</h3>
+			</div>
+			<div class="col-5 text-right" id="store-block" style="display: none;">
+				<small class="badge badge-warning">此系審查資料由 <span id="store-by">Name</span> 最後儲存於 <span id="store-at">YYYY/MM/DD HH:mm:ss</span></small>
+			</div>
+			<div class="col-5 text-right" id="confirm-block" style="display: none;">
+				<small class="badge badge-danger">此系審查資料由 <span id="confirm-by">Name</span> 確認送出並鎖定於 <span id="confirm-at">YYYY/MM/DD HH:mm:ss</span></small>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<a id="btn-downloadCSV" class="btn btn-success" href="#" role="button">
+					<i class="fa fa-download" aria-hidden="true"></i>
+					下載系所審查名冊（csv）
+				</a>
+				<button id="btn-upload" class="btn btn-primary"><i class="fa fa-sign-in" aria-hidden="true"></i> 匯入系所審查結果</button>
+				<input id="file-input" type="file" class="file-upload" accept=".csv" style="display: none" />
+				<button id="download-result-file" class="btn btn-success" disabled>
+					<i class="fa fa-download" aria-hidden="true"></i>
+					下載系所審查回覆表（pdf）
+				</button>
+			</div>
+		</div>
 	</div>
-</div>
-<hr />
-<div class="row">
-	<div class="col-12">
-		<h3 class="pl-2" style="border-left: 5px solid">待審查清單</h3>
-		<div style="max-height: 350px; overflow: auto">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>排序</th>
-						<th>僑生編號</th>
-						<th>學生姓名</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody id="tbody-pending"></tbody>
-			</table>
+	<hr />
+	<div class="row">
+		<div class="col-12">
+			<h3 class="pl-2" style="border-left: 5px solid">待審查清單</h3>
+			<div style="max-height: 350px; overflow: auto">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>僑生編號</th>
+							<th>學生姓名</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody id="tbody-pending"></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<hr />
+	<div class="row">
+		<div class="col-12">
+			<h3 class="border-success pl-2" style="border-left: 5px solid">合格清單</h3>
+			<div style="max-height: 350px; overflow: auto">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>排序</th>
+							<th>僑生編號</th>
+							<th>學生姓名</th>
+							<th style="width: 200px"></th>
+						</tr>
+					</thead>
+					<tbody id="tbody-pass"></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<hr />
+	<div class="row">
+		<div class="col-12">
+			<h3 class="border-danger pl-2" style="border-left: 5px solid">不合格清單</h3>
+			<div style="max-height: 350px; overflow: auto">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>僑生編號</th>
+							<th>學生姓名</th>
+							<th>不合格原因</th>
+							<th>備註</th>
+							<th style="width: 120px"></th>
+						</tr>
+					</thead>
+					<tbody id="tbody-failed"></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<hr />
+	<div id="div-submit" class="row mb-5" style="display: none;">
+		<div class="col-md-10 offset-md-1 text-center">
+			<button class="btn btn-primary btn-patch" data-mode="save">儲存</button>
+			<button class="btn btn-danger btn-patch" data-mode="confirm">送出資料並鎖定</button>
+		</div>
+	</div>
+	<div id="div-submit-admin" class="row mb-5" style="display: none;">
+		<div class="col-md-10 offset-md-1 text-center">
+			<button class="btn btn-primary btn-patch" data-mode="confirm">儲存修改</button>
+		</div>
+	</div>
+	<div id="div-lock-info" class="row mb-5" style="display: none;">
+		<div class="col-md-12 text-center">
+			<button class="btn btn-danger" disabled>資料已送出並鎖定</button>
 		</div>
 	</div>
 </div>
-<hr />
-<div class="row">
-	<div class="col-12">
-		<h3 class="border-success pl-2" style="border-left: 5px solid">合格清單</h3>
-		<div style="max-height: 350px; overflow: auto">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>排序</th>
-						<th>僑生編號</th>
-						<th>學生姓名</th>
-						<th style="width: 200px"></th>
-					</tr>
-				</thead>
-				<tbody id="tbody-pass"></tbody>
-			</table>
-		</div>
-	</div>
-</div>
-<hr />
-<div class="row">
-	<div class="col-12">
-		<h3 class="border-danger pl-2" style="border-left: 5px solid">不合格清單</h3>
-		<div style="max-height: 350px; overflow: auto">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>僑生編號</th>
-						<th>學生姓名</th>
-						<th>不合格原因</th>
-						<th>備註</th>
-						<th style="width: 120px"></th>
-					</tr>
-				</thead>
-				<tbody id="tbody-failed"></tbody>
-			</table>
-		</div>
-	</div>
-</div>
-<hr />
-<div class="row mb-5">
-	<div class="col-md-10 offset-md-1 text-center">
-		<button class="btn btn-primary">儲存</button>
-		<button class="btn btn-danger">送出資料並鎖定</button>
-	</div>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jschardet/1.6.0/jschardet.min.js" integrity="sha256-CEf/4H6Uoi1ITLUQxu/mUnVHZdabrr4lVGsTduOHkkQ="
-	crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jschardet/1.6.0/jschardet.min.js"
+	integrity="sha256-CEf/4H6Uoi1ITLUQxu/mUnVHZdabrr4lVGsTduOHkkQ=" crossorigin="anonymous"></script>
 <script src="./js/review.js"></script>
