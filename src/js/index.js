@@ -16,7 +16,7 @@
 	let downloadPttHTML='';
 	downloadPttHTML += `
 		<div>
-			<a href="${_config.apiBase}/forms/個人申請制備審資料下載與審查回覆系統操作說明.pdf"  target="_blank">
+			<a href="https://docs.google.com/presentation/d/1lav-5ToDGmc7gXl8fYDXNIDeDnHzC5ciTvfQvUbYI-0/edit#slide=id.g2f452ac164_0_0"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 個人申請制備審資料下載與審查回覆系統操作說明PTT
 			</a>
 		</div>
