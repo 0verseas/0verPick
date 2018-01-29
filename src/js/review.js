@@ -325,8 +325,11 @@
 			_reviewPending = _studentList.filter(el => el.review_order === null);
 			_reviewPass = _studentList.filter(el => el.review_order > 0);
 			_reviewFailed = _studentList.filter(el => el.review_order === 0);
-			//渲染前先按照 review_order 排序
-			_reviewPass.sort(_sortStudentByOrder);
+
+			//渲染前先排序一下
+			_reviewPending.sort(_sortStudentsByOverseasId);
+			_reviewPass.sort(_sortStudentByReviewOrder);
+			_reviewFailed.sort(_sortStudentsByOverseasId);
 
 			// reRender 時，丟入參數判斷是否已鎖定，若已鎖定且非 admin，將所有 input disabled
 			_reRenderPending();
@@ -390,7 +393,6 @@
 	}
 
 	function _reRenderPending() {
-		_reviewPending.sort(_sortStudentsByOverseasId);
 
 		const noDataHtml = '<tr><td colspan=3 class="text-center"><h4>無資料</h4></td></tr>';
 
@@ -425,7 +427,7 @@
 		$('.btn-judge').on('click', _handlePass);
 	}
 	function _reRenderPass() {
-		_reviewPass.sort(_sortStudentsByReviewOrder);
+		console.log(_reviewPass);
 		const noDataHtml = '<tr><td colspan=4 class="text-center"><h4>無資料</h4></td></tr>';
 
 		// 設定鎖定 html
@@ -456,7 +458,6 @@
 	}
 
 	function _reRenderFailed() {
-		_reviewFailed.sort(_sortStudentsByOverseasId);
 
 		const noDataHtml = '<tr><td colspan=5 class="text-center"><h4>無資料</h4></td></tr>';
 
@@ -631,11 +632,7 @@
 		return a.overseas_student_id - b.overseas_student_id;
 	}
 
-	function _sortStudentsByReviewOrder(a, b) {
-		return a.sortNum - b.sortNum;
-	}
-
-	function _sortStudentByOrder(a,b) {
+	function _sortStudentByReviewOrder(a,b) {
 		return a.review_order - b.review_order;
 	}
 
