@@ -10,6 +10,9 @@
 	const $annex01 = $('#annex01');
 	const $annex02 = $('#annex02');
 	const $annex03 = $('#annex03');
+	const $annex04 = $('#annex04');
+	const $annex05 = $('#annex05');
+	const $annex06 = $('#annex06');
 	const _config = window.getConfig();
 
 
@@ -100,5 +103,35 @@
 		</div>
 		`;
 	$annex03.html(annex03HTML);
+
+	let annex04HTML='';
+	annex04HTML += `
+		<div>
+			<a href="${_config.apiBase}/forms/港二技_入學大學同等學力認定標準.pdf"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 入學大學同等學力認定標準
+			</a>
+		</div>
+		`;
+	$annex04.html(annex04HTML);
+
+	let annex05HTML='';
+	annex05HTML += `
+		<div>
+			<a href="${_config.apiBase}/forms/港二技_本會彙整報名學生畢肄業學校經香港當地評審情形一覽表.pdf"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 本會彙整報名學生畢肄業學校經香港當地評審情形一覽表
+			</a>
+		</div>
+		`;
+	$annex05.html(annex05HTML);
+
+	let annex06HTML='';
+	annex06HTML += `
+		<div>
+			<a href="${_config.apiBase}/forms/港二技_香港副學士或高級文憑學生來臺升讀學士班適用簡章.pdf"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 香港副學士或高級文憑學生來臺升讀學士班適用簡章
+			</a>
+		</div>
+		`;
+	$annex06.html(annex06HTML);
 
 })();
