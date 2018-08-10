@@ -63,7 +63,7 @@
 	<script>
 		const _productionConfig = window.getConfig();
 
-		if (_productionConfig.isProduction) {
+		if (!_productionConfig.isProduction) {
 			document.title='個人申請制應繳資料下載系統-測試站';
 			document.getElementById('loginWordOfSystem').innerHTML='個人申請制<br />應繳資料下載系統-測試站';
 		}
