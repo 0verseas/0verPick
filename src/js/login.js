@@ -25,10 +25,9 @@
 			password: sha256(password)
 		}, function (err, data) {
 			if (err) {
+				console.error(err);
 				if (err.status === 401) {
 					alert('帳號或密碼有誤');
-				} else {
-					console.error(err);
 				}
 				
 				return;
