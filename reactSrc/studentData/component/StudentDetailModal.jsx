@@ -297,38 +297,6 @@ export default class StudentDetailModal extends React.Component {
 			});
 		});
 
-		window.API.getStudentDiploma({
-			system: this.props.system,
-			userID,
-			deptID
-		}, (err, data) => {
-			if (err) {
-				console.error(err);
-				return;
-			}
-
-			this.setState({
-				diplomas: data.student_diploma || []
-			});
-			// console.log(this.state.diplomas);
-		});
-
-		window.API.getStudentTranscripts({
-			system: this.props.system,
-			userID,
-			deptID
-		}, (err, data) => {
-			if (err) {
-				console.error(err);
-				return;
-			}
-
-
-			this.setState({
-				transcripts: data.student_transcripts || []
-			});
-		});
-
 		window.API.getApplicationDoc({
 			system: this.props.system,
 			userID,
@@ -458,9 +426,9 @@ export default class StudentDetailModal extends React.Component {
 							</tr>
 							<tr>
 								<th>電話</th>
-								<td colSpan={2}>{ this.state.tel }</td>
+								<td colSpan={2}>{ this.state.tel.replace(/;/g, '-') }</td>
 								<th>手機</th>
-								<td colSpan={2}>{ this.state.phone }</td>
+								<td colSpan={2}>{ this.state.phone.replace(/;/g, '-') }</td>
 							</tr>
 							<tr>
 								<th>畢業學校</th>
@@ -477,46 +445,6 @@ export default class StudentDetailModal extends React.Component {
 						</tbody>
 					</Table>
 					<hr />
-					<div className="mb-2">
-						<Card>
-							<CardHeader>學歷證明資料夾 <small>必審資料</small></CardHeader>
-							<CardBody>
-								{
-									this.state.diplomas.map(diploma => {
-										return (
-											<Image
-												img={diploma}
-												system={this.props.system}
-												deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
-												userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
-												type="diploma"
-											/>
-										);
-									})
-								}
-							</CardBody>
-						</Card>
-					</div>
-					<div className="mb-2">
-						<Card>
-							<CardHeader>成績單資料夾 <small>必審資料</small></CardHeader>
-							<CardBody>
-								{
-									this.state.transcripts.map(transcript => {
-										return (
-											<Image
-												img={transcript}
-												system={this.props.system}
-												deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
-												userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
-												type="transcripts"
-											/>
-										);
-									})
-								}
-							</CardBody>
-						</Card>
-					</div>
 
 					{
 						this.state.applicationDocs.map((doc, i) => {
@@ -526,6 +454,7 @@ export default class StudentDetailModal extends React.Component {
 										<CardHeader>{doc.type.name} {doc.required ? <small>必審資料</small> : ''}</CardHeader>
 										<CardBody>
 											{
+												(doc.paper != null) ? '以紙本寄送至貴系' :
 												// 作品集不只是一堆檔案，要另外處理
 												[18, 38, 58, 78].includes(doc.type_id) ? this.imgOrFile(doc.files, doc.type_id) : doc.files.map(file => {
 													return this.imgOrFile(file, doc.type_id);
