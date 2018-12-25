@@ -148,7 +148,7 @@ export default class StudentDataTable extends React.Component {
 											<td>{val.order}</td>
 											<td className="text-center"><Button color="primary" size="sm" onClick={() => { this.props.onDetail(val.userID, val.deptID) }}>學生詳細資料</Button></td>
 
-											<td className="text-center"><Button color="success" size="sm" onClick={() => { this.getStudentMergedFile(val.userID, val.deptID, 'raw') } }>下載審查資料（原始檔）</Button></td>
+											<td className="text-center"><Button color="success" size="sm" onClick={() => { this.getStudentMergedFile(val.userID, val.deptID, 'pdf') } }>下載審查資料（PDF 檔）</Button></td>
 										</tr>
 									);
 								})
@@ -167,4 +167,5 @@ export default class StudentDataTable extends React.Component {
 	}
 }
 
+//<td className="text-center"><Button color="success" size="sm" onClick={() => { this.getStudentMergedFile(val.userID, val.deptID, 'raw') } }>下載審查資料（原始檔）</Button></td>
 //<td className="text-center"><Button color="success" size="sm" onClick={() => { this.getStudentMergedFile(val.userID, val.deptID, 'pdf') } }>下載審查資料（PDF 檔）</Button></td>
