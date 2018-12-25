@@ -71,7 +71,7 @@ const app = ( () => {
 	 * event handler
 	 */
 	function systemDownload(type_id) {
-		window.open(`${_config.apiBase}/reviewers/systems/${type_id}/departments/all/review-result`, `_blank`);
+		window.open(`${_config.apiBase}/reviewers/systems/${type_id}/departments/all/review-result?mode=formal`, `_blank`);
 	}
 
 	function systemConfirm(type_id) {
@@ -184,8 +184,8 @@ const app = ( () => {
 					<tr>
 						<td>${dept.id}</td>
 						<td>${dept.title}</td>
-						<td>${dept.review_confirmed_at ? '已鎖定' : dept.review_students_at ? '已儲存' : '未審查'}</td>
-						<td>${dept.review_students_by ? dept.student_order_reviewer.name : ''}</td>
+						<td>${dept.review_confirmed_at ? '<font color="green">已鎖定</font>' : dept.review_students_at ? '<font color="yellow">已儲存</font>' : '<font color="red">未審查</font>'}</td>
+						<td>${dept.student_order_reviewer ? dept.student_order_reviewer.name : ''}</td>
 						<td>${dept.review_students_at ? dateFns.format(dept.review_students_at, 'YYYY/MM/DD HH:mm:ss') : ''}</td>
 					</tr>
 				`;

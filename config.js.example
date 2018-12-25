@@ -1,5 +1,6 @@
 window.getConfig = function () {
 	return {
-		apiBase: ''
+		apiBase: '',
+		isProduction: false
 	};
 };
