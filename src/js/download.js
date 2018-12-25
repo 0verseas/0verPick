@@ -54,13 +54,13 @@ const app = ( () => {
 				<tr>
 					<td>${dept.title}</td>
 					<td class="text-center btn-download">
-						<button class="btn btn-success btn-sm" onclick="app.getStudentApplicationDocsFile('${system}', '${dept.id}', 'pdf')">
+						<button class="btn btn-success btn-sm" onclick="app.getStudentApplicationDocsFile('${system}', '${dept.id}', 'pdf');">
 							<i class="fa fa-download" aria-hidden="true"></i> PDF 合併檔
 						</button>
 					</td>
 					<!--
 					<td class="text-center btn-download">
-						<button class="btn btn-success btn-sm" onclick="app.getStudentApplicationDocsFile('${system}', '${dept.id}', 'raw')">
+						<button class="btn btn-success btn-sm" onclick="app.getStudentApplicationDocsFile('${system}', '${dept.id}', 'raw');">
 							<i class="fa fa-download" aria-hidden="true"></i> 原始檔案合併檔
 						</button>
 					</td>
