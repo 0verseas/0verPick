@@ -6,3 +6,7 @@
 .btn-download {
     width: 200px;
 }
+
+.hide {
+	display: none;
+}
