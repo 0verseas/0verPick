@@ -57,6 +57,12 @@ const app = ( () => {
 	const $phdConfirmBy = $('#phd-confirm-by');
 	const $phdConfirmAt = $('#phd-confirm-at');
 
+	// 鎖定所有無人選填系所
+	const $bachelorLockAllNoStudent = $('#bachelor-lock-all-no-student');
+	const $masterLockAllNoStudent = $('#master-lock-all-no-student');
+	const $phdLockAllNoStudent = $('#phd-lock-all-no-student');
+	const $twoYearTechLockAllNoStudent = $('#two-year-tech-lock-all-no-student');
+
 	/**
 	 * init
 	 */
@@ -104,6 +110,30 @@ const app = ( () => {
 		});
 	}
 
+	function lockAllNoStudent(system_id) {
+		window.API.lockAllNoStudent(system_id, (err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+
+			switch (system_id) {
+				case 1:
+					_renderSystems($bachelorTbody, data.bachelor);
+					break;
+				case 2:
+					_renderSystems($twoYearTechTbody, data.two_year_tech);
+					break;
+				case 3:
+					_renderSystems($masterTbody, data.master);
+					break;
+				case 4:
+					_renderSystems($phdTbody, data.phd);
+					break;
+			}
+		});
+	}
+
 	function _init() {
 		// 取得所有學制的審查狀態
 		window.API.getSystems((err, data) => {
@@ -122,6 +152,9 @@ const app = ( () => {
 				$bachelorConfirm.click(() =>{
 					systemConfirm(1);
 				});
+				$bachelorLockAllNoStudent.click(() => {
+					lockAllNoStudent(1);
+				});
 			} else {
 				$bachelorNavItem.remove();
 			}
@@ -133,6 +166,9 @@ const app = ( () => {
 				});
 				$twoYearTechConfirm.click(() =>{
 					systemConfirm(2);
+				});
+				$twoYearTechLockAllNoStudent.click(() => {
+					lockAllNoStudent(2);
 				});
 			} else {
 				$twoYearTechNavItem.remove();
@@ -146,6 +182,9 @@ const app = ( () => {
 				$masterConfirm.click(() =>{
 					systemConfirm(3);
 				});
+				$masterLockAllNoStudent.click(() => {
+					lockAllNoStudent(3);
+				});
 			} else {
 				$masterNavItem.remove();
 			}
@@ -157,6 +196,9 @@ const app = ( () => {
 				});
 				$phdConfirm.click(() =>{
 					systemConfirm(4);
+				});
+				$phdLockAllNoStudent.click(() => {
+					lockAllNoStudent(4);
 				});
 			} else {
 				$phdNavItem.remove();

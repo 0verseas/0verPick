@@ -367,6 +367,20 @@ window.API = (() => {
 		.catch((err) => { _handleError(err, callback) });
 	}
 
+	function lockAllNoStudent(system, callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/lock-all-no-student-department/${system}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+			.then(_parseData)
+			.then((data) => { callback && callback(null, data) })
+			.catch((err) => { _handleError(err, callback) });
+	}
+
 	/**
 	 * private method
 	 */
@@ -521,6 +535,7 @@ window.API = (() => {
 		confirmSystem,
 		getReviewFailResult,
 		getDeptReviewResult,
-		patchDeptReviewResult
+		patchDeptReviewResult,
+		lockAllNoStudent
 	};
 })();
