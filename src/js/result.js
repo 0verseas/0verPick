@@ -76,8 +76,8 @@ const app = ( () => {
 	/**
 	 * event handler
 	 */
-	function systemDownload(type_id) {
-		window.open(`${_config.apiBase}/reviewers/systems/${type_id}/departments/all/review-result?mode=formal`, `_blank`);
+	function systemDownload(type_id, mode) {
+		window.open(`${_config.apiBase}/reviewers/systems/${type_id}/departments/all/review-result?mode=${mode}`, `_blank`);
 	}
 
 	function systemConfirm(type_id) {
@@ -146,9 +146,7 @@ const app = ( () => {
 			// 判斷學制存不存在
 			if (data.bachelor) {
 				_renderSystems($bachelorTbody, data.bachelor);
-				$bachelorDownload.click(() => {
-					systemDownload(1);
-				});
+
 				$bachelorConfirm.click(() =>{
 					systemConfirm(1);
 				});
@@ -161,9 +159,7 @@ const app = ( () => {
 
 			if (data.two_year_tech) {
 				_renderSystems($twoYearTechTbody, data.two_year_tech);
-				$twoYearTechDownload.click(() => {
-					systemDownload(2);
-				});
+
 				$twoYearTechConfirm.click(() =>{
 					systemConfirm(2);
 				});
@@ -176,9 +172,7 @@ const app = ( () => {
 
 			if (data.master) {
 				_renderSystems($masterTbody, data.master);
-				$masterDownload.click(() => {
-					systemDownload(3);
-				});
+
 				$masterConfirm.click(() =>{
 					systemConfirm(3);
 				});
@@ -191,9 +185,7 @@ const app = ( () => {
 
 			if (data.phd) {
 				_renderSystems($phdTbody, data.phd);
-				$phdDownload.click(() => {
-					systemDownload(4);
-				});
+
 				$phdConfirm.click(() =>{
 					systemConfirm(4);
 				});
@@ -243,7 +235,20 @@ const app = ( () => {
 		// 若學制已確認並鎖定，可以下載審核回覆表
 		switch (system.type_id) {
 			case 1:
-				$bachelorDownload.prop('disabled', !canDownload);
+				if (canDownload) {
+					$bachelorDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載學士班審查結果回覆表';
+
+					$bachelorDownload.click(() => {
+						systemDownload(1, 'formal');
+					});
+				} else {
+					$bachelorDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載學士班審查結果回覆表(預覽版)';
+
+					$bachelorDownload.click(() => {
+						systemDownload(1, 'preview');
+					});
+				}
+
 				$bachelorConfirm.prop('disabled', !canConfirm);
 
 				if(canConfirm == true){
@@ -263,7 +268,20 @@ const app = ( () => {
 				break;
 
 			case 2:
-				$twoYearTechDownload.prop('disabled', !canDownload);
+				if (canDownload) {
+					$twoYearTechDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載港二技審查結果回覆表';
+
+					$twoYearTechDownload.click(() => {
+						systemDownload(2, 'formal');
+					});
+				} else {
+					$twoYearTechDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載港二技審查結果回覆表(預覽版)';
+
+					$twoYearTechDownload.click(() => {
+						systemDownload(2, 'preview');
+					});
+				}
+
 				$twoYearTechConfirm.prop('disabled', !canConfirm);
 
 				if(canConfirm == true){
@@ -283,7 +301,20 @@ const app = ( () => {
 				break;
 
 			case 3:
-				$masterDownload.prop('disabled', !canDownload);
+				if (canDownload) {
+					$masterDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載碩士班審查結果回覆表';
+
+					$masterDownload.click(() => {
+						systemDownload(3, 'formal');
+					});
+				} else {
+					$masterDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載碩士班審查結果回覆表(預覽版)';
+
+					$masterDownload.click(() => {
+						systemDownload(3, 'preview');
+					});
+				}
+
 				$masterConfirm.prop('disabled', !canConfirm);
 
 				if(canConfirm == true){
@@ -303,7 +334,20 @@ const app = ( () => {
 				break;
 
 			case 4:
-				$phdDownload.prop('disabled', !canDownload);
+				if (canDownload) {
+					$phdDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載博士班審查結果回覆表';
+
+					$phdDownload.click(() => {
+						systemDownload(4, 'formal');
+					});
+				} else {
+					$phdDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載博士班審查結果回覆表(預覽版)';
+
+					$phdDownload.click(() => {
+						systemDownload(4, 'preview');
+					});
+				}
+
 				$phdConfirm.prop('disabled', !canConfirm);
 
 				if(canConfirm == true){
