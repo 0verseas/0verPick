@@ -242,7 +242,7 @@ const app = ( () => {
 						systemDownload(1, 'formal');
 					});
 				} else {
-					$bachelorDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載學士班審查結果回覆表(預覽版)';
+					$bachelorDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載學士班審查結果回覆表（預覽版）';
 
 					$bachelorDownload.click(() => {
 						systemDownload(1, 'preview');
@@ -275,7 +275,7 @@ const app = ( () => {
 						systemDownload(2, 'formal');
 					});
 				} else {
-					$twoYearTechDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載港二技審查結果回覆表(預覽版)';
+					$twoYearTechDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載港二技審查結果回覆表（預覽版）';
 
 					$twoYearTechDownload.click(() => {
 						systemDownload(2, 'preview');
@@ -308,7 +308,7 @@ const app = ( () => {
 						systemDownload(3, 'formal');
 					});
 				} else {
-					$masterDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載碩士班審查結果回覆表(預覽版)';
+					$masterDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載碩士班審查結果回覆表（預覽版）';
 
 					$masterDownload.click(() => {
 						systemDownload(3, 'preview');
@@ -341,7 +341,7 @@ const app = ( () => {
 						systemDownload(4, 'formal');
 					});
 				} else {
-					$phdDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載博士班審查結果回覆表(預覽版)';
+					$phdDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載博士班審查結果回覆表（預覽版）';
 
 					$phdDownload.click(() => {
 						systemDownload(4, 'preview');
