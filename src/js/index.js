@@ -44,7 +44,7 @@
 				<i class="fa fa-download" aria-hidden="true"></i> 各學制系代碼代碼表
 			</a>
 			<span style="font-size: 13px;">（匯入帳號的各學制權限請使用以上提供的系代碼）</span>
-			<span style="font-size: 13px;">（因測試站以台灣大學為範例，故匯入時請暫時以國立臺灣大學科系代碼表做測試）</span>
+			<span style="font-size: 13px;">（因測試站以國立臺灣大學為範例，故匯入時請暫時以國立臺灣大學科系代碼表做測試）</span>
 		</div>
 		`;
 	$deptID.html(deptIDHTML);
