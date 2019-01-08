@@ -12,8 +12,9 @@
 	let _reasonMapping = [];
 	let _reasonOptionHTML = '';
 	let _systems = {};
-	let _systemId = ""
-	let _deptId = "";
+	let _systemId = '';
+	let _deptId = '';
+	let _downloadMode = 'preview';
 	let _reviewPending = [];
 	let _reviewPass = [];
 	let _reviewFailed = [];
@@ -168,7 +169,7 @@
 	}
 
 	function _handleDownloadResultFile() {
-		window.open(`${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}/review-result`, `_blank`);
+		window.open(`${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}/review-result?mode=${_downloadMode}`, `_blank`);
 	}
 
 	function _renderCSVTable(fileName, data) {
@@ -355,7 +356,9 @@
 				}
 
 				// 開放下載回覆表
-				$downloadResultFile.prop('disabled', false);
+				$downloadResultFile[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載系所審查回覆表（pdf）';
+
+				_downloadMode = 'formal';
 
 				// 顯示系所鎖定狀態
 				$confirmAT.text(window.dateFns.format(data.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
@@ -368,8 +371,10 @@
 				$confirmBlock.hide();
 				$storeBlock.hide();
 
-				// 開放下載回覆表
-				$downloadResultFile.prop('disabled', true);
+				// 開放下載預覽版回覆表
+				$downloadResultFile[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載系所審查回覆表（預覽版 pdf）';
+
+				_downloadMode = 'preview';
 
 				if (data.review_students_at) {
 					// 顯示系所儲存狀態
