@@ -19,7 +19,7 @@
 	let downloadPttHTML='';
 	downloadPttHTML += `
 		<div>
-			<a href="https://docs.google.com/presentation/d/1lav-5ToDGmc7gXl8fYDXNIDeDnHzC5ciTvfQvUbYI-0/edit#slide=id.g2f452ac164_0_0"  target="_blank">
+			<a href="https://docs.google.com/presentation/d/1lav-5ToDGmc7gXl8fYDXNIDeDnHzC5ciTvfQvUbYI-0/edit#slide=id.g4c2c41d31c_0_35"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 個人申請制備審資料下載與審查回覆系統操作說明PTT
 			</a>
 		</div>
@@ -40,19 +40,11 @@
 	let deptIDHTML='';
 	deptIDHTML += `
 		<div>
-			<a href="${_config.apiBase}/forms/學士系代碼對照表.ods"  target="_blank">
-				<i class="fa fa-download" aria-hidden="true"></i> 學士班系代碼代碼表
-			</a>
-			<a href="${_config.apiBase}/forms/港二技代碼對照表.ods"  target="_blank">
-				<i class="fa fa-download" aria-hidden="true"></i> 港二技代碼對照表
-			</a>
-			<a href="${_config.apiBase}/forms/碩士系代碼對照表.ods"  target="_blank">
-				<i class="fa fa-download" aria-hidden="true"></i> 碩士班系代碼代碼表
-			</a>
-			<a href="${_config.apiBase}/forms/博士系代碼對照表.ods"  target="_blank">
-				<i class="fa fa-download" aria-hidden="true"></i> 博士班系代碼代碼表
+			<a href="${_config.apiBase}/forms/2019下載系統系所代碼表.xlsx"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 各學制系代碼代碼表
 			</a>
 			<span style="font-size: 13px;">（匯入帳號的各學制權限請使用以上提供的系代碼）</span>
+			<span style="font-size: 13px;">（因測試站以國立臺灣大學為範例，故匯入時請暫時以國立臺灣大學科系代碼表做測試）</span>
 		</div>
 		`;
 	$deptID.html(deptIDHTML);
@@ -76,7 +68,7 @@
 	let annex01HTML='';
 	annex01HTML += `
 		<div>
-			<a href="http://edu.law.moe.gov.tw/LawContentDetails.aspx?id=FL040632"  target="_blank">
+			<a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?PCode=H0030039"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 大學辦理國外學歷採認辦法
 			</a>
 		</div>
@@ -97,7 +89,7 @@
 	let annex03HTML='';
 	annex03HTML += `
 		<div>
-			<a href="${_config.apiBase}/forms/大陸地區學歷採認辦法.pdf"  target="_blank">
+			<a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?PCode=H0010005"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 大陸地區學歷採認辦法
 			</a>
 		</div>
@@ -107,7 +99,7 @@
 	let annex04HTML='';
 	annex04HTML += `
 		<div>
-			<a href="${_config.apiBase}/forms/港二技_入學大學同等學力認定標準.pdf"  target="_blank">
+			<a href="http://edu.law.moe.gov.tw/LawContent.aspx?id=FL008644"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 入學大學同等學力認定標準
 			</a>
 		</div>

@@ -316,7 +316,7 @@
 			});
 
 			// 判斷是否已確認
-			isConfirmed = !!data.student_order_confirmer;
+			isConfirmed = !!data.review_confirmed_at;
 			isSystemConfirmed = !!data.system_data.review_confirmed_at
 
 			// 系所鎖 => 一般使用者不得用
