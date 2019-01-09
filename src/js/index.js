@@ -32,6 +32,10 @@
 			<a href="${_config.apiBase}/forms/下載系統匯入帳號範例.csv"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 匯入帳號範例.csv
 			</a>
+			&nbsp;
+			<a href="${_config.apiBase}/forms/108各校匯入下載系統之帳號.xlsx"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 107年各校匯入下載系統之帳號
+			</a>
 			<span style="font-size: 13px;">（任意刪除欄位將會導致匯入失敗，帳號權限請依照範本使用 "啟用"、"關閉"）</span>
 		</div>
 		`;
