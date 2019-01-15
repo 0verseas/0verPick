@@ -112,16 +112,16 @@ class WorkFiles extends React.Component {
 					</ul>
 				</li>
 
-				<Card className="mb-2">
-					<CardHeader>作品授權書</CardHeader>
-					<CardBody>
-						{
-							this.props.authorization_files.map(file => {
-								return this.imgOrFile(file);
-							})
-						}
-					</CardBody>
-				</Card>
+				{/*<Card className="mb-2">*/}
+					{/*<CardHeader>作品授權書</CardHeader>*/}
+					{/*<CardBody>*/}
+						{/*{*/}
+							{/*this.props.authorization_files.map(file => {*/}
+								{/*return this.imgOrFile(file);*/}
+							{/*})*/}
+						{/*}*/}
+					{/*</CardBody>*/}
+				{/*</Card>*/}
 
 				<Card>
 					<CardHeader>作品集檔案</CardHeader>
