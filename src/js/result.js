@@ -155,6 +155,10 @@ const app = ( () => {
 				});
 			} else {
 				$bachelorNavItem.remove();
+				document.getElementById("bachelor").classList.remove('active');
+				document.getElementById("bachelor").classList.remove('show');
+				document.getElementById("master").classList.add('active');
+				document.getElementById("master").classList.add('show');
 			}
 
 			if (data.two_year_tech) {
