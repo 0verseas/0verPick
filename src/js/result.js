@@ -93,6 +93,7 @@ const app = ( () => {
 				console.error(err);
 				return;
 			}
+			window.location.reload();
 			switch (system.type_id) {
 				case 1:
 					_renderSystems($bachelorTbody, system);
