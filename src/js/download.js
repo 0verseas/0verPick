@@ -48,17 +48,16 @@ const app = ( () => {
 			_renderDepartments($phdTbody, 'phd', '博士班', data.phd_depts)
 
 			_two_year_tech_depts = data.two_year_tech_depts;
+			if (_two_year_tech_depts.length < 1) {
+				$twoyearallpdfzip.remove();
+			} else {
+				$twoyearallpdfzip.show();
+			}
 		});
 
 		PubSub.on('user', (user) => {
 			if (!!user.school_reviewer.has_admin) {
 				$allpdfzip.show();
-
-				if (_two_year_tech_depts.length < 1) {
-					$twoyearallpdfzip.remove();
-				} else {
-					$twoyearallpdfzip.show();
-				}
 			} else {
 				$twoyearallpdfzip.remove();
 				$allpdfzip.remove();
