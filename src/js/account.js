@@ -31,6 +31,8 @@
 	const $importAccountBtn = $('.btn-importAccount');
 	const $fileInput = $('.input-file');
 	const $CSVModal = $('.CSVModal');
+	const $importAccount = $('.importAccount');
+	const $exportAccount = $('.exportAccount');
 
 	/**
 	 * init
@@ -62,6 +64,8 @@
 	$fileInput.on('change', _handleFileChange);
 	$CSVModal.on('click.submit', '.CSVModal__btn-submit', _handleSubmitCSV);
 	$CSVModal.on('hide.bs.modal', _handleCancelCSV);
+	$importAccount.on('click',_downloadList);
+	$exportAccount.on('click',_uploadList);
 
 	/**
 	 * event handler
@@ -509,6 +513,17 @@
 			phd_permissions: data.phd_permissions,
 			two_year_tech_department_permissions: data.two_year_tech_department_permissions
 		});
+	}
+
+	//匯出reviewer_list_excel funciotn
+	function _downloadList(){
+		baseUrl = window.getConfig().apiBase;
+		window.location.href = `${baseUrl}/reviewers/user-list`;
+	}
+
+	//匯入reviewer_list_excel funciotn
+	function _uploadList(){
+		
 	}
 
 	async function _updateUserList() {
