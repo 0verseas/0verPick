@@ -519,7 +519,7 @@
 		});
 	}
 
-	//匯出reviewer_list_excel funciotn
+	//匯出reviewer_list_csv funciotn
 	function _downloadList(){
 		baseUrl = window.getConfig().apiBase;
 		window.location.href = `${baseUrl}/reviewers/user-list`;
@@ -530,6 +530,7 @@
 		$fileImport.trigger('click');
 	}
 
+	//處理reviewer_list_csv funciotn
 	function _handleImportFile() {
 		const file = _csvFile = this.files[0];
 		$fileImport.val('');
@@ -558,6 +559,7 @@
 		fileReaderAsBinaryString.readAsBinaryString(file);
 	}
 
+	//dialog渲染 方便預覽reviewer_list_csv funciotn
 	function _renderImportListTable(fileName, data) {
 		$ImportList.find('.ImportListTitle').text(`預覽匯入清單 ${fileName}`);
 		$ImportList.find('.ImportListBody').empty();
@@ -601,11 +603,14 @@
 		$ImportList.modal();
 	}
 
+	//按下匯入後 將reviewer_list_csv資料處理後傳送至後端 function
 	function _handleImportSubmit() {
 		let data = {};
+		//將reviewer_list_csv 轉換成二維陣列
 		_csvAccounts.forEach((user, i) => {
-			data[i] = {};
+			data[i] = {}; //宣告第二維陣列 
 			user.forEach((val, fieldIndex) => {
+				//將資料按照key匯入 
 				if (fieldIndex === 1) {
 					// 密碼加密
 					data[i][_csvFieldMap[fieldIndex]] = sha256(val);
@@ -638,7 +643,8 @@
 				data[i][_csvFieldMap[fieldIndex]] = val;
 			});
 		});
-		console.log(data);
+		
+		//呼叫API function 傳送資料到後端
 		window.API.importUserList(data, (err, data) => {
 			if (err) {
 				console.error(err);
