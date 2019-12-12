@@ -602,55 +602,44 @@
 	}
 
 	function _handleImportSubmit() {
-		// _csvAccounts.forEach((user, i) => {
-		// 	const data = {};
-		// 	user.forEach((val, fieldIndex) => {
-		// 		if (fieldIndex === 1) {
-		// 			// 密碼加密
-		// 			data[_csvFieldMap[fieldIndex]] = sha256(val);
+		let data = {};
+		_csvAccounts.forEach((user, i) => {
+			data[i] = {};
+			user.forEach((val, fieldIndex) => {
+				if (fieldIndex === 1) {
+					// 密碼加密
+					data[i][_csvFieldMap[fieldIndex]] = sha256(val);
 
-		// 			return;
-		// 		}
+					return;
+				}
 
-		// 		if (fieldIndex === 7) {
-		// 			// 狀態
-		// 			if (val === '啟用') {
-		// 				data[_csvFieldMap[fieldIndex]] = true;
-		// 			} else {
-		// 				data[_csvFieldMap[fieldIndex]] = false;
-		// 			}
+				if (fieldIndex === 7) {
+					// 狀態
+					if (val === '啟用') {
+						data[i][_csvFieldMap[fieldIndex]] = true;
+					} else {
+						data[i][_csvFieldMap[fieldIndex]] = false;
+					}
 
-		// 			return;
-		// 		}
+					return;
+				}
 
-		// 		if (fieldIndex > 7 ) {
-		// 			// "學士班權限","二技班權限","碩士班權限","博士班權限"
-		// 			if (val.toLowerCase() === 'all') {
-		// 				data[_csvFieldMap[fieldIndex]] = 'all';
-		// 			} else {
-		// 				data[_csvFieldMap[fieldIndex]] = val === '' ? [] : val.split('#');
-		// 			}
+				if (fieldIndex > 7 ) {
+					// "學士班權限","二技班權限","碩士班權限","博士班權限"
+					if (val.toLowerCase() === 'all') {
+						data[i][_csvFieldMap[fieldIndex]] = 'all';
+					} else {
+						data[i][_csvFieldMap[fieldIndex]] = val === '' ? [] : val.split('#');
+					}
 
-		// 			return;
-		// 		}
+					return;
+				}
 
-		// 		data[_csvFieldMap[fieldIndex]] = val;
-		// 	});
-
-		// 	console.log(data);
-		// 	window.API.importUserList(data, (err, data) => {
-		// 		if (err) {
-		// 			console.error(err);
-		// 			return;
-		// 		}
-
-		// 		_updateUserList();
-		// 		console.log(data);
-		// 	});
-		// });
-		
-		console.log(_csvAccounts);
-		window.API.importUserList(_csvAccounts, (err, _csvAccounts) => {
+				data[i][_csvFieldMap[fieldIndex]] = val;
+			});
+		});
+		console.log(data);
+		window.API.importUserList(data, (err, data) => {
 			if (err) {
 				console.error(err);
 				return;
