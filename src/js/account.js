@@ -649,13 +649,12 @@
 			if (err) {
 				console.error(err);
 				return;
-			} 
+			}
 
 			_updateUserList();
 		});
-		
-		$ImportList.modal('hide'); //關掉預覽用Dialog
-		window.location.reload();; // 刷新頁面
+
+		$ImportList.modal('hide');
 	}
 
 	function _handleImportCancel() {
