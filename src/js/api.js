@@ -510,6 +510,21 @@ window.API = (() => {
 		});
 	}
 
+	function importUserList(data, callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/user-list`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data),
+			credentials: 'include'
+		})
+		.then(_parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { _handleError(err, callback) });
+	}
+
 	return {
 		login,
 		logout,
@@ -536,6 +551,7 @@ window.API = (() => {
 		getReviewFailResult,
 		getDeptReviewResult,
 		patchDeptReviewResult,
-		lockAllNoStudent
+		lockAllNoStudent,
+		importUserList
 	};
 })();
