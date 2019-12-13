@@ -412,6 +412,10 @@ window.API = (() => {
 		}
 
 		_endLoading();
+
+		if( res.status === 205 || res.status === 204 ){
+			return ;
+		}
 		return res.json();
 	}
 
