@@ -50,7 +50,7 @@
 	console.log(_deptList);
 	_renderAccount(_userList);
 	_renderDeptList(_deptList);
-	
+
 
 	/**
 	 * bind event
@@ -90,7 +90,7 @@
 		$AccountModal.find('.AccountModal__input-email').val('');
 		$AccountModal.find('.AccountModal__input-phone').val('');
 		$AccountModal.find('.AccountModal__input-status[value=1]').prop('checked', true);
-		
+
 		if (type === 'C') {
 			$AccountModal.find('.AccountModal__input-password').attr('placeholder', '');
 			_renderDeptList(_deptList);
@@ -504,7 +504,7 @@
 	function _setUserData(data) {
 		// set basic info
 		Object.keys(data.inputText).forEach((key, i) => {
-			$AccountModal.find(`.AccountModal__input-${key}`).val(data.inputText[key]);	
+			$AccountModal.find(`.AccountModal__input-${key}`).val(data.inputText[key]);
 		});
 
 		// set account status
@@ -521,7 +521,7 @@
 
 	//匯出reviewer_list_csv funciotn
 	function _downloadList(){
-		baseUrl = window.getConfig().apiBase;
+		const baseUrl = window.getConfig().apiBase;
 		window.location.href = `${baseUrl}/reviewers/user-list`;
 	}
 
@@ -608,9 +608,9 @@
 		let data = {};
 		//將reviewer_list_csv 轉換成二維陣列
 		_csvAccounts.forEach((user, i) => {
-			data[i] = {}; //宣告第二維陣列 
+			data[i] = {}; //宣告第二維陣列
 			user.forEach((val, fieldIndex) => {
-				//將資料按照key匯入 
+				//將資料按照key匯入
 				if (fieldIndex === 1) {
 					// 密碼加密
 					data[i][_csvFieldMap[fieldIndex]] = sha256(val);
@@ -643,7 +643,7 @@
 				data[i][_csvFieldMap[fieldIndex]] = val;
 			});
 		});
-		
+
 		//呼叫API function 傳送資料到後端
 		window.API.importUserList(data, (err, data) => {
 			if (err) {
