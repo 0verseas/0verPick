@@ -32,3 +32,14 @@
 .CSVModal .modal-dialog {
 	min-width: 92vw;
 }
+
+.ImportListBody table td,
+.ImportListBody table th {
+	word-break: keep-all;
+	max-width: 377px;
+	overflow: auto;
+}
+
+.ImportList .modal-dialog {
+	min-width: 92vw;
+}
