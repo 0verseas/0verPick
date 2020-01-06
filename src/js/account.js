@@ -193,7 +193,7 @@
 		$fileInput.val('');
 		const fileName = file.name;
 		if (fileName.split('.').pop() !== 'csv') {
-			alert('請匯入 .csv 欓');
+			alert('請匯入 .csv 檔');
 			return;
 		}
 
@@ -454,7 +454,7 @@
 		});
 	}
 
-	// 有 editor 權限，沒有 reviewer 全線的使用者
+	// 有 editor 權限，沒有 reviewer 權限的使用者
 	function _getUserList() {
 		return new Promise((resolve, reject) => {
 			window.API.getAvailableUsers((err, data) => {
@@ -536,7 +536,7 @@
 		$fileImport.val('');
 		const fileName = file.name;
 		if (fileName.split('.').pop() !== 'csv') {
-			alert('請匯入 .csv 欓');
+			alert('請匯入 .csv 檔');
 			return;
 		}
 
