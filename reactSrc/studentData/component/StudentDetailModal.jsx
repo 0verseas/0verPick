@@ -293,7 +293,12 @@ export default class StudentDetailModal extends React.Component {
 				gSchoolCountry: `${student.student_personal_data.school_country_data.continent}/${student.student_personal_data.school_country_data.country}`, // 學校國別
 				aSchool: data.school.title, // 申請學校
 				dept: data.title,
-				disability: student.student_personal_data.disability_level ? student.student_personal_data.disability_level+student.student_personal_data.disability_category : '無'
+				disability: student.student_personal_data.disability_level ? student.student_personal_data.disability_level+student.student_personal_data.disability_category : '無',
+				// 副學士和高級文憑的調查（只香港 && 學士班有）
+				HK_have_associate_degree_or_higher_diploma_graduated: student.student_personal_data.HK_have_associate_degree_or_higher_diploma_graduated===1 ? '是' : student.student_personal_data.HK_have_associate_degree_or_higher_diploma_graduated===0 ? '否' : '',  // 是否取得副學士或高級文憑畢業證書
+				HK_have_AD_or_HD: student.student_personal_data.HK_have_AD_or_HD === 1 ? '副學士學位' : student.student_personal_data.HK_have_AD_or_HD === 2 ? '高級文憑' : '無',
+				HK_AD_or_HD_class_name: student.student_personal_data.HK_AD_or_HD_class_name,
+				HK_AD_or_HD_school_name: student.student_personal_data.HK_AD_or_HD_school_name,
 			});
 		});
 
@@ -441,6 +446,19 @@ export default class StudentDetailModal extends React.Component {
 								<td colSpan={2}>{ this.state.aSchool }</td>
 								<th>系所</th>
 								<td colSpan={2}>{ this.state.dept }</td>
+							</tr>
+							{/*香港學士班的副學士或高級文憑調查*/}
+							<tr>
+								<th colSpan={2}>曾經修讀或正在修習<br />副學士或高級文憑？</th>
+								<td>{ this.state.HK_have_AD_or_HD}</td>
+								<th colSpan={2}>是否已取得副學士或<br />高級文憑畢業證書</th>
+								<td>{ this.state.HK_have_associate_degree_or_higher_diploma_graduated}</td>
+							</tr>
+							<tr>
+								<th>副學士或高級文憑學校</th>
+								<td colSpan={2}>{ this.state.HK_AD_or_HD_school_name}</td>
+								<th>副學士或高級文憑課程</th>
+								<td colSpan={2}>{ this.state.HK_AD_or_HD_class_name}</td>
 							</tr>
 						</tbody>
 					</Table>
