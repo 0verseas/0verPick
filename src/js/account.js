@@ -575,6 +575,12 @@
 			return val.length === fieldLength && !!val[0] && !!val[1] && !!val[2];
 		});
 
+		if(!_csvAccounts[0]){
+			alert('請確認是否有帳號、密碼、姓名欄位未填寫');
+			window.location.reload();
+			return;
+		}
+
 		$ImportList.find('.ImportListBody').html(`
 			<table class="table table-bordered table-hover">
 				<thead>
