@@ -570,12 +570,20 @@
 			alert ('匯入之 csv 欄位數量有誤');
 			return;
 		}
-
+		
 		_csvAccounts = rows.filter((val, i) => {
 			return val.length === fieldLength && !!val[0] && !!val[1] && !!val[2];
 		});
 
-		if(!_csvAccounts[0]){
+		let valueEmpty = 0;
+		for(let i = 0;i<rows.length;i++){
+			if(rows[i].length!=12){break;}
+			if(!rows[i][0]||!rows[i][1]||!rows[i][2]){
+				valueEmpty = 1;
+				break;
+			}
+		}
+		if(valueEmpty){
 			alert('請確認是否有帳號、密碼、姓名欄位未填寫');
 			window.location.reload();
 			return;
