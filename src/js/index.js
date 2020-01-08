@@ -44,7 +44,7 @@
 	let deptIDHTML='';
 	deptIDHTML += `
 		<div>
-			<a href="${_config.apiBase}/forms/2019下載系統系所代碼表.xlsx"  target="_blank">
+			<a href="${_config.apiBase}/forms/2020各學制系所代碼表.xlsx"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 各學制系代碼代碼表
 			</a>
 			<span style="font-size: 13px;">（匯入帳號的各學制權限請使用以上提供的系代碼）</span>
