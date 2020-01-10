@@ -19,8 +19,8 @@
 	let downloadPttHTML='';
 	downloadPttHTML += `
 		<div>
-			<a href="https://docs.google.com/presentation/d/1lav-5ToDGmc7gXl8fYDXNIDeDnHzC5ciTvfQvUbYI-0/edit#slide=id.g4c2c41d31c_0_35"  target="_blank">
-				<i class="fa fa-download" aria-hidden="true"></i> 個人申請制備審資料下載與審查回覆系統操作說明PTT
+			<a href="https://docs.google.com/presentation/d/1kzzLxYp3CZX28gl639Di3hhhHotsv-zx/edit#slide=id.p1"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 個人申請制備審資料下載與審查回覆系統操作說明PPT
 			</a>
 		</div>
 		`;
