@@ -3,7 +3,7 @@
 	/**
 	 * cache DOM
 	 */
-	const $downloadPtt = $('#downloadPtt');
+	const $downloadPpt = $('#downloadPpt');
 	const $importAccount = $('#importAccount');
 	const $deptID = $('#deptID');
 	const $noAcceptList = $('#noAcceptList');
@@ -16,15 +16,15 @@
 	const _config = window.getConfig();
 
 
-	let downloadPttHTML='';
-	downloadPttHTML += `
+	let downloadPptHTML='';
+	downloadPptHTML += `
 		<div>
 			<a href="https://docs.google.com/presentation/d/1kzzLxYp3CZX28gl639Di3hhhHotsv-zx/edit#slide=id.p1"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 個人申請制備審資料下載與審查回覆系統操作說明PPT
 			</a>
 		</div>
 		`;
-	$downloadPtt.html(downloadPttHTML);
+	$downloadPpt.html(downloadPptHTML);
 
 	let importAccountHTML='';
 	importAccountHTML += `
