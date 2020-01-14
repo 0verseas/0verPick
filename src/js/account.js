@@ -663,6 +663,8 @@
 			if (err) {
 				console.error(err);
 				return;
+			} else {
+				alert(data.messages[0]);
 			}
 
 			_updateUserList();

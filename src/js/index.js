@@ -32,11 +32,13 @@
 			<a href="${_config.apiBase}/forms/下載系統匯入帳號範例.csv"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 匯入帳號範例.csv
 			</a>
-			&nbsp;
-			<a href="https://drive.google.com/open?id=1Su08J1Lcj6210rbbOPLba8XkCNd1lnAj"  target="_blank">
-				<i class="fa fa-download" aria-hidden="true"></i> 109年各校匯入下載系統之帳號
-			</a>
 			<span style="font-size: 13px;">（任意刪除欄位將會導致匯入失敗，帳號權限請依照範本使用 "啟用"、"關閉"）</span>
+		</div>
+		<div>
+			<a href= "${_config.apiBase}/reviewers/user-list"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 各校審核者帳號列表.xlsx
+			</a>
+			<span style="font-size: 13px;">（這邊的檔案資料會隨著學校帳號管理的動作一併更新，如果需要上年度資料請用 email 聯絡海聯）</span>
 		</div>
 		`;
 	$importAccount.html(importAccountHTML);

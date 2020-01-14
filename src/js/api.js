@@ -414,6 +414,8 @@ window.API = (() => {
 		_endLoading();
 
 		if( res.status === 205 || res.status === 204 ){
+			window.location.reload();
+			alert('匯入成功');
 			return ;
 		}
 		return res.json();
