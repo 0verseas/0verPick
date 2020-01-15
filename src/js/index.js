@@ -3,7 +3,7 @@
 	/**
 	 * cache DOM
 	 */
-	const $downloadPtt = $('#downloadPtt');
+	const $downloadPpt = $('#downloadPpt');
 	const $importAccount = $('#importAccount');
 	const $deptID = $('#deptID');
 	const $noAcceptList = $('#noAcceptList');
@@ -16,15 +16,15 @@
 	const _config = window.getConfig();
 
 
-	let downloadPttHTML='';
-	downloadPttHTML += `
+	let downloadPptHTML='';
+	downloadPptHTML += `
 		<div>
-			<a href="https://docs.google.com/presentation/d/1lav-5ToDGmc7gXl8fYDXNIDeDnHzC5ciTvfQvUbYI-0/edit#slide=id.g4c2c41d31c_0_35"  target="_blank">
-				<i class="fa fa-download" aria-hidden="true"></i> 個人申請制備審資料下載與審查回覆系統操作說明PTT
+			<a href="https://docs.google.com/presentation/d/1kzzLxYp3CZX28gl639Di3hhhHotsv-zx/edit#slide=id.p1"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 個人申請制備審資料下載與審查回覆系統操作說明PPT
 			</a>
 		</div>
 		`;
-	$downloadPtt.html(downloadPttHTML);
+	$downloadPpt.html(downloadPptHTML);
 
 	let importAccountHTML='';
 	importAccountHTML += `
@@ -32,11 +32,13 @@
 			<a href="${_config.apiBase}/forms/下載系統匯入帳號範例.csv"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 匯入帳號範例.csv
 			</a>
-			&nbsp;
-			<a href="${_config.apiBase}/forms/108各校匯入下載系統之帳號.xlsx"  target="_blank">
-				<i class="fa fa-download" aria-hidden="true"></i> 107年各校匯入下載系統之帳號
-			</a>
 			<span style="font-size: 13px;">（任意刪除欄位將會導致匯入失敗，帳號權限請依照範本使用 "啟用"、"關閉"）</span>
+		</div>
+		<div>
+			<a href= "${_config.apiBase}/reviewers/user-list"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 各校審核者帳號列表.xlsx
+			</a>
+			<span style="font-size: 13px;">（這邊的檔案資料會隨著學校帳號管理的動作一併更新，如果需要上年度資料請用 email 聯絡海聯）</span>
 		</div>
 		`;
 	$importAccount.html(importAccountHTML);
@@ -44,11 +46,10 @@
 	let deptIDHTML='';
 	deptIDHTML += `
 		<div>
-			<a href="${_config.apiBase}/forms/2019下載系統系所代碼表.xlsx"  target="_blank">
+			<a href="${_config.apiBase}/forms/2020各學制系所代碼表.xlsx"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 各學制系代碼代碼表
 			</a>
 			<span style="font-size: 13px;">（匯入帳號的各學制權限請使用以上提供的系代碼）</span>
-			<span style="font-size: 13px;">（因測試站以國立臺灣大學為範例，故匯入時請暫時以國立臺灣大學科系代碼表做測試）</span>
 		</div>
 		`;
 	$deptID.html(deptIDHTML);

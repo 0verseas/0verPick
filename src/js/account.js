@@ -31,6 +31,10 @@
 	const $importAccountBtn = $('.btn-importAccount');
 	const $fileInput = $('.input-file');
 	const $CSVModal = $('.CSVModal');
+	const $importAccount = $('.importAccount');
+	const $exportAccount = $('.exportAccount');
+	const $fileImport = $('.import-file');
+	const $ImportList = $('.ImportList');
 
 	/**
 	 * init
@@ -46,7 +50,7 @@
 	console.log(_deptList);
 	_renderAccount(_userList);
 	_renderDeptList(_deptList);
-	
+
 
 	/**
 	 * bind event
@@ -62,7 +66,11 @@
 	$fileInput.on('change', _handleFileChange);
 	$CSVModal.on('click.submit', '.CSVModal__btn-submit', _handleSubmitCSV);
 	$CSVModal.on('hide.bs.modal', _handleCancelCSV);
-
+	$exportAccount.on('click',_downloadList);
+	$importAccount.on('click',_uploadList);
+	$fileImport.on('change', _handleImportFile);
+	$ImportList.on('click.submit', '.ImportSubmit', _handleImportSubmit);
+	$ImportList.on('hide.bs.modal', _handleImportCancel);
 	/**
 	 * event handler
 	 */
@@ -82,7 +90,7 @@
 		$AccountModal.find('.AccountModal__input-email').val('');
 		$AccountModal.find('.AccountModal__input-phone').val('');
 		$AccountModal.find('.AccountModal__input-status[value=1]').prop('checked', true);
-		
+
 		if (type === 'C') {
 			$AccountModal.find('.AccountModal__input-password').attr('placeholder', '');
 			_renderDeptList(_deptList);
@@ -185,7 +193,7 @@
 		$fileInput.val('');
 		const fileName = file.name;
 		if (fileName.split('.').pop() !== 'csv') {
-			alert('請匯入 .csv 欓');
+			alert('請匯入 .csv 檔');
 			return;
 		}
 
@@ -446,7 +454,7 @@
 		});
 	}
 
-	// 有 editor 權限，沒有 reviewer 全線的使用者
+	// 有 editor 權限，沒有 reviewer 權限的使用者
 	function _getUserList() {
 		return new Promise((resolve, reject) => {
 			window.API.getAvailableUsers((err, data) => {
@@ -496,7 +504,7 @@
 	function _setUserData(data) {
 		// set basic info
 		Object.keys(data.inputText).forEach((key, i) => {
-			$AccountModal.find(`.AccountModal__input-${key}`).val(data.inputText[key]);	
+			$AccountModal.find(`.AccountModal__input-${key}`).val(data.inputText[key]);
 		});
 
 		// set account status
@@ -509,6 +517,165 @@
 			phd_permissions: data.phd_permissions,
 			two_year_tech_department_permissions: data.two_year_tech_department_permissions
 		});
+	}
+
+	//匯出reviewer_list_csv funciotn
+	function _downloadList(){
+		const baseUrl = window.getConfig().apiBase;
+		window.location.href = `${baseUrl}/reviewers/user-list`;
+	}
+
+	//匯入reviewer_list_excel funciotn
+	function _uploadList(){
+		$fileImport.trigger('click');
+	}
+
+	//處理reviewer_list_csv funciotn
+	function _handleImportFile() {
+		const file = _csvFile = this.files[0];
+		$fileImport.val('');
+		const fileName = file.name;
+		if (fileName.split('.').pop() !== 'csv') {
+			alert('請匯入 .csv 檔');
+			return;
+		}
+
+		// 需先讀成 binary string 以判斷編碼
+		const fileReaderAsBinaryString = new FileReader();
+		const fileReaderAsText = new FileReader();
+
+		fileReaderAsBinaryString.onload = function (e) {
+			// 偵測檔案編碼
+			const encoding = window.jschardet.detect(e.target.result).encoding;
+			// 使用偵測的編碼來讀取檔案成文字
+			fileReaderAsText.readAsText(file, encoding);
+		};
+
+		fileReaderAsText.onload = function (e) {
+			_renderImportListTable(fileName, e.target.result);
+		};
+
+		// 讀入檔案判斷編碼
+		fileReaderAsBinaryString.readAsBinaryString(file);
+	}
+
+	//dialog渲染 方便預覽reviewer_list_csv funciotn
+	function _renderImportListTable(fileName, data) {
+		$ImportList.find('.ImportListTitle').text(`預覽匯入清單 ${fileName}`);
+		$ImportList.find('.ImportListBody').empty();
+		const rows = window.API.CSVToArray(data);
+		const header = rows.shift();
+		const fieldLength = header.length;
+		if (fieldLength !== 12) {
+			alert ('匯入之 csv 欄位數量有誤');
+			return;
+		}
+		
+		_csvAccounts = rows.filter((val, i) => {
+			return val.length === fieldLength && !!val[0] && !!val[1] && !!val[2];
+		});
+
+		let valueEmpty = 0;
+		for(let i = 0;i<rows.length;i++){
+			if(rows[i].length!=12){break;}
+			if(!rows[i][0]||!rows[i][1]||!rows[i][2]){
+				valueEmpty = 1;
+				break;
+			}
+		}
+		if(valueEmpty){
+			alert('請確認是否有帳號、密碼、姓名欄位未填寫');
+			window.location.reload();
+			return;
+		}
+
+		$ImportList.find('.ImportListBody').html(`
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						${
+							header.map((val, i) => `<th>${val}</th>`).join().replace(/,/g, '')
+						}
+					</tr>
+				</thead>
+				<tbody>
+					${
+						_csvAccounts.map((r, i) => {
+							return `
+								<tr>
+									${
+										_csvAccounts[i].map((val, j) => `<td>${val}</td>`).join().replace(/,/g, '')
+									}
+								</tr>
+							`;
+						}).join().replace(/,/g, '')
+					}
+				</tbody>
+			</table>
+		`);
+
+		$ImportList.modal();
+	}
+
+	//按下匯入後 將reviewer_list_csv資料處理後傳送至後端 function
+	function _handleImportSubmit() {
+		let data = {};
+		//將reviewer_list_csv 轉換成二維陣列
+		_csvAccounts.forEach((user, i) => {
+			data[i] = {}; //宣告第二維陣列
+			user.forEach((val, fieldIndex) => {
+				//將資料按照key匯入
+				if (fieldIndex === 1) {
+					// 密碼加密
+					data[i][_csvFieldMap[fieldIndex]] = sha256(val);
+
+					return;
+				}
+
+				if (fieldIndex === 7) {
+					// 狀態
+					if (val === '啟用') {
+						data[i][_csvFieldMap[fieldIndex]] = true;
+					} else {
+						data[i][_csvFieldMap[fieldIndex]] = false;
+					}
+
+					return;
+				}
+
+				if (fieldIndex > 7 ) {
+					// "學士班權限","二技班權限","碩士班權限","博士班權限"
+					if (val.toLowerCase() === 'all') {
+						data[i][_csvFieldMap[fieldIndex]] = 'all';
+					} else {
+						data[i][_csvFieldMap[fieldIndex]] = val === '' ? [] : val.split('#');
+					}
+
+					return;
+				}
+
+				data[i][_csvFieldMap[fieldIndex]] = val;
+			});
+		});
+
+		//呼叫API function 傳送資料到後端
+		window.API.importUserList(data, (err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			} else {
+				alert(data.messages[0]);
+			}
+
+			_updateUserList();
+		});
+
+		$ImportList.modal('hide');
+	}
+
+	function _handleImportCancel() {
+		$fileImport.val('');
+		_csvFile = '';
 	}
 
 	async function _updateUserList() {
