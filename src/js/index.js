@@ -104,27 +104,27 @@
 	let annex04HTML='';
 	annex04HTML += `
 		<div>
-			<a href="http://edu.law.moe.gov.tw/LawContent.aspx?id=FL008644"  target="_blank">
+			<a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=H0030032"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 入學大學同等學力認定標準
 			</a>
 		</div>
 		`;
 	$annex04.html(annex04HTML);
 
-	let annex05HTML='';
-	annex05HTML += `
-		<div>
-			<a href="${_config.apiBase}/forms/港二技_本會彙整報名學生畢肄業學校經香港當地評審情形一覽表.pdf"  target="_blank">
-				<i class="fa fa-download" aria-hidden="true"></i> 本會彙整報名學生畢肄業學校經香港當地評審情形一覽表
-			</a>
-		</div>
-		`;
-	$annex05.html(annex05HTML);
+	// let annex05HTML='';
+	// annex05HTML += `
+	// 	<div>
+	// 		<a href="${_config.apiBase}/forms/港二技_本會彙整報名學生畢肄業學校經香港當地評審情形一覽表.pdf"  target="_blank">
+	// 			<i class="fa fa-download" aria-hidden="true"></i> 本會彙整報名學生畢肄業學校經香港當地評審情形一覽表
+	// 		</a>
+	// 	</div>
+	// 	`;
+	// $annex05.html(annex05HTML);
 
 	let annex06HTML='';
 	annex06HTML += `
 		<div>
-			<a href="${_config.apiBase}/forms/港二技_香港副學士或高級文憑學生來臺升讀學士班適用簡章.pdf"  target="_blank">
+			<a href="https://cmn-hant.overseas.ncnu.edu.tw/sites/default/files/inline-files/15_109%E9%A6%99%E6%B8%AF%28%E4%BA%8C%E6%8A%80%29%20.pdf"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 香港副學士或高級文憑學生來臺升讀學士班適用簡章
 			</a>
 		</div>
