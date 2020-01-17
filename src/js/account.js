@@ -561,7 +561,7 @@
 
 	//dialog渲染 方便預覽reviewer_list_csv funciotn
 	function _renderImportListTable(fileName, data) {
-		$ImportList.find('.ImportListTitle').text(`預覽匯入清單 ${fileName}`);
+		$ImportList.find('.ImportListTitle').text(`匯入並覆蓋功能   預覽清單：${fileName}`);
 		$ImportList.find('.ImportListBody').empty();
 		const rows = window.API.CSVToArray(data);
 		const header = rows.shift();
