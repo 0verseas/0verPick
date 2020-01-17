@@ -10,27 +10,47 @@ import cloneDeep from 'lodash.clonedeep';
 
 class PageBar extends React.Component {
 	render() {
-		const pages = Math.ceil(this.props.dataLength / this.props.pageSize);
+		const pages = Math.ceil(this.props.dataLength / this.props.pageSize); // 總頁數
+		/* PageBar 目前限制在10個頁面選項之中 */
+		let pageOffset = 0; //偏移值
+		pageOffset = this.props.currentPage+5-pages <0 ? 0 :this.props.currentPage+5-pages; //如果到底了計算不能往後的值
+		let pageFront = this.props.currentPage-5-pageOffset <0 ?0 :this.props.currentPage-5-pageOffset; //計算PageBar第一個選項值
+		pageOffset = this.props.currentPage-5>0 ? 0 :this.props.currentPage-5;//如果到頂了計算不能往前的值
+		let pageBehind = this.props.currentPage+5-pageOffset>pages ?pages :this.props.currentPage+5-pageOffset;//計算PageBar最後面選項值
+		let pageRange = pageBehind - pageFront;//PageBarRange值  按照前面的算法 目前不管怎樣都是10
+		let prePage = this.props.currentPage -1 < 1 ? this.props.currentPage : this.props.currentPage-1; //計算上一頁的值
+		let nextPage = this.props.currentPage +1 > pages ? this.props.currentPage : this.props.currentPage+1;//計算下一頁的值
 		return (
 			<Pagination style={{display: 'flex', justifyContent: 'center'}}>
 				<PaginationItem onClick={() => {this.props.onPage(1)}}>
 					<PaginationLink previous href="javascript:;" />
 				</PaginationItem>
+				<PaginationItem onClick={() => {this.props.onPage(prePage)}}>
+					<PaginationLink href="javascript:;">
+						{'<'}
+					</PaginationLink>
+				</PaginationItem>
 				{
-					[...Array(pages)].map((val, i) => {
+					//只顯示pageRange數量的page按鈕 （10個）//因為是動態計算的頁面範圍所以 i 要加上pageFront才是正確的數值
+					[...Array(pageRange)].map((val, i) => {
 						return (
 							<PaginationItem
 								key={i}
-								active={i + 1 === this.props.currentPage}
-								onClick={() => {this.props.onPage(i + 1)}}
+								active={i + 1+pageFront === this.props.currentPage}
+								onClick={() => {this.props.onPage(i + 1+pageFront)}}
 							>
 								<PaginationLink href="javascript:;">
-									{ i + 1 }
+									{ i + 1+pageFront }
 								</PaginationLink>
 							</PaginationItem>
 						);
 					})
 				}
+				<PaginationItem onClick={() => {this.props.onPage(nextPage)}}>
+					<PaginationLink href="javascript:;">
+						{'>'}
+					</PaginationLink>
+				</PaginationItem>
 				<PaginationItem onClick={() => {this.props.onPage(pages)}}>
 					<PaginationLink next href="javascript:;" />
 				</PaginationItem>
