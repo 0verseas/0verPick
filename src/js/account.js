@@ -92,6 +92,8 @@
 		$AccountModal.find('.AccountModal__input-status[value=1]').prop('checked', true);
 
 		if (type === 'C') {
+			//讓帳號欄位能輸入
+			document.getElementById('AccountModal__input-username').disabled = false ;
 			$AccountModal.find('.AccountModal__input-password').attr('placeholder', '');
 			_renderDeptList(_deptList);
 			return;
@@ -502,6 +504,10 @@
 
 	// 編輯使用者的 modal，帶入現有資料
 	function _setUserData(data) {
+
+		//讓帳號欄位不能輸入
+		document.getElementById('AccountModal__input-username').disabled = true ;
+
 		// set basic info
 		Object.keys(data.inputText).forEach((key, i) => {
 			$AccountModal.find(`.AccountModal__input-${key}`).val(data.inputText[key]);
