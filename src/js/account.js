@@ -346,7 +346,7 @@
 			let accountPermission = '';
 			let deptPermission = '';
 			if (!val.editorOnly) {
-				org = val.school_reviewer.organization;
+				org = encodeHtmlCharacters(val.school_reviewer.organization);  // 單位
 				accountPermission = val.school_reviewer.has_admin ? '管理員' : '一般使用者';;
 				deptPermission = [];
 				!!val.school_reviewer.department_permissions.length && deptPermission.push('學士班');
@@ -355,6 +355,7 @@
 				!!val.school_reviewer.two_year_tech_department_permissions.length && deptPermission.push('港二技');
 				deptPermission = val.school_reviewer.has_admin ? '全部' : (!!deptPermission.length ? deptPermission.join(', ') : '無');
 			}
+			const encodedName = encodeHtmlCharacters(val.name);  // 帳戶名稱（轉換過的）
 
 			$AccountList.find('tbody').append(`
 				<tr class="AccountItem" data-id="${val.id}">
@@ -366,7 +367,7 @@
 					</td>
 					<td class="AccountItem__username">${val.username}</td>
 					<td class="AccountItem__organization">${org}</td>
-					<td class="AccountItem__name">${val.name}</td>
+					<td class="AccountItem__name">${encodedName}</td>
 					<td class="AccountItem__accountPermission">${accountPermission}</td>
 					<td class="AccountItem__deptPermission">${deptPermission}</td>
 					<td class="AccountItem__status ${status === '啟用' ? 'table-success' : 'table-danger'}">${status}</td>
@@ -576,7 +577,7 @@
 			alert ('匯入之 csv 欄位數量有誤');
 			return;
 		}
-		
+
 		_csvAccounts = rows.filter((val, i) => {
 			return val.length === fieldLength && !!val[0] && !!val[1] && !!val[2];
 		});
@@ -687,5 +688,14 @@
 	async function _updateUserList() {
 		_userList = [...(await _getReviewers()), ...(await _getUserList())];
 		_renderAccount(_userList);
+	}
+
+	// 轉換一些敏感字元避免 XSS
+	function encodeHtmlCharacters(bareString) {
+		return bareString.replace(/&/g, "&amp;")  // 轉換 &
+			.replace(/</g, "&lt;").replace(/>/g, "&gt;")  // 轉換 < 及 >
+			.replace(/'/g, "&apos;").replace(/"/g, "&quot;")  // 轉換英文的單雙引號
+			.replace(/ /g, " &nbsp;")
+			;
 	}
 })();
