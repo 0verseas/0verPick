@@ -224,7 +224,7 @@ const app = ( () => {
 						<td>${dept.id}</td>
 						<td>${dept.title}</td>
 						<td>${dept.review_confirmed_at ? '<font color="green">已鎖定</font>' : dept.review_students_at ? '<font color="#F19510">已儲存</font>' : '<font color="red">未審查</font>'}</td>
-						<td>${dept.student_order_reviewer ? dept.student_order_reviewer.name : ''}</td>
+						<td>${dept.student_order_reviewer ? encodeHtmlCharacters(dept.student_order_reviewer.name) : ''}</td>
 						<td>${dept.review_students_at ? dateFns.format(dept.review_students_at, 'YYYY/MM/DD HH:mm:ss') : ''}</td>
 					</tr>
 				`;
@@ -264,7 +264,7 @@ const app = ( () => {
 					$bachelorCanComfirm.hide();
 				}
 				if (lock) {
-					$bachelorConfirmBy.html(system.student_order_confirmer.name);
+					$bachelorConfirmBy.text(system.student_order_confirmer.name);
 					$bachelorConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
 					$bachelorConfirmBlock.show();
 					$bachelorCantComfirm.hide();
@@ -297,7 +297,7 @@ const app = ( () => {
 					$twoYearTechCanConfirm.hide();
 				}
 				if (lock) {
-					$twoYearTechConfirmBy.html(system.student_order_confirmer.name);
+					$twoYearTechConfirmBy.text(system.student_order_confirmer.name);
 					$twoYearTechConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
 					$twoYearTechConfirmBlock.show();
 					$twoYearTechCantConfirm.hide();
@@ -330,7 +330,7 @@ const app = ( () => {
 					$masterCanConfirm.hide();
 				}
 				if (lock) {
-					$masterConfirmBy.html(system.student_order_confirmer.name);
+					$masterConfirmBy.text(system.student_order_confirmer.name);
 					$masterConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
 					$masterConfirmBlock.show();
 					$masterCantConfirm.hide();
@@ -363,7 +363,7 @@ const app = ( () => {
 					$phdCanConfirm.hide();
 				}
 				if (lock) {
-					$phdConfirmBy.html(system.student_order_confirmer.name);
+					$phdConfirmBy.text(system.student_order_confirmer.name);
 					$phdConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
 					$phdConfirmBlock.show();
 					$phdCantConfirm.hide();
@@ -373,6 +373,15 @@ const app = ( () => {
 		}
 
 
+	}
+
+	// 轉換一些敏感字元避免 XSS
+	function encodeHtmlCharacters(bareString) {
+		return bareString.replace(/&/g, "&amp;")  // 轉換 &
+			.replace(/</g, "&lt;").replace(/>/g, "&gt;")  // 轉換 < 及 >
+			.replace(/'/g, "&apos;").replace(/"/g, "&quot;")  // 轉換英文的單雙引號
+			.replace(/ /g, " &nbsp;")
+			;
 	}
 
 	return {
