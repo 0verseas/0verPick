@@ -475,6 +475,7 @@
 
 		let failedHTML = '';
 		_reviewFailed.forEach((data, index) => {
+			let review_memo = encodeHtmlCharacters(data.review_memo);  // 不合格清單備註
 			failedHTML += `
 			<tr>
 				<td>${data.overseas_student_id}</td>
@@ -485,7 +486,7 @@
 					</select>
 				</td>
 				<td>
-					<input type="text" data-index="${index}" class="input-memo form-control form-control-sm" value="${data.review_memo}" ${lockHtml}>
+					<input type="text" data-index="${index}" class="input-memo form-control form-control-sm" value="${review_memo}" ${lockHtml}>
 				</td>
 				<td class="text-center">
 					<button class="btn btn-warning btn-failed-return" data-pass="0" data-index="${index}" ${lockHtml}> 退回 </button>
@@ -639,6 +640,15 @@
 
 	function _sortStudentByReviewOrder(a,b) {
 		return a.review_order - b.review_order;
+	}
+
+	// 轉換一些敏感字元避免 XSS
+	function encodeHtmlCharacters(bareString) {
+		return bareString.replace(/&/g, "&amp;")  // 轉換 &
+			.replace(/</g, "&lt;").replace(/>/g, "&gt;")  // 轉換 < 及 >
+			.replace(/'/g, "&apos;").replace(/"/g, "&quot;")  // 轉換英文的單雙引號
+			.replace(/ /g, " &nbsp;")
+			;
 	}
 
 })();
