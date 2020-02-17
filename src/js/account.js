@@ -355,7 +355,8 @@
 				!!val.school_reviewer.two_year_tech_department_permissions.length && deptPermission.push('港二技');
 				deptPermission = val.school_reviewer.has_admin ? '全部' : (!!deptPermission.length ? deptPermission.join(', ') : '無');
 			}
-			const encodedName = encodeHtmlCharacters(val.name);  // 帳戶名稱（轉換過的）
+			const encodedName = encodeHtmlCharacters(val.name);  // 用戶名稱（轉換過的）
+			const encodeUsername = encodeHtmlCharacters(val.username); //帳號（轉換過得）
 
 			$AccountList.find('tbody').append(`
 				<tr class="AccountItem" data-id="${val.id}">
@@ -365,7 +366,7 @@
 					<td class="text-danger clickable AccountItem__btn-del">
 						<i class="fa fa-times" aria-hidden="true"></i>
 					</td>
-					<td class="AccountItem__username">${val.username}</td>
+					<td class="AccountItem__username">${encodeUsername}</td>
 					<td class="AccountItem__organization">${org}</td>
 					<td class="AccountItem__name">${encodedName}</td>
 					<td class="AccountItem__accountPermission">${accountPermission}</td>
