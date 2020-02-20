@@ -392,6 +392,12 @@
 			return val.length === fieldLength && !!val[0] && !!val[1] && !!val[2];
 		});
 
+		// 渲染時要防止 XSS，但儲存的時候還是要依照使用者輸入的去儲存
+		let new_csvAccounts = _csvAccounts.slice();  // 轉換過的資料
+		for(let i = 0 ; i < _csvAccounts.length; i++){
+			new_csvAccounts[i] = _csvAccounts[i].map(x => encodeHtmlCharacters(x));
+		}
+
 		$CSVModal.find('.CSVModal__body').html(`
 			<table class="table table-bordered table-hover">
 				<thead>
@@ -407,7 +413,7 @@
 							return `
 								<tr>
 									${
-										_csvAccounts[i].map((val, j) => `<td>${val}</td>`).join().replace(/,/g, '')
+										new_csvAccounts[i].map((val, j) => `<td>${val}</td>`).join().replace(/,/g, '')
 									}
 								</tr>
 							`;
@@ -568,6 +574,7 @@
 	}
 
 	//dialog渲染 方便預覽reviewer_list_csv funciotn
+	// TODO: 這邊是「匯入並覆蓋帳號」的，但和「匯入新帳號」高度重疊。考慮改在按下按鈕的時候用一個參數判斷要走哪個 API。
 	function _renderImportListTable(fileName, data) {
 		$ImportList.find('.ImportListTitle').text(`匯入並覆蓋功能   預覽清單：${fileName}`);
 		$ImportList.find('.ImportListBody').empty();
@@ -597,6 +604,12 @@
 			return;
 		}
 
+		// 渲染時要防止 XSS，但儲存的時候還是要依照使用者輸入的去儲存
+		let new_csvAccounts = _csvAccounts.slice();  // 轉換過的資料
+		for(let i = 0 ; i < _csvAccounts.length; i++){
+			new_csvAccounts[i] = _csvAccounts[i].map(x => encodeHtmlCharacters(x));
+		}
+
 		$ImportList.find('.ImportListBody').html(`
 			<table class="table table-bordered table-hover">
 				<thead>
@@ -612,7 +625,7 @@
 							return `
 								<tr>
 									${
-										_csvAccounts[i].map((val, j) => `<td>${val}</td>`).join().replace(/,/g, '')
+										new_csvAccounts[i].map((val, j) => `<td>${val}</td>`).join().replace(/,/g, '')
 									}
 								</tr>
 							`;
