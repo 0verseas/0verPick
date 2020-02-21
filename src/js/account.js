@@ -20,6 +20,7 @@
 	let _csvAccounts = [];
 	let _userList;
 	let _deptList = null;
+	var flag = 0;
 
 	/**
 	 * cache DOM
@@ -34,7 +35,6 @@
 	const $importAccount = $('.importAccount');
 	const $exportAccount = $('.exportAccount');
 	const $fileImport = $('.import-file');
-	const $ImportList = $('.ImportList');
 
 	/**
 	 * init
@@ -64,13 +64,11 @@
 	$SelectedDeptList.on('click.remove', '.SelectedDeptList__item .btn-remove', _handleremoveDept);
 	$importAccountBtn.on('click', _handleUpload);
 	$fileInput.on('change', _handleFileChange);
-	$CSVModal.on('click.submit', '.CSVModal__btn-submit', _handleSubmitCSV);
+	$CSVModal.on('click.submit', '.CSVModal__btn-submit', _handleSubmitSwitch);
 	$CSVModal.on('hide.bs.modal', _handleCancelCSV);
 	$exportAccount.on('click',_downloadList);
 	$importAccount.on('click',_uploadList);
-	$fileImport.on('change', _handleImportFile);
-	$ImportList.on('click.submit', '.ImportSubmit', _handleImportSubmit);
-	$ImportList.on('hide.bs.modal', _handleImportCancel);
+	$fileImport.on('change', _handleFileChange);
 	/**
 	 * event handler
 	 */
@@ -187,6 +185,7 @@
 	}
 
 	function _handleUpload() {
+		flag = 0;
 		$fileInput.trigger('click');
 	}
 
@@ -216,6 +215,15 @@
 
 		// 讀入檔案判斷編碼
 		fileReaderAsBinaryString.readAsBinaryString(file);
+	}
+	
+	//依據flag 數值做判斷要去呼叫哪個函式 0 ： 新增   1：覆蓋
+	function _handleSubmitSwitch(){
+		if(flag){
+			_handleImportSubmit();
+		} else {
+			_handleSubmitCSV();
+		}
 	}
 
 	function _handleSubmitCSV() {
@@ -254,7 +262,6 @@
 				data[_csvFieldMap[fieldIndex]] = val;
 			});
 
-			console.log(data);
 			window.API.addUser(data, (err, data) => {
 				if (err) {
 					console.error(err);
@@ -396,6 +403,20 @@
 		let new_csvAccounts = _csvAccounts.slice();  // 轉換過的資料
 		for(let i = 0 ; i < _csvAccounts.length; i++){
 			new_csvAccounts[i] = _csvAccounts[i].map(x => encodeHtmlCharacters(x));
+		}
+
+		let valueEmpty = 0;
+		for(let i = 0;i<rows.length;i++){
+			if(rows[i].length!=12){break;}
+			if(!rows[i][0]||!rows[i][1]||!rows[i][2]){
+				valueEmpty = 1;
+				break;
+			}
+		}
+		if(valueEmpty){
+			alert('請確認是否有帳號、密碼、姓名欄位未填寫');
+			window.location.reload();
+			return;
 		}
 
 		$CSVModal.find('.CSVModal__body').html(`
@@ -541,101 +562,8 @@
 
 	//匯入reviewer_list_excel funciotn
 	function _uploadList(){
+		flag = 1;
 		$fileImport.trigger('click');
-	}
-
-	//處理reviewer_list_csv funciotn
-	function _handleImportFile() {
-		const file = _csvFile = this.files[0];
-		$fileImport.val('');
-		const fileName = file.name;
-		if (fileName.split('.').pop() !== 'csv') {
-			alert('請匯入 .csv 檔');
-			return;
-		}
-
-		// 需先讀成 binary string 以判斷編碼
-		const fileReaderAsBinaryString = new FileReader();
-		const fileReaderAsText = new FileReader();
-
-		fileReaderAsBinaryString.onload = function (e) {
-			// 偵測檔案編碼
-			const encoding = window.jschardet.detect(e.target.result).encoding;
-			// 使用偵測的編碼來讀取檔案成文字
-			fileReaderAsText.readAsText(file, encoding);
-		};
-
-		fileReaderAsText.onload = function (e) {
-			_renderImportListTable(fileName, e.target.result);
-		};
-
-		// 讀入檔案判斷編碼
-		fileReaderAsBinaryString.readAsBinaryString(file);
-	}
-
-	//dialog渲染 方便預覽reviewer_list_csv funciotn
-	// TODO: 這邊是「匯入並覆蓋帳號」的，但和「匯入新帳號」高度重疊。考慮改在按下按鈕的時候用一個參數判斷要走哪個 API。
-	function _renderImportListTable(fileName, data) {
-		$ImportList.find('.ImportListTitle').text(`匯入並覆蓋功能   預覽清單：${fileName}`);
-		$ImportList.find('.ImportListBody').empty();
-		const rows = window.API.CSVToArray(data);
-		const header = rows.shift();
-		const fieldLength = header.length;
-		if (fieldLength !== 12) {
-			alert ('匯入之 csv 欄位數量有誤');
-			return;
-		}
-
-		_csvAccounts = rows.filter((val, i) => {
-			return val.length === fieldLength && !!val[0] && !!val[1] && !!val[2];
-		});
-
-		let valueEmpty = 0;
-		for(let i = 0;i<rows.length;i++){
-			if(rows[i].length!=12){break;}
-			if(!rows[i][0]||!rows[i][1]||!rows[i][2]){
-				valueEmpty = 1;
-				break;
-			}
-		}
-		if(valueEmpty){
-			alert('請確認是否有帳號、密碼、姓名欄位未填寫');
-			window.location.reload();
-			return;
-		}
-
-		// 渲染時要防止 XSS，但儲存的時候還是要依照使用者輸入的去儲存
-		let new_csvAccounts = _csvAccounts.slice();  // 轉換過的資料
-		for(let i = 0 ; i < _csvAccounts.length; i++){
-			new_csvAccounts[i] = _csvAccounts[i].map(x => encodeHtmlCharacters(x));
-		}
-
-		$ImportList.find('.ImportListBody').html(`
-			<table class="table table-bordered table-hover">
-				<thead>
-					<tr>
-						${
-							header.map((val, i) => `<th>${val}</th>`).join().replace(/,/g, '')
-						}
-					</tr>
-				</thead>
-				<tbody>
-					${
-						_csvAccounts.map((r, i) => {
-							return `
-								<tr>
-									${
-										new_csvAccounts[i].map((val, j) => `<td>${val}</td>`).join().replace(/,/g, '')
-									}
-								</tr>
-							`;
-						}).join().replace(/,/g, '')
-					}
-				</tbody>
-			</table>
-		`);
-
-		$ImportList.modal();
 	}
 
 	//按下匯入後 將reviewer_list_csv資料處理後傳送至後端 function
@@ -678,7 +606,7 @@
 				data[i][_csvFieldMap[fieldIndex]] = val;
 			});
 		});
-
+		
 		//呼叫API function 傳送資料到後端
 		window.API.importUserList(data, (err, data) => {
 			if (err) {
@@ -691,12 +619,7 @@
 			_updateUserList();
 		});
 
-		$ImportList.modal('hide');
-	}
-
-	function _handleImportCancel() {
-		$fileImport.val('');
-		_csvFile = '';
+		$CSVModal.modal('hide');
 	}
 
 	async function _updateUserList() {
