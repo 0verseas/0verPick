@@ -34,7 +34,6 @@
 	const $CSVModal = $('.CSVModal');
 	const $importAccount = $('.importAccount');
 	const $exportAccount = $('.exportAccount');
-	const $fileImport = $('.import-file');
 
 	/**
 	 * init
@@ -68,7 +67,6 @@
 	$CSVModal.on('hide.bs.modal', _handleCancelCSV);
 	$exportAccount.on('click',_downloadList);
 	$importAccount.on('click',_uploadList);
-	$fileImport.on('change', _handleFileChange);
 	/**
 	 * event handler
 	 */
@@ -563,7 +561,7 @@
 	//匯入reviewer_list_excel funciotn
 	function _uploadList(){
 		flag = 1;
-		$fileImport.trigger('click');
+		$fileInput.trigger('click');
 	}
 
 	//按下匯入後 將reviewer_list_csv資料處理後傳送至後端 function
