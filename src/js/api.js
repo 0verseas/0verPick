@@ -352,6 +352,11 @@ window.API = (() => {
 		.catch((err) => { _handleError(err, callback) });
 	}
 
+	function unlockDeptReviewResult(system, deptId,  callback){
+		console.log(system);
+		console.log(deptId);
+	}
+
 	function patchDeptReviewResult(system, deptId, mode, data, callback) {
 		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments/${deptId}?mode=${mode}`, {
@@ -556,6 +561,7 @@ window.API = (() => {
 		confirmSystem,
 		getReviewFailResult,
 		getDeptReviewResult,
+		unlockDeptReviewResult,
 		patchDeptReviewResult,
 		lockAllNoStudent,
 		importUserList

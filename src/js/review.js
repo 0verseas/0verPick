@@ -35,6 +35,7 @@
 	const $passTbody = $('#tbody-pass');
 	const $failedTbody = $('#tbody-failed');
 	const $patchBtn = $('.btn-patch');
+	const $unlockBtn = $('.btn-unlock');
 	const $saveBtn = $('#btn-save');
 	const $confirmBtn = $('#btn-confirm');
 	const $infoDiv = $('#div-info');
@@ -66,6 +67,7 @@
 	$fileInput.on('change', _handleFileChange);
 	$downloadResultFile.on('click', _handleDownloadResultFile);
 	$patchBtn.on('click', _handlePatchData);
+	$unlockBtn.on('click',_handleUnlockData)
 
 	/**
 	 * event handler
@@ -568,6 +570,31 @@
 		const index = $(this).data('index');
 		const memoText = $(this).val();
 		_reviewFailed[index].review_memo = memoText;
+	}
+
+	function _handleUnlockData(){
+		const mode = $(this).data('mode');
+		if (mode === 'confirm') {
+			// 問一下是否要鎖定系所？
+			const isConfirmed = confirm('確定要解除鎖定系所嗎？');
+			if (!isConfirmed) {
+				return;
+			}
+		}
+
+		if(_deptId !== ""){
+			window.API.unlockDeptReviewResult(_systemId, _deptId, (err, data) => {
+				if (err) {
+					console.error(err);
+					return;
+				}
+
+				// 成功鎖定後，重 render 一次系所審查結果
+				_renderDeptReviewResult(data.id);
+			});
+		} else {
+			alert('請先選擇系所。');
+		}
 	}
 
 	function _handlePatchData() {
