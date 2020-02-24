@@ -574,7 +574,7 @@
 
 	function _handleUnlockData(){
 		const mode = $(this).data('mode');
-		if (mode === 'confirm') {
+		if (mode === 'unlock') {
 			// 問一下是否要鎖定系所？
 			const isConfirmed = confirm('確定要解除鎖定系所嗎？');
 			if (!isConfirmed) {
@@ -583,7 +583,7 @@
 		}
 
 		if(_deptId !== ""){
-			window.API.unlockDeptReviewResult(_systemId, _deptId, (err, data) => {
+			window.API.unlockDeptReviewResult(_systemId, _deptId, mode, (err, data) => {
 				if (err) {
 					console.error(err);
 					return;
