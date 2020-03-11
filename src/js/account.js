@@ -90,13 +90,13 @@
 		if (type === 'C') {
 			//讓帳號欄位能輸入
 			document.getElementById('AccountModal__input-username').disabled = false ;
-			$AccountModal.find('.AccountModal__input-password').attr('placeholder', '');
+			$AccountModal.find('.AccountModal__input-password').attr('placeholder', '密碼需至少8碼且大寫、小寫、數字或特殊符號至少兩種');
 			_renderDeptList(_deptList);
 			return;
 		}
 
 		// set old value
-		$AccountModal.find('.AccountModal__input-password').attr('placeholder', '不更改則無須填寫');
+		$AccountModal.find('.AccountModal__input-password').attr('placeholder', '不更改則無須填寫，密碼需至少8碼且大寫、小寫、數字或特殊符號至少兩種');
 		const id = $(e.relatedTarget).parents('.AccountItem').data('id');
 		const userData = _userList.filter((val) => val.id === id)[0];
 		console.log(userData);
@@ -214,7 +214,7 @@
 		// 讀入檔案判斷編碼
 		fileReaderAsBinaryString.readAsBinaryString(file);
 	}
-	
+
 	//依據flag 數值做判斷要去呼叫哪個函式 0 ： 新增   1：覆蓋
 	function _handleSubmitSwitch(){
 		if(flag){
@@ -301,6 +301,7 @@
 		if (!job_title) return alert('職稱不得為空');
 		if (!email) return alert('MAIL 不得為空');
 		if (!phone) return alert('TEL 不得為空');
+		if (!checkPasswordComplex(password)) return alert('密碼複雜度不足');
 
 		const data = {
 			password: password === '' ? '' : sha256(password),
@@ -613,7 +614,7 @@
 				data[i][_csvFieldMap[fieldIndex]] = val;
 			});
 		});
-		
+
 		//呼叫API function 傳送資料到後端
 		window.API.importUserList(data, (err, data) => {
 			if (err) {
