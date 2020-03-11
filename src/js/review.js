@@ -432,7 +432,6 @@
 		$('.btn-judge').on('click', _handlePass);
 	}
 	function _reRenderPass() {
-		console.log(_reviewPass);
 		const noDataHtml = '<tr><td colspan=4 class="text-center"><h4>無資料</h4></td></tr>';
 
 		// 設定鎖定 html

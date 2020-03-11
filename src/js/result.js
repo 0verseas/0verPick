@@ -143,7 +143,6 @@ const app = ( () => {
 				return;
 			}
 
-			console.log(data);
 			// 判斷學制存不存在
 			if (data.bachelor) {
 				_renderSystems($bachelorTbody, data.bachelor);

@@ -45,8 +45,7 @@
 
 	_userList = [...(await _getReviewers()), ...(await _getUserList())];
 	_deptList = await _getDeptList();
-	console.log(_userList);
-	console.log(_deptList);
+
 	_renderAccount(_userList);
 	_renderDeptList(_deptList);
 
@@ -99,7 +98,7 @@
 		$AccountModal.find('.AccountModal__input-password').attr('placeholder', '不更改則無須填寫，密碼需至少8碼且大寫、小寫、數字或特殊符號至少兩種');
 		const id = $(e.relatedTarget).parents('.AccountItem').data('id');
 		const userData = _userList.filter((val) => val.id === id)[0];
-		console.log(userData);
+
 		const userType = userData.editorOnly ? 'school_editor' : 'school_reviewer';
 		_setUserData({
 			inputText: {
@@ -122,9 +121,9 @@
 	function _handleDelAccount() {
 		if (confirm('確定停用？')) {
 			const userID = $(this).parents('.AccountItem').data('id');
-			console.log(userID);
+
 			window.API.disableUser(userID, (data) => {
-				console.log(data);
+
 				_updateUserList();
 			});
 		}
@@ -267,7 +266,7 @@
 				}
 
 				_updateUserList();
-				console.log(data);
+
 			});
 		});
 
@@ -326,7 +325,7 @@
 
 			$AccountModal.modal('hide');
 			_updateUserList();
-			console.log(data);
+
 		});
 
 		type === 'U' && window.API.editUser({ ...data, userID }, (err, data) => {
@@ -335,7 +334,7 @@
 				return;
 			}
 
-			console.log(data);
+
 			$AccountModal.modal('hide');
 			_updateUserList();
 		});
@@ -405,7 +404,6 @@
 				return;
 			}
 		}
-		console.log(_csvAccounts);
 
 		// 渲染時要防止 XSS，但儲存的時候還是要依照使用者輸入的去儲存
 		let new_csvAccounts = _csvAccounts.slice();  // 轉換過的資料

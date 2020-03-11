@@ -257,7 +257,6 @@ export default class StudentDetailModal extends React.Component {
 	}
 
 	renderStudentData(userID, deptID) {
-		console.log(userID, deptID);
 		this.getStudentData(userID, deptID);
 	}
 
@@ -316,7 +315,6 @@ export default class StudentDetailModal extends React.Component {
 			this.setState({
 				applicationDocs: data || []
 			});
-			console.log('this.state.applicationDoc',this.state.applicationDocs);
 			// console.log('this.props', this.props);
 		});
 	}

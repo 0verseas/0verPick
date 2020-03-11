@@ -14,7 +14,6 @@
 			return;
 		}
 
-		console.log(data);
 		PubSub.emit('user', data);
 		_setGreeting(data.name, data.school_reviewer.school.title);
 		_setNavLink(

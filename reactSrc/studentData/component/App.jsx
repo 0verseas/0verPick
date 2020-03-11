@@ -85,7 +85,6 @@ export default class App extends React.Component {
 				return;
 			}
 
-			console.log(data);
 			const studentList = [];
 			data.forEach((dept) => {
 				const deptName = dept.title;
