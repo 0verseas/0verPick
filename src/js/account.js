@@ -397,6 +397,15 @@
 			return val.length === fieldLength && !!val[0] && !!val[1] && !!val[2];
 		});
 
+		//匯入前檢查密碼複雜度
+		for(let i = 0; i<_csvAccounts.length;i++){
+			if(!checkPasswordComplex(_csvAccounts[i][1])){
+				alert(' 密碼需至少8碼且大寫、小寫、數字或特殊符號至少兩種！！');
+				return;
+			}
+		}
+		console.log(_csvAccounts);
+
 		// 渲染時要防止 XSS，但儲存的時候還是要依照使用者輸入的去儲存
 		let new_csvAccounts = _csvAccounts.slice();  // 轉換過的資料
 		for(let i = 0 ; i < _csvAccounts.length; i++){
@@ -633,4 +642,13 @@
 			.replace(/ /g, " &nbsp;")
 			;
 	}
+
+	// 確認密碼複雜度
+	function checkPasswordComplex(input) {
+		// 至少8碼且大寫、小寫、數字或特殊符號（數字那一排不含反斜線和豎線）至少兩種
+		// ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*()_+\-=]).{8,}$
+		const reg = /^((?=.*\d)(?=.*[A-Z])|(?=.*[a-z])(?=.*[A-Z])|(?=.*\d)(?=.*[a-z])|(?=.*\d)(?=.*[~!@#$%^&*()_+\-=])|(?=.*[a-z])(?=.*[~!@#$%^&*()_+\-=])|(?=.*[A-Z])(?=.*[~!@#$%^&*()_+\-=])).{8,}$/;
+		return !!reg.test(input);
+	}
+
 })();
