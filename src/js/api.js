@@ -352,6 +352,24 @@ window.API = (() => {
 		.catch((err) => { _handleError(err, callback) });
 	}
 
+	function unlockDeptReviewResult(system, deptId, mode, callback){
+		if (mode !== 'unlock'){  // 不是要解鎖的人來亂什麼啦
+			return;
+		}
+
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments/${deptId}?mode=${mode}`, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+			.then(_parseData)
+			.then((data) => { callback && callback(null, data) })
+			.catch((err) => { _handleError(err, callback) });
+	}
+
 	function patchDeptReviewResult(system, deptId, mode, data, callback) {
 		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments/${deptId}?mode=${mode}`, {
@@ -556,6 +574,7 @@ window.API = (() => {
 		confirmSystem,
 		getReviewFailResult,
 		getDeptReviewResult,
+		unlockDeptReviewResult,
 		patchDeptReviewResult,
 		lockAllNoStudent,
 		importUserList
