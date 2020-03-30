@@ -271,8 +271,46 @@ export default class StudentDetailModal extends React.Component {
 				return;
 			}
 
-			console.log(data);
+			// console.log(data);
 			const student = data.students[0];
+
+			let birthLimitMessage = '無';
+			let genderLimitMessage = '無';
+			let genderLimit = '';
+			if(data.gender_limit != null){
+				
+				if(data.gender_limit != student.student_personal_data.gender){
+					genderLimit = '不符合，只收';
+				}
+				genderLimitMessage = (data.gender_limit=='F')?genderLimit+'女性':genderLimit+'男性';
+			}
+
+			let birthLimit='';
+			if(data.has_birth_limit){
+				birthLimitMessage = false;
+
+				let birthAfter =data.birth_limit_after;
+				let birthBefore = data.birth_limit_before;
+
+				if(birthAfter != null && Date.parse(birthAfter).valueOf()> Date.parse(student.student_personal_data.birthday)){
+					birthLimit = '不符合，學生需';
+				}
+				
+				if(birthBefore != null && Date.parse(birthBefore).valueOf()< Date.parse(student.student_personal_data.birthday)){
+					birthLimit = '不符合，學生需';
+				}
+
+				if(birthAfter != null && birthBefore != null){
+					birthLimitMessage =birthLimit+ '在 '+birthAfter+' 與 '+birthBefore+' 之間出生';
+				} else if(birthAfter !=null){
+					birthLimitMessage = birthLimit+'在 '+birthAfter+' 之後出生';
+				} else if(birthBefore != null){
+					birthLimitMessage = birthLimit+'在 '+birthBefore+' 之前出生';
+				} else {
+					birthLimitMessage = '無';
+				}
+			}
+
 			this.setState({
 				no: student.student_misc_data.overseas_student_id, // 僑生編號
 				remark: student.student_misc_data.overseas_student_id.toString().substr(0,2) == '06' ||
@@ -298,6 +336,8 @@ export default class StudentDetailModal extends React.Component {
 				HK_have_AD_or_HD: student.student_personal_data.HK_have_AD_or_HD === 1 ? '副學士學位' : student.student_personal_data.HK_have_AD_or_HD === 2 ? '高級文憑' : '無',
 				HK_AD_or_HD_class_name: student.student_personal_data.HK_AD_or_HD_class_name,
 				HK_AD_or_HD_school_name: student.student_personal_data.HK_AD_or_HD_school_name,
+				birthLimitMessage:birthLimitMessage,//年齡限制文字訊息
+				genderLimitMessage:genderLimitMessage,//性別限制文字訊息
 			});
 		});
 
@@ -457,6 +497,12 @@ export default class StudentDetailModal extends React.Component {
 								<td colSpan={2}>{ this.state.HK_AD_or_HD_school_name}</td>
 								<th>副學士或高級文憑課程</th>
 								<td colSpan={2}>{ this.state.HK_AD_or_HD_class_name}</td>
+							</tr>
+							<tr>
+								<th>系所規定<br/>性別限制</th>
+								<td colSpan={1}>{ this.state.genderLimitMessage}</td>
+								<th>系所規定<br/>年齡限制</th>
+								<td colSpan={3}>{ this.state.birthLimitMessage}</td>
 							</tr>
 						</tbody>
 					</Table>

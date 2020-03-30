@@ -17,7 +17,7 @@ class PageBar extends React.Component {
 		let pageFront = this.props.currentPage-5-pageOffset <0 ?0 :this.props.currentPage-5-pageOffset; //計算PageBar第一個選項值
 		pageOffset = this.props.currentPage-5>0 ? 0 :this.props.currentPage-5;//如果到頂了計算不能往前的值
 		let pageBehind = this.props.currentPage+5-pageOffset>pages ?pages :this.props.currentPage+5-pageOffset;//計算PageBar最後面選項值
-		let pageRange = pageBehind - pageFront;//PageBarRange值  按照前面的算法 目前不管怎樣都是10
+		let pageRange = pageBehind - pageFront;//PageBarRange值  按照前面的算法 目前不管怎樣都 <= 10
 		let prePage = this.props.currentPage -1 < 1 ? this.props.currentPage : this.props.currentPage-1; //計算上一頁的值
 		let nextPage = this.props.currentPage +1 > pages ? this.props.currentPage : this.props.currentPage+1;//計算下一頁的值
 		return (
