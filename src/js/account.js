@@ -300,7 +300,7 @@
 		if (!job_title) return alert('職稱不得為空');
 		if (!email) return alert('MAIL 不得為空');
 		if (!phone) return alert('TEL 不得為空');
-		if (!checkPasswordComplex(password)) return alert('密碼複雜度不足');
+		if (!checkPasswordComplex(password) && password) return alert('密碼複雜度不足');  // 有輸入密碼時檢查密碼複雜度
 
 		const data = {
 			password: password === '' ? '' : sha256(password),
