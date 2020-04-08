@@ -300,7 +300,7 @@
 		if (!job_title) return alert('職稱不得為空');
 		if (!email) return alert('MAIL 不得為空');
 		if (!phone) return alert('TEL 不得為空');
-		if (!checkPasswordComplex(password) && password) return alert('密碼複雜度不足');  // 有輸入密碼時檢查密碼複雜度
+		if (!checkPasswordComplex(password)) return alert('密碼複雜度不足');  // 有輸入密碼時檢查密碼複雜度
 
 		const data = {
 			password: password === '' ? '' : sha256(password),
@@ -642,8 +642,17 @@
 			;
 	}
 
-	// 確認密碼複雜度
+	/**
+	 * 確認密碼複雜度
+	 *
+	 * @param {string} input 要驗證的字串
+	 * @returns {boolean} 是否通過密碼複雜度檢查
+	 */
 	function checkPasswordComplex(input) {
+		if (!input) {  // 如果沒輸入東西就算了（感謝 YY 大神指導）
+			return true;
+		}
+
 		// 至少8碼且大寫、小寫、數字或特殊符號（數字那一排不含反斜線和豎線）至少兩種
 		// ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*()_+\-=]).{8,}$
 		const reg = /^((?=.*\d)(?=.*[A-Z])|(?=.*[a-z])(?=.*[A-Z])|(?=.*\d)(?=.*[a-z])|(?=.*\d)(?=.*[~!@#$%^&*()_+\-=])|(?=.*[a-z])(?=.*[~!@#$%^&*()_+\-=])|(?=.*[A-Z])(?=.*[~!@#$%^&*()_+\-=])).{8,}$/;
