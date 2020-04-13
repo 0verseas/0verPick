@@ -111,15 +111,15 @@
 		`;
 	$annex04.html(annex04HTML);
 
-	// let annex05HTML='';
-	// annex05HTML += `
-	// 	<div>
-	// 		<a href="${_config.apiBase}/forms/港二技_本會彙整報名學生畢肄業學校經香港當地評審情形一覽表.pdf"  target="_blank">
-	// 			<i class="fa fa-download" aria-hidden="true"></i> 本會彙整報名學生畢肄業學校經香港當地評審情形一覽表
-	// 		</a>
-	// 	</div>
-	// 	`;
-	// $annex05.html(annex05HTML);
+	let annex05HTML='';
+	annex05HTML += `
+		<div>
+			<a href="${_config.apiBase}/forms/港二技_本會彙整報名學生畢肄業學校經香港當地評審情形一覽表.pdf"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 本會彙整報名學生畢肄業學校經香港當地評審情形一覽表
+			</a>
+		</div>
+		`;
+	$annex05.html(annex05HTML);
 
 	let annex06HTML='';
 	annex06HTML += `
