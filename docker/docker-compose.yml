@@ -1,0 +1,37 @@
+version: '3'
+services:
+
+  # 0verPick
+  app:
+    image: node:8.12.0
+    container_name: app_0verPick
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www/html/0verPick
+    volumes:
+      - ./app:/var/www/html/0verPick/
+    command: /bin/bash -c "npm install && npm run build && node"
+#    ports:
+#      - "8081:9000"
+
+  # Nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_0verPick
+    restart: unless-stopped
+    tty: true
+#    ports:
+#      - "80:80"
+#      - "443:443"
+    volumes:
+      #- ./nginx/conf.d/:/etc/nginx/conf.d/
+      #- ./nginx/ssl/:/etc/nginx/ssl/
+#      - ./nginx/:/etc/nginx/
+#      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/log/nginx:/var/log/nginx
+      - ./app:/var/www/html/0verPick/
+    depends_on:
+      - app
