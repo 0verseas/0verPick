@@ -7,13 +7,6 @@ services:
     container_name: nginx_0verPick
     restart: unless-stopped
     tty: true
-#    ports:
-#      - "80:80"
-#      - "443:443"
     volumes:
-      #- ./nginx/conf.d/:/etc/nginx/conf.d/
-      #- ./nginx/ssl/:/etc/nginx/ssl/
-#      - ./nginx/:/etc/nginx/
-#      - /etc/letsencrypt:/etc/letsencrypt
-      - /var/log/nginx:/var/log/nginx
-      - ./app:/var/www/html/0verPick/
+#      - /var/log/nginx:/var/log/nginx
+      - ./app/dist/:/usr/share/nginx/html/review/
