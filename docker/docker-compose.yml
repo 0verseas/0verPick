@@ -4,7 +4,7 @@ services:
   # Nginx Service
   nginx:
     image: nginx:alpine
-    container_name: nginx_0verPick
+    container_name: 0verPick
     restart: unless-stopped
     tty: true
     volumes:
