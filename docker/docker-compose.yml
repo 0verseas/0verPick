@@ -7,6 +7,8 @@ services:
     container_name: 0verPick
     restart: unless-stopped
     tty: true
+    environment:
+      - TZ=Asia/Taipei
     volumes:
 #      - /var/log/nginx:/var/log/nginx
       - ./app/dist/:/usr/share/nginx/html/review/
