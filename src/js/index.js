@@ -13,6 +13,7 @@
 	const $annex04 = $('#annex04');
 	const $annex05 = $('#annex05');
 	const $annex06 = $('#annex06');
+	const $annex07 = $('#annex07');
 	const _config = window.getConfig();
 
 
@@ -118,11 +119,21 @@
 	let annex06HTML='';
 	annex06HTML += `
 		<div>
-			<a href="https://cmn-hant.overseas.ncnu.edu.tw/sites/default/files/inline-files/17_110%E9%A6%99%E6%B8%AF%28%E4%BA%8C%E6%8A%80%29%20_0.pdf"  target="_blank">
-				<i class="fa fa-download" aria-hidden="true"></i> 香港副學士或高級文憑學生來臺升讀學士班適用簡章
+			<a href="https://cmn-hant.overseas.ncnu.edu.tw/chapters"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 各地區招生簡章
 			</a>
 		</div>
 		`;
 	$annex06.html(annex06HTML);
+
+	let annex07HTML='';
+	annex07HTML += `
+		<div>
+			<a href="https://student.overseas.ncnu.edu.tw/quota/index.html"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 僑生及港澳生招生名額查詢系統
+			</a>
+		</div>
+		`;
+	$annex07.html(annex07HTML);
 
 })();

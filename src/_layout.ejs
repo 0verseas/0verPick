@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>個人申請制應繳資料下載系統</title>
+	<title>個人申請制備審資料下載與審查回覆系統</title>
 	<% include component/_header %>
 </head>
 <body>
@@ -9,11 +9,11 @@
 	<div class="container" style="min-height: calc(100vh - 112px)">
 		<div class="row pt-3" style="margin-bottom: -24px;">
 			<div class="col-12">
-				<a href="./" style="width: 250px; display: flex; color: inherit; text-decoration: none;">
+				<a href="./" style="width: 320px; display: flex; color: inherit; text-decoration: none;">
 					<div class="text-center" style="flex: 1">
 						<img src="./img/logo.png" alt="logo" height="40" />
 					</div>
-					<div style="font-size: 16px; font-weight: bold; flex: 2;" id="wordOfSystem">個人申請制<br />應繳資料下載系統</div>
+					<div style="font-size: 16px; font-weight: bold; flex: 4	;" id="wordOfSystem">個人申請制<br />備審資料下載與審查回覆系統</div>
 				</a>
 				<div class='float-right' style="position: relative; top: -24px;">
 					<span id="greeting">　</span>
@@ -76,8 +76,8 @@
 		const _productionConfig = window.getConfig();
 
 		if (!_productionConfig.isProduction) {
-			document.title='個人申請制應繳資料下載系統-測試站';
-			document.getElementById('wordOfSystem').innerHTML='個人申請制<br />應繳資料下載系統<br />測試站';
+			document.title='個人申請制備審資料下載與審查回覆系統-測試站';
+			document.getElementById('wordOfSystem').innerHTML='個人申請制<br />備審資料下載與審查回覆系統<br />測試站';
 		}
 
 		if (_productionConfig.isProduction) {
