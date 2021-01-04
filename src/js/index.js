@@ -40,7 +40,7 @@
 	let deptIDHTML='';
 	deptIDHTML += `
 		<div>
-			<a href="${_config.apiBase}/forms/2020各學制系所代碼表.xlsx"  target="_blank">
+			<a href="https://drive.google.com/file/d/1EYUN1QPfv8xojKJmxx0dU9YxzdyUJyom/view?usp=sharing"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 各學制系代碼代碼表
 			</a>
 			<span style="font-size: 13px;">（匯入帳號的各學制權限請使用以上提供的系代碼）</span>
@@ -78,7 +78,7 @@
 	let annex02HTML='';
 	annex02HTML += `
 		<div>
-			<a href="${_config.apiBase}/forms/香港澳門學歷檢覈及採認辦法(含學校認可名冊).pdf"  target="_blank">
+			<a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=Q0030008"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 香港澳門學歷檢覈及採認辦法
 			</a>
 		</div>
@@ -118,7 +118,7 @@
 	let annex06HTML='';
 	annex06HTML += `
 		<div>
-			<a href="https://cmn-hant.overseas.ncnu.edu.tw/sites/default/files/inline-files/15_109%E9%A6%99%E6%B8%AF%28%E4%BA%8C%E6%8A%80%29%20.pdf"  target="_blank">
+			<a href="https://cmn-hant.overseas.ncnu.edu.tw/sites/default/files/inline-files/17_110%E9%A6%99%E6%B8%AF%28%E4%BA%8C%E6%8A%80%29%20_0.pdf"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 香港副學士或高級文憑學生來臺升讀學士班適用簡章
 			</a>
 		</div>
