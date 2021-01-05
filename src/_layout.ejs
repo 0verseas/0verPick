@@ -83,6 +83,20 @@
 		if (_productionConfig.isProduction) {
 			console.log = function() {}
 		}
+
+		/* Sample function that returns boolean in case the browser is Internet Explorer*/
+		function isIE() {
+		ua = navigator.userAgent;
+			/* MSIE used to detect old browsers and Trident used to newer ones*/
+			var is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;			
+			return is_ie; 
+		}
+		/* Create an alert to show if the browser is IE or not */
+		if (isIE()){
+			alert('IE 瀏覽器可能無法正常操作網頁功能，請改以 Chrome、Firefox 操作。');
+		}else{
+			//alert('It is NOT InternetExplorer');
+		}
 	</script>
 </body>
 </html>
