@@ -93,8 +93,9 @@
 			}
 
 			_reasonMapping = data;
+			_reasonMapping.splice(0, 0, {id:0, reason:"< 請選擇不合格原因… >"});
 			_reasonMapping.forEach(el => {
-				_reasonOptionHTML += `<option value="${el.id}">${el.reason}</option>`;
+				_reasonOptionHTML += el.id == '0' ? `<option value="${el.id}" style="display: none" disabled>${el.reason}</option>` :`<option value="${el.id}">${el.reason}</option>`;
 			});
 		})
 
