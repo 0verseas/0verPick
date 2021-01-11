@@ -20,7 +20,7 @@
 	let downloadPptHTML='';
 	downloadPptHTML += `
 		<div>
-			<a href="https://docs.google.com/presentation/d/1kzzLxYp3CZX28gl639Di3hhhHotsv-zx/edit#slide=id.p1"  target="_blank">
+			<a href="https://docs.google.com/presentation/d/1oGg9g7O39IXjOT1uua5j9QmYQX9qELDd_hQKB0ric10/edit?usp=sharing"  target="_blank">
 				<i class="fa fa-download" aria-hidden="true"></i> 個人申請制備審資料下載與審查回覆系統操作說明PPT
 			</a>
 		</div>
