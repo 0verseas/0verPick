@@ -14,6 +14,7 @@
 	const $annex05 = $('#annex05');
 	const $annex06 = $('#annex06');
 	const $annex07 = $('#annex07');
+	const $annex08 = $('#annex08');
 	const _config = window.getConfig();
 
 
@@ -136,4 +137,13 @@
 		`;
 	$annex07.html(annex07HTML);
 
+	let annex08HTML='';
+	annex08HTML += `
+		<div>
+			<a href="https://depart.moe.edu.tw/ED2500/News.aspx?n=E8380E03A0E16960&sms=D2E10027BB4EC183"  target="_blank">
+				<i class="fa fa-link" aria-hidden="true"></i> 教育部外國大學校院參考名冊專區
+			</a>
+		</div>
+		`;
+	$annex08.html(annex08HTML);
 })();
