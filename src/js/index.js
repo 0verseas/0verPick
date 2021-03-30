@@ -80,8 +80,8 @@
 	let annex02HTML='';
 	annex02HTML += `
 		<div>
-			<a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=Q0030008"  target="_blank">
-				<i class="fa fa-download" aria-hidden="true"></i> 香港澳門學歷檢覈及採認辦法
+			<a href="https://www.edu.tw/News_Content.aspx?n=0217161130F0B192&sms=DD4E27A7858227FF&s=DBFEB120E0C2C3E4"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 香港澳門學歷檢覈及採認辦法(含認可名冊)
 			</a>
 		</div>
 		`;
@@ -107,15 +107,15 @@
 		`;
 	$annex04.html(annex04HTML);
 
-	let annex05HTML='';
-	annex05HTML += `
-		<div>
-			<a href="${_config.apiBase}/forms/港二技_本會彙整報名學生畢肄業學校經香港當地評審情形一覽表.pdf"  target="_blank">
-				<i class="fa fa-download" aria-hidden="true"></i> 本會彙整報名學生畢肄業學校經香港當地評審情形一覽表
-			</a>
-		</div>
-		`;
-	$annex05.html(annex05HTML);
+	// let annex05HTML='';
+	// annex05HTML += `
+	// 	<div>
+	// 		<a href="${_config.apiBase}/forms/港二技_本會彙整報名學生畢肄業學校經香港當地評審情形一覽表.pdf"  target="_blank">
+	// 			<i class="fa fa-download" aria-hidden="true"></i> 本會彙整報名學生畢肄業學校經香港當地評審情形一覽表
+	// 		</a>
+	// 	</div>
+	// 	`;
+	// $annex05.html(annex05HTML);
 
 	let annex06HTML='';
 	annex06HTML += `
