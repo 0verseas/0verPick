@@ -1,6 +1,6 @@
 const path = require('path');
 
-module.exports = {
+const config = {
 	entry: './reactSrc/studentData/index.js',
 	output: {
 		filename: 'build_studentData.js',
@@ -10,18 +10,22 @@ module.exports = {
 		extensions: ['.webpack.js', '.web.js', '.js', '.jsx', '.scss', '.css', 'config.js']
 	},
 	module: {
-		loaders: [{
-			test: /\.(js|jsx)$/,
-			loader: 'babel-loader',
-			exclude: /node_modules/,
-			query: {
-				presets: ['react', 'env']
+		rules:[
+			{
+				test: /\.(js|jsx)$/,
+				loader: 'babel-loader',
+				exclude: /node_modules/,
+				options:{
+					presets: ["@babel/preset-react", "@babel/preset-env"]
+				}
+			},
+			{
+				test: /\.css$/,
+				use: 'style-loader!css-loader?sourceMap'
 			}
-		},
-		{
-			test: /\.css$/,
-			loader: 'style-loader!css-loader?sourceMap'
-		}]
+		]
 	},
 	devtool:'source-map',
 };
+
+module.exports = config;
