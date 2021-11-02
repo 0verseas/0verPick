@@ -26,6 +26,11 @@ const config = {
 		]
 	},
 	devtool:'source-map',
+	performance: {
+		hints: "error",
+		maxEntrypointSize: 512000,
+		maxAssetSize: 512000
+	}
 };
 
 module.exports = config;
