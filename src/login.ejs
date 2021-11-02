@@ -2,10 +2,10 @@
 <html>
 <head>
 	<title>個人申請制備審資料下載與審查回覆系統</title>
-	<% include component/_header %>
+	<%- include ('component/_header') %>
 </head>
 <body>
-	<% include component/_loading %>
+	<%- include ('component/_loading') %>
 	<div class="container" style="padding-top: 15vh; min-height: calc(100vh - 112px)">
 		<div class="row">
 			<div class="col-12">
@@ -55,7 +55,7 @@
 		</div>
 	</div>
 	<div class="text-center pt-2 pb-2">
-		<% include component/_footer %>
+		<%- include ('component/_footer') %>
 	</div>
 	<script src="js/login.js"></script>
 	<script src="js/config.js"></script>
