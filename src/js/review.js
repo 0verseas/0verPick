@@ -413,10 +413,11 @@
 
 		let pendingHTML = '';
 		_reviewPending.forEach((data, index) => {
+			let name = encodeHtmlCharacters(data.name);
 			pendingHTML += `
 			<tr>
 				<td>${data.overseas_student_id}</td>
-				<td>${data.name}</td>
+				<td>${name}</td>
 				<td class="text-right">
 					<button class="btn btn-success btn-judge" data-pass="1" data-index="${index}" ${lockHtml}>
 						<i class="fa fa-circle-o" aria-hidden="true"></i>
@@ -445,11 +446,12 @@
 		}
 		let passHTML = '';
 		_reviewPass.forEach((data, index) => {
+			let name = encodeHtmlCharacters(data.name);
 			passHTML += `
 			<tr>
 				<td>${index + 1}</td>
 				<td>${data.overseas_student_id}</td>
-				<td>${data.name}</td>
+				<td>${name}</td>
 				<td class="text-center">
 					<button class="btn btn-secondary up-arrow" data-index="${index}" ${lockHtml}><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
 					<button class="btn btn-secondary down-arrow" data-index="${index}" ${lockHtml}><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
@@ -477,11 +479,12 @@
 
 		let failedHTML = '';
 		_reviewFailed.forEach((data, index) => {
+			let name = encodeHtmlCharacters(data.name);
 			let review_memo = encodeHtmlCharacters(data.review_memo);  // 不合格清單備註
 			failedHTML += `
 			<tr>
 				<td>${data.overseas_student_id}</td>
-				<td>${data.name}</td>
+				<td>${name}</td>
 				<td>
 					<select id="failedReason-${index}" data-index="${index}" class="form-control form-control-sm sel-reason" ${lockHtml}>
 						${_reasonOptionHTML}
