@@ -1,6 +1,7 @@
 window.getConfig = function () {
 	return {
 		apiBase: '',
-		isProduction: false
+		isProduction: false,
+		reCAPTCHA_site_key: ''
 	};
 };
