@@ -8,29 +8,54 @@ import {
 } from 'reactstrap';
 import cloneDeep from 'lodash.clonedeep';
 
+/* PageBar 目前限制 除了第一與最後外一次最多動態顯示10個頁面選項 */
 class PageBar extends React.Component {
 	render() {
-		const pages = Math.ceil(this.props.dataLength / this.props.pageSize); // 總頁數（-1）
-		/* PageBar 目前限制在10個頁面選項之中 */
+		const pages = Math.ceil(this.props.dataLength / this.props.pageSize); // 總頁數
+		let frontHtml = ``; 
+		let behindHtml = ``;
 		let pageOffset = 0; //偏移值
 		pageOffset = this.props.currentPage+6-pages <0 ? 0 :this.props.currentPage+6-pages; //如果到底了計算不能往後的值
-		let pageFront = this.props.currentPage-6-pageOffset <0 ?1 :this.props.currentPage-5-pageOffset; //計算PageBar第一個選項值 最小是1（第二頁）
+		let pageFront = 1; //計算PageBar第一個選項值 最小是1（第二頁）
+		if(this.props.currentPage-6-pageOffset > 0){
+			pageFront = this.props.currentPage-5-pageOffset;
+			// 在第一頁按鈕後顯示...表示有選項被隱藏了
+			frontHtml = 
+				<PaginationItem disabled>
+					<PaginationLink href="javascript:;" >
+						{'...'}
+					</PaginationLink>
+				</PaginationItem>
+			;
+		}
 		pageOffset = this.props.currentPage-6>0 ? 0 :this.props.currentPage-6;//如果到頂了計算不能往前的值
-		let pageBehind = this.props.currentPage+6-pageOffset>pages ?pages-1 :this.props.currentPage+5-pageOffset;//計算PageBar最後面選項值 最大是pages-2
+		let pageBehind = pages - 1;//計算PageBar最後面選項值 最大是pages-2
+		if(this.props.currentPage+6-pageOffset < pages){
+			pageBehind = this.props.currentPage+5-pageOffset;
+			// 在最後頁按鈕後顯示...表示有選項被隱藏了
+			behindHtml = 
+				<PaginationItem disabled>
+					<PaginationLink href="javascript:;" >
+						{'...'}
+					</PaginationLink>
+				</PaginationItem>
+			;
+		}
 		let pageRange = pageBehind - pageFront;//PageBarRange值  按照前面的算法 目前不管怎樣都 <= 10
 		let prePage = this.props.currentPage -1 < 1 ? 1 : this.props.currentPage-1; //計算上一頁的值
 		let nextPage = this.props.currentPage +1 > pages ? pages : this.props.currentPage+1;//計算下一頁的值
 		// 讓最小（第一頁）跟最大（最後頁）始終在畫面上取代 first page 跟 last page鍵 中間有十個頁面按鍵 數字動態顯示
 		return (
 			<Pagination style={{display: 'flex', justifyContent: 'center'}}>
+				<PaginationItem onClick={() => {this.props.onPage(prePage)}} disabled={1 === this.props.currentPage}>
+					<PaginationLink previous href="javascript:;" />
+				</PaginationItem>
 				<PaginationItem onClick={() => {this.props.onPage(1)}} active={1 === this.props.currentPage}>
 					<PaginationLink href="javascript:;" >
 						{'1'}
 					</PaginationLink>
 				</PaginationItem>
-				<PaginationItem onClick={() => {this.props.onPage(prePage)}}>
-					<PaginationLink previous href="javascript:;" />
-				</PaginationItem>
+				{frontHtml}
 				{
 					//只顯示pageRange數量的page按鈕 （10個）//因為是動態計算的頁面範圍所以 i 要加上pageFront才是正確的數值
 					[...Array(pageRange)].map((val, i) => {
@@ -47,13 +72,14 @@ class PageBar extends React.Component {
 						);
 					})
 				}
-				<PaginationItem onClick={() => {this.props.onPage(nextPage)}}>
-					<PaginationLink next href="javascript:;" />
-				</PaginationItem>
+				{behindHtml}
 				<PaginationItem onClick={() => {this.props.onPage(pages)}} active={pages === this.props.currentPage}>
 					<PaginationLink href="javascript:;" >
 						{pages}
 					</PaginationLink>
+				</PaginationItem>
+				<PaginationItem onClick={() => {this.props.onPage(nextPage)}} disabled={pages === this.props.currentPage}>
+					<PaginationLink next href="javascript:;" />
 				</PaginationItem>
 			</Pagination>
 		);
