@@ -42,6 +42,18 @@ class PageBar extends React.Component {
 			;
 		}
 		let pageRange = pageBehind - pageFront;//PageBarRange值  按照前面的算法 目前不管怎樣都 <= 10
+		// 跳到最後頁面的按鈕html
+		let lastPageHtml = 
+			<PaginationItem onClick={() => {this.props.onPage(pages)}} active={pages === this.props.currentPage}>
+				<PaginationLink href="javascript:;" >
+					{pages}
+				</PaginationLink>
+			</PaginationItem>
+		// 只需要一頁的話 就不需要中間的動態按鈕跟最後頁按鈕
+		if(pageRange < 0){
+			pageRange = 0;
+			lastPageHtml = ``
+		}
 		let prePage = this.props.currentPage -1 < 1 ? 1 : this.props.currentPage-1; //計算上一頁的值
 		let nextPage = this.props.currentPage +1 > pages ? pages : this.props.currentPage+1;//計算下一頁的值
 		// 讓最小（第一頁）跟最大（最後頁）始終在畫面上取代 first page 跟 last page鍵 中間有十個頁面按鍵 數字動態顯示
@@ -73,11 +85,7 @@ class PageBar extends React.Component {
 					})
 				}
 				{behindHtml}
-				<PaginationItem onClick={() => {this.props.onPage(pages)}} active={pages === this.props.currentPage}>
-					<PaginationLink href="javascript:;" >
-						{pages}
-					</PaginationLink>
-				</PaginationItem>
+				{lastPageHtml}
 				<PaginationItem onClick={() => {this.props.onPage(nextPage)}} disabled={pages === this.props.currentPage}>
 					<PaginationLink next href="javascript:;" />
 				</PaginationItem>
