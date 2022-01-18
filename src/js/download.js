@@ -47,24 +47,24 @@ const app = ( () => {
 			_renderDepartments($masterTbody, 'master', '碩士班', data.master_depts)
 			_renderDepartments($phdTbody, 'phd', '博士班', data.phd_depts)
 
-			// 學士班沒人就隱藏
-			if(data.bachelor_depts.length < 1){
-				$('.bachelorForm').hide();
+			// 學士班有人就顯示 系所表格
+			if(data.bachelor_depts.length > 0){
+				$('.bachelorForm').show();
 			}
 
-			// 港二技沒人就隱藏
-			if(data.two_year_tech_depts.length < 1){
-				$('.twoYearForm').hide();
+			// 港二技有人就顯示 系所表格
+			if(data.two_year_tech_depts.length > 0){
+				$('.twoYearForm').show();
 			}
 
-			// 碩士班沒人就隱藏
-			if(data.master_depts.length < 1){
-				$('.masterForm').hide();
+			// 碩士班有人就顯示 系所表格
+			if(data.master_depts.length > 0){
+				$('.masterForm').show();
 			}
 
-			// 博士班沒人就隱藏
-			if(data.phd_depts.length < 1){
-				$('.phdForm').hide();
+			// 博士班有人就顯示 系所表格
+			if(data.phd_depts.length > 0){
+				$('.phdForm').show();
 			}
 
 			// 學碩博沒人就隱藏 全校檔案按鈕
