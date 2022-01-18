@@ -32,7 +32,7 @@ class PageBar extends React.Component {
 		let pageBehind = pages - 1;//計算PageBar最後面選項值 最大是pages-2
 		if(this.props.currentPage+6-pageOffset < pages){
 			pageBehind = this.props.currentPage+5-pageOffset;
-			// 在最後頁按鈕後顯示...表示有選項被隱藏了
+			// 在最後頁按鈕前顯示...表示有選項被隱藏了
 			behindHtml = 
 				<PaginationItem disabled>
 					<PaginationLink href="javascript:;" >

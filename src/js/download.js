@@ -47,6 +47,31 @@ const app = ( () => {
 			_renderDepartments($masterTbody, 'master', '碩士班', data.master_depts)
 			_renderDepartments($phdTbody, 'phd', '博士班', data.phd_depts)
 
+			// 學士班沒人就隱藏
+			if(data.bachelor_depts.length < 1){
+				$('.bachelorForm').hide();
+			}
+
+			// 港二技沒人就隱藏
+			if(data.two_year_tech_depts.length < 1){
+				$('.twoYearForm').hide();
+			}
+
+			// 碩士班沒人就隱藏
+			if(data.master_depts.length < 1){
+				$('.masterForm').hide();
+			}
+
+			// 博士班沒人就隱藏
+			if(data.phd_depts.length < 1){
+				$('.phdForm').hide();
+			}
+
+			// 學碩博沒人就隱藏 全校檔案按鈕
+			if((data.bachelor_depts.length + data.master_depts.length + data.phd_depts.length) < 1){
+				$allpdfzip.remove();
+			}
+
 			_two_year_tech_depts = data.two_year_tech_depts;
 			if (_two_year_tech_depts.length < 1) {
 				$twoyearallpdfzip.remove();
