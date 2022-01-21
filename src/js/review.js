@@ -105,7 +105,7 @@
 	}
 
 	function _setSystems(systems = null) {
-		let systemSelHtml = '<option value="-1">請選擇</option>';
+		let systemSelHtml = '<option value="-1" hidden selected disabled>請選擇</option>';
 
 		if (systems.bachelor) {
 			_systemMapping.push({id: "1", key: "bachelor", name: "學士班"});
@@ -261,7 +261,7 @@
 	}
 
 	function _handleSystemChange() {
-		$deptSel.html('<option value="-1">請選擇</option>');
+		$deptSel.html('<option value="-1" hidden selected disabled>請選擇</option>');
 
 		// 有值再說
 		if (this.value === '-1') {
