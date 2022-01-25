@@ -86,12 +86,20 @@
 		$AccountModal.find('.AccountModal__input-phone').val('');
 		$AccountModal.find('.AccountModal__input-status[value=1]').prop('checked', true);
 
+		$('.AccountStatusForm').show();
+		$('.DeptPermissionForm').show();
+
 		if (type === 'C') {
 			//讓帳號欄位能輸入
 			document.getElementById('AccountModal__input-username').disabled = false ;
 			$AccountModal.find('.AccountModal__input-password').attr('placeholder', '密碼需至少8碼且大寫、小寫、數字或特殊符號至少兩種');
 			_renderDeptList(_deptList);
 			return;
+		} else {
+			if($(e.relatedTarget).parents('.AccountItem').data('permission') === '管理員'){
+				$('.AccountStatusForm').hide();
+				$('.DeptPermissionForm').hide();
+			}
 		}
 
 		// set old value
@@ -364,7 +372,7 @@
 			const encodeUsername = encodeHtmlCharacters(val.username); //帳號（轉換過得）
 
 			$AccountList.find('tbody').append(`
-				<tr class="AccountItem" data-id="${val.id}">
+				<tr class="AccountItem" data-id="${val.id}" data-permission="${accountPermission}">
 					<td class="text-warning clickable" data-toggle="modal" data-target=".AccountModal" data-type="U">
 						<i class="fa fa-pencil" aria-hidden="true"></i>
 					</td>
