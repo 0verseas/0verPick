@@ -370,15 +370,27 @@
 			}
 			const encodedName = encodeHtmlCharacters(val.name);  // 用戶名稱（轉換過的）
 			const encodeUsername = encodeHtmlCharacters(val.username); //帳號（轉換過得）
+			let delBtnHtml = '';
+			if(accountPermission === '管理員'){
+				delBtnHtml = `
+					<td>
+						
+					</td>
+				`;
+			} else {
+				delBtnHtml = `
+					<td class="text-danger clickable AccountItem__btn-del">
+						<i class="fa fa-times" aria-hidden="true"></i>
+					</td>
+				`;
+			}
 
 			$AccountList.find('tbody').append(`
 				<tr class="AccountItem" data-id="${val.id}" data-permission="${accountPermission}">
 					<td class="text-warning clickable" data-toggle="modal" data-target=".AccountModal" data-type="U">
 						<i class="fa fa-pencil" aria-hidden="true"></i>
 					</td>
-					<td class="text-danger clickable AccountItem__btn-del">
-						<i class="fa fa-times" aria-hidden="true"></i>
-					</td>
+					${delBtnHtml}
 					<td class="AccountItem__username">${encodeUsername}</td>
 					<td class="AccountItem__organization">${org}</td>
 					<td class="AccountItem__name">${encodedName}</td>
