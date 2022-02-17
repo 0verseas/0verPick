@@ -23,6 +23,9 @@
 			data.school_reviewer.phd_permissions.length,
 			data.school_reviewer.two_year_tech_department_permissions.length
 		);
+
+		// 隱藏港二技學生資料
+		$('.Nav__twoyear').remove();
 	})
 
 	/**

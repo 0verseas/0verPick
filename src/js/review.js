@@ -112,10 +112,10 @@
 			systemSelHtml += '<option value="bachelor">學士班</option>';
 		}
 
-		if (systems.two_year_tech) {
-			_systemMapping.push({id: "2", key: "two_year_tech", name: "港二技"});
-			systemSelHtml += '<option value="two_year_tech">港二技</option>';
-		}
+		// if (systems.two_year_tech) {
+		// 	_systemMapping.push({id: "2", key: "two_year_tech", name: "港二技"});
+		// 	systemSelHtml += '<option value="two_year_tech">港二技</option>';
+		// }
 
 		if (systems.master) {
 			_systemMapping.push({id: "3", key: "master", name: "碩士班"});
