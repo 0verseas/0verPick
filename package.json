@@ -21,7 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "harp": "^0.41.0",
+    "harp": "^0.41.2",
     "lodash.clonedeep": "^4.5.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
@@ -29,15 +29,15 @@
     "reactstrap": "^5.0.0-alpha.4"
   },
   "devDependencies": {
-    "@babel/cli": "^7.15.0",
-    "@babel/core": "^7.15.0",
-    "@babel/preset-env": "^7.15.0",
-    "@babel/preset-react": "^7.15.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.15.0",
-    "babel-loader": "^8.2.3",
-    "css-loader": "^6.5.1",
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.8",
+    "@babel/plugin-proposal-object-rest-spread": "^7.17.3",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "babel-loader": "^8.2.4",
+    "css-loader": "^6.7.1",
     "style-loader": "^3.3.1",
-    "webpack": "^5.61.0",
-    "webpack-cli": "^4.9.1"
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2"
   }
 }
