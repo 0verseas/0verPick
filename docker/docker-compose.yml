@@ -1,8 +1,12 @@
-version: '3'
-services:
+version: '3.7'
 
-  # Nginx Service
-  nginx:
+networks:
+  bridge:
+    external:
+      name: ${NETWORKS}
+
+services:
+  pick:
     image: nginx:alpine
     container_name: 0verPick
     restart: unless-stopped
@@ -10,5 +14,11 @@ services:
     environment:
       - TZ=Asia/Taipei
     volumes:
-#      - /var/log/nginx:/var/log/nginx
       - ./app/dist/:/usr/share/nginx/html/review/
+    networks:
+      - bridge
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pick.entrypoints=websecure"
+      - "traefik.http.routers.pick.tls.certresolver=lets-encr"
+      - "traefik.http.routers.pick.rule=Host(``) && PathPrefix(`/review`)"
