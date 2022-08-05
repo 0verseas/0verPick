@@ -8,7 +8,7 @@
 			if (err.status === 401) {
 				window.location.replace('./login.html');
 			} else {
-				alert(`Error ${err.status}: ${err.msg}`)
+				swal({title: 'Error' + err.status + ':' + err.msg, type:"error", confirmButtonText: '確定', allowOutsideClick: false});
 			}
 
 			return;
@@ -21,7 +21,8 @@
 			data.school_reviewer.department_permissions.length,
 			data.school_reviewer.master_permissions.length,
 			data.school_reviewer.phd_permissions.length,
-			data.school_reviewer.two_year_tech_department_permissions.length
+			data.school_reviewer.two_year_tech_department_permissions.length,
+			data.school_reviewer.young_associate_department_permissions.length
 		);
 		
 		// 不管有沒有權限 沒有已打包的學生資料就不出現港二技頁面
@@ -37,7 +38,7 @@
 		$('#greeting').text(`${school} ${name}，您好！`);
 	}
 
-	function _setNavLink(admin, b, m, p, t) {
+	function _setNavLink(admin, b, m, p, t, y) {
 		if (!!admin) return;
 		if (!admin) {
 			$('.Nav__account').remove();
@@ -48,7 +49,8 @@
 		if (!m) $('.Nav__master').remove();
 		if (!p) $('.Nav__phd').remove();
 		if (!t) $('.Nav__twoyear').remove();
-		if (!b && !m && !p && !t) {
+		if (!y) $('.Nav__youngassociate').remove();
+		if (!b && !m && !p && !t && !y) {
 			$('.Nav__download').remove();
 			$('.Nav__review').remove();
 		}

@@ -49,14 +49,13 @@
 						// console.error(err);
 
 						if (err.status == 401) {
-							alert('帳號或密碼有誤');
+							swal({title: '帳號或密碼有誤', type:"error", confirmButtonText: '確定', allowOutsideClick: false});
 						} else if (err.status == 403) {
-							alert('Google reCAPTCHA verification failed');
+							swal({title: 'Google reCAPTCHA verification failed', type:"error", confirmButtonText: '確定', allowOutsideClick: false});
+						} else if (err.status == 429) {  // 429 Too Many Requests
+							swal({title: '錯誤次數太多，請稍後再試。', type:"error", confirmButtonText: '確定', allowOutsideClick: false});
 						}
-						else if (err.status == 429) {  // 429 Too Many Requests
-							alert('錯誤次數太多，請稍後再試。');
-						}
-						
+
 						return;
 					}
 		

@@ -97,6 +97,7 @@ class PageBar extends React.Component {
 export default class StudentDataTable extends React.Component {
 	constructor(props) {
 		super(props);
+		this.systemID = window.getSystem();
 		this.state = {
 			currentPage: 1,
 			pageSize: 15,
@@ -173,6 +174,12 @@ export default class StudentDataTable extends React.Component {
 		studentList = studentList.slice(start, start + this.state.pageSize);
 
 		const thStyle = { cursor: 'pointer' };
+		let printDocumentCol = (<th></th>);
+		let printDocument = (<td className="text-center"><Button color="success" size="sm" onClick={() => { this.getStudentMergedFile(val.userID, val.deptID, 'pdf') } }>下載審查資料（PDF 檔）</Button></td>);
+		if (this.systemID == 5) { // 海青班不需要下載審查資料(PDF檔)
+			printDocumentCol = "";
+			printDocument = "";
+		}
 		return (
 			<div>
 				<div style={{overflow: 'auto'}}>
@@ -186,8 +193,7 @@ export default class StudentDataTable extends React.Component {
 								<th style={thStyle} onClick={() => this.handleSort('resident')}>僑居地 {!!this.state.sort && sortKey === 'resident' && sortIcon}</th>
 								<th style={thStyle} onClick={() => this.handleSort('order')}>志願序 {!!this.state.sort && sortKey === 'order' && sortIcon}</th>
 								<th></th>
-
-								<th></th>
+								{printDocumentCol}
 							</tr>
 						</thead>
 						<tbody>
@@ -202,8 +208,7 @@ export default class StudentDataTable extends React.Component {
 											<td>{val.resident}</td>
 											<td>{val.order}</td>
 											<td className="text-center"><Button color="primary" size="sm" onClick={() => { this.props.onDetail(val.userID, val.deptID) }}>學生詳細資料</Button></td>
-
-											<td className="text-center"><Button color="success" size="sm" onClick={() => { this.getStudentMergedFile(val.userID, val.deptID, 'pdf') } }>下載審查資料（PDF 檔）</Button></td>
+											{printDocument}
 										</tr>
 									);
 								})

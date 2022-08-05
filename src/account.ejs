@@ -240,6 +240,33 @@
 								</div>
 							</div>
 						</div>
+						<div class="col-sm-10 offset-sm-2 mb-2">
+							<h4>
+								<span class="badge badge-warning">海青班</span>
+							</h4>
+							<div class="row">
+								<div class="col-lg-5">
+									<strong>所有系所</strong>
+									<div class="card pt-1 pb-1 DeptList" data-system="youngassociate" style="max-height: 250px; min-height: 100px; overflow: auto;"></div>
+								</div>
+								<div class="col-lg-2 text-center pt-2">
+									<button type="button" class="btn btn-sm btn-primary btn-selectAll mb-lg-2" data-system="youngassociate">
+										全選
+										<i class="fa fa-chevron-right d-none d-lg-inline" aria-hidden="true"></i>
+										<i class="fa fa-chevron-down d-inline d-lg-none" aria-hidden="true"></i>
+									</button>
+									<button type="button" class="btn btn-sm btn-danger btn-removeAll" data-system="youngassociate">
+										移除
+										<i class="fa fa-chevron-left d-none d-lg-inline" aria-hidden="true"></i>
+										<i class="fa fa-chevron-up d-inline d-lg-none" aria-hidden="true"></i>
+									</button>
+								</div>
+								<div class="col-lg-5">
+									<strong>已選系所</strong>
+									<div class="card pt-1 pb-1 SelectedDeptList" data-system="youngassociate" style="max-height: 250px; min-height: 100px; overflow: auto;"></div>
+								</div>
+							</div>
+						</div>
 					</div>
 					<input type="hidden" class="AccountModal__input-modalType" />
 					<input type="hidden" class="AccountModal__input-id" />

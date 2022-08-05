@@ -51,7 +51,6 @@ window.API = (() => {
 	}
 
 	function getAvailableUsers(callback) {
-		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/available-users`, {
 			method: 'GET',
 			headers: {
@@ -65,7 +64,6 @@ window.API = (() => {
 	}
 
 	function getReviewers(callback) {
-		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/users`, {
 			method: 'GET',
 			headers: {
@@ -79,7 +77,6 @@ window.API = (() => {
 	}
 
 	function getDepts(callback) {
-		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/available-departments`, {
 			method: 'GET',
 			headers: {
@@ -122,7 +119,7 @@ window.API = (() => {
 		.catch((err) => { _handleError(err, callback) });
 	}
 
-	function disableUser(userID, callback) {
+	function changeUserStatus(userID, callback) {
 		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/users/${userID}`, {
 			method: 'DELETE',
@@ -430,23 +427,18 @@ window.API = (() => {
 		}
 
 		_endLoading();
-
-		if( res.status === 205 || res.status === 204 ){
-			window.location.reload();
-			alert('匯入成功');
-			return ;
-		}
+	
 		return res.json();
 	}
 
 	function _parseMergedFile(request) {
 		return request.then(res => {
-			// 有問題彈出問題
+			// 有問題彈出問題	
 			if (!res.ok) {
 				if (res.status === 404) {
-					window.alert('檔案尚未合併完成');
+					swal({title: '檔案尚未合併完成', type:"error", confirmButtonText: '確定', allowOutsideClick: false});
 				} else if (res.status === 401) {
-					window.alert('無權限下載，請重新登入');
+					swal({title: '無權限下載，請重新登入', type:"error", confirmButtonText: '確定', allowOutsideClick: false});
 					// window.location.href = './login.html';
 				}
 
@@ -475,10 +467,9 @@ window.API = (() => {
 			// 移除下載用連結
 			pom.remove();
 
-			_endLoading();
+			Loading.stop();
 		}).catch(err => {
-			_endLoading();
-
+			Loading.stop();
 			console.error(err);
 		});
 	}
@@ -524,8 +515,9 @@ window.API = (() => {
 
 		console.error(status);
 		err.json().then((msg) => {
+			Loading.stop();
 			if (err.status != 401) {
-				alert(msg.messages[0]);
+				swal({title: msg.messages[0], type:"error", confirmButtonText: '確定', allowOutsideClick: false});
 			}
 			callback && callback({
 				status,
@@ -558,7 +550,7 @@ window.API = (() => {
 		getDepts,
 		addUser,
 		editUser,
-		disableUser,
+		changeUserStatus,
 		getStudents,
 		getOneStudent,
 		getStudentDiploma,

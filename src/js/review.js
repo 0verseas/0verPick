@@ -127,6 +127,11 @@
 			systemSelHtml += '<option value="phd">博士班</option>';
 		}
 
+		if (systems.young_associate) {
+			_systemMapping.push({id: "5", key: "young_associate", name: "海青班"});
+			systemSelHtml += '<option value="young_associate">海青班</option>';
+		}
+
 		$systemSel.html(systemSelHtml);
 
 		// 若過濾結果為只有一個，直接幫使用者選定該學制
@@ -148,7 +153,7 @@
 		$fileInput.val('');
 		const fileName = file.name;
 		if (fileName.split('.').pop() !== 'csv') {
-			alert('請匯入 .csv 檔');
+			swal({title: `請匯入 .csv 檔`, type:"warning", confirmButtonText: '確定', allowOutsideClick: false});
 			return;
 		}
 
@@ -184,11 +189,11 @@
 			header[5] !== '審查結果' ||
 			header[6] !== '不合格原因代碼' ||
 			header[7] !== '備註') {
-			alert('匯入之 csv 欄位有誤');
+			swal({title: `匯入之 csv 欄位有誤`, type:"error", confirmButtonText: '確定', allowOutsideClick: false});
 			return;
 		}
 		else{
-			alert("匯入成功");
+			swal({title:"審核結果匯入成功", type:"success", confirmButtonText: '確定'});
 		}
 		// 清掉奇怪的空行
 		let csvReviews = rows.filter((val, i) => val.length === fieldLength);
@@ -283,6 +288,8 @@
 			// 幫使用者選定
 			$deptSel.children(`[value=${deptId}]`).prop('selected', true);
 			$deptSel.change();
+		} else {
+			$reviewBlock.hide();
 		}
 	}
 
@@ -397,6 +404,7 @@
 
 			// 顯示審查區塊
 			$reviewBlock.show();
+			Loading.stop();
 		});
 	}
 
@@ -578,89 +586,96 @@
 	function _handleUnlockData(){
 		const mode = $(this).data('mode');
 		if (mode === 'unlock') {
-			// 問一下是否要鎖定系所？
-			const isConfirmed = confirm('確定要解除鎖定系所嗎？');
-			if (!isConfirmed) {
+			swal({
+				title: '確定要解除鎖定系所嗎？',
+				type: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: '確定',
+				cancelButtonText: '取消',
+			}).then(function () { // 確定後資料再解鎖
+				window.API.unlockDeptReviewResult(_systemId, _deptId, mode, (err, data) => {
+					if (err) {
+						console.error(err);
+						return;
+					}
+					// 成功鎖定後，重 render 一次系所審查結果
+					_renderDeptReviewResult(data.id);
+				});
+			}, function (dismiss) { // 取消則什麼也不發生
 				return;
-			}
-		}
-
-		if(_deptId !== ""){
-			window.API.unlockDeptReviewResult(_systemId, _deptId, mode, (err, data) => {
-				if (err) {
-					console.error(err);
-					return;
-				}
-
-				// 成功鎖定後，重 render 一次系所審查結果
-				_renderDeptReviewResult(data.id);
 			});
-		} else {
-			alert('請先選擇系所。');
 		}
 	}
 
 	function _handlePatchData() {
 		const mode = $(this).data('mode');
-		if (mode === 'confirm') {
-			// 問一下是否要鎖定系所？
-			const isConfirmed = confirm('確定要鎖定系所嗎？');
-			if (!isConfirmed) {
-				return;
+		// 可以先處理好資料，再準備送後端
+		let sendData = [];
+		let passData = _reviewPass.map((data, index) => {
+			return {
+				id: data.id,
+				review_order: index + 1,
+				fail_result: null,
+				review_memo: null
 			}
-		}
-		if (_deptId !== "") {
-			if (_reviewPending.length > 0 && mode === 'confirm') {
-				alert('尚有待審查項目，請審查完畢再儲存。');
+		});
+		let failedData = _reviewFailed.map((data, index) => {
+			return {
+				id: data.id,
+				review_order: 0,
+				fail_result: data.fail_result,
+				review_memo: data.review_memo
 			}
-			else{
-				let sendData = [];
-				let passData = _reviewPass.map((data, index) => {
-					return {
-						id: data.id,
-						review_order: index + 1,
-						fail_result: null,
-						review_memo: null
-					}
-				});
-				let failedData = _reviewFailed.map((data, index) => {
-					return {
-						id: data.id,
-						review_order: 0,
-						fail_result: data.fail_result,
-						review_memo: data.review_memo
-					}
-				});
-				let pedingData = _reviewPending.map((data, index) => {
-					return{
-						id: data.id,
-						review_order: -1,
-						fail_result: null,
-						review_memo: null
-					}
-				});
-				sendData = sendData.concat(passData);
-				sendData = sendData.concat(failedData);
-				sendData = sendData.concat(pedingData);
-				const studentsData = { students: sendData };
+		});
+		let pedingData = _reviewPending.map((data, index) => {
+			return{
+				id: data.id,
+				review_order: -1,
+				fail_result: null,
+				review_memo: null
+			}
+		});
+		sendData = sendData.concat(passData);
+		sendData = sendData.concat(failedData);
+		sendData = sendData.concat(pedingData);
+		const studentsData = { students: sendData };
 
-				window.API.patchDeptReviewResult(_systemId, _deptId, mode, studentsData, (err, data) => {
-					if (err) {
-						console.error(err);
+		if (mode === 'confirm') { // 如果是選送資料並鎖定
+			if (_reviewPending.length > 0) { // 先判斷待審查清單是否有資料
+				swal({title: `尚有待審查項目，請審查完畢再儲存。`, type:"warning", confirmButtonText: '確定', allowOutsideClick: false})
+			} else { // 待審查沒資料，則詢問是否要鎖定資料
+				swal({
+					title: '確定要鎖定系所嗎？',
+					type: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: '確定',
+					cancelButtonText: '取消',
+				}).then(function () { // 確定後資料再丟後端
+					window.API.patchDeptReviewResult(_systemId, _deptId, mode, studentsData, (err, data) => {
+				        if (err) {
+				            console.error(err);
+				            return;
+						}
+				        swal({title:"審查結果已送出，並鎖定審查結果。", type:"success", confirmButtonText: '確定'});
+						_renderDeptReviewResult(data.id);
+			        });
+				}, function(dismiss) { // 取消後什麼也沒發生
 						return;
-					}
-
-					if (mode === 'confirm') {
-						alert('審查結果已送出，並鎖定審查結果。');
-					} else {
-						alert('審查結果已儲存。');
-					}
-					// 成功鎖定後，重 render 一次系所審查結果
-					_renderDeptReviewResult(data.id);
-				});
+			    });
 			}
-		} else {
-			alert('請先選擇系所。');
+		} else { // 如果是選儲存，資料再送後端
+			window.API.patchDeptReviewResult(_systemId, _deptId, mode, studentsData, (err, data) => {
+				if (err) {
+					console.error(err);
+					return;
+				}
+				swal({title:"審查結果已儲存。", type:"success", confirmButtonText: '確定'});
+				_renderDeptReviewResult(data.id);
+			});
 		}
 	}
 

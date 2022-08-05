@@ -14,8 +14,8 @@ export default class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.systemID = window.getSystem();
-		this.systemKeyMap = ['', 'department', 'two-year-tech', 'master', 'phd'];
-		this.identityMap = ['', '港澳生', '港澳具外國國籍之華裔學生', '海外僑生', '在臺港澳生', '在臺僑生', '僑先部結業生'];
+		this.systemKeyMap = ['', 'department', 'two-year-tech', 'master', 'phd', 'young-associate'];
+		this.identityMap = ['', '港澳生', '港澳具外國國籍之華裔學生', '海外僑生', '在臺港澳生', '在臺僑生', '僑先部結業生', '', '海外僑生']; // identity目前是8，所以第7項放空，第8名稱暫時一樣放海外僑生
 		this.state = {
 			studentList: [
 				/*{
@@ -141,7 +141,7 @@ export default class App extends React.Component {
 	}
 
 	render() {
-		const systemName = ['', '學士班', '港二技', '碩士班', '博士班'];
+		const systemName = ['', '學士班', '港二技', '碩士班', '博士班', '海青班'];
 		const parsedStudentList = this.parseList();
 		return (
 			<div>

@@ -341,22 +341,25 @@ export default class StudentDetailModal extends React.Component {
 			});
 		});
 
-		window.API.getApplicationDoc({
-			system: this.props.system,
-			userID,
-			deptID
-		}, (err, data) => {
-			if (err) {
-				console.error(err);
-				return;
-			}
-
-			// console.log('getApplicationDoc',data);
-			this.setState({
-				applicationDocs: data || []
+		let systemID = this.props.system;
+		if (systemID != 'young-associate') { // 海青學制沒有審查文件，不需要取得，其餘照常
+			window.API.getApplicationDoc({
+				system: this.props.system,
+				userID,
+				deptID
+			}, (err, data) => {
+				if (err) {
+					console.error(err);
+					return;
+				}
+	
+				// console.log('getApplicationDoc',data);
+				this.setState({
+					applicationDocs: data || []
+				});
+				// console.log('this.props', this.props);
 			});
-			// console.log('this.props', this.props);
-		});
+		}
 	}
 
 	// 判斷是 img 還是 file

@@ -13,6 +13,9 @@
 			<li class="nav-item" id="two-year-tech-nav-item">
 				<a class="nav-link" id="two-year-tech-tab" data-toggle="tab" href="#two-year-tech" role="tab" aria-controls="two-year-tech" aria-selected="true">港二技</a>
 			</li>
+			<li class="nav-item" id="young-associate-nav-item">
+				<a class="nav-link" id="young-associate-tab" data-toggle="tab" href="#young-associate" role="tab" aria-controls="young-associate" aria-selected="true">海青班</a>
+			</li>
 		</ul>
 	</div>
 </div>
@@ -257,7 +260,7 @@
 
 
 				<div class="col-5 text-right" id="two-year-tech-confirm-block" style="display: none;">
-					<small class="badge badge-primary">由 <span id="bachelor-confirm-by">Name</span> 確認並鎖定於 <span id="two-year-tech-confirm-at">YYYY/MM/DD HH:mm:ss</span></small>
+					<small class="badge badge-primary">由 <span id="two-year-tech-confirm-by">Name</span> 確認並鎖定於 <span id="two-year-tech-confirm-at">YYYY/MM/DD HH:mm:ss</span></small>
 				</div>
 			</div>
 			<div class="row">
@@ -312,6 +315,81 @@
 
 		<div class="col-md-4 text-center mb-5 mx-auto mt-4">
 			<button class="btn btn-danger btn-block" id="two-year-tech-confirm">確認港二技審查結果並鎖定</button>
+		</div>
+	</div>
+
+	<div class="tab-pane fade row mb-3" id="young-associate" role="tabpanel" aria-labelledby="young-associate-tab">
+		<div class="col-12">
+			<div class="row">
+				<div class="col-7">
+					<h3>海青班 系所審查狀態</h3>
+				</div>
+
+				<div class="col-5 text-right" id="young-associate-cant-confirm">
+					<small class="badge badge-danger">此學制仍有系所尚未鎖定</small>
+				</div>
+
+				<div class="col-5 text-right" id="young-associate-can-confirm">
+					<small class="badge badge-warning">此學制各系全已鎖定，可按下確認審查結果並鎖定</small>
+				</div>
+
+
+				<div class="col-5 text-right" id="young-associate-confirm-block" style="display: none;">
+					<small class="badge badge-primary">由 <span id="young-associate-confirm-by">Name</span> 確認並鎖定於 <span id="young-associate-confirm-at">YYYY/MM/DD HH:mm:ss</span></small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<button id="young-associate-lock-all-no-student" class="btn btn-info" role="button">
+						<i class="fa fa-lock" aria-hidden="true"></i>
+						鎖定海青班所有無人選填系所
+					</button>
+					<button id="young-associate-download-review-form" class="btn btn-success" role="button">
+						<i class="fa fa-download" aria-hidden="true"></i>
+						下載海青班審查結果回覆表
+					</button>
+				</div>
+			</div>
+			<div style="max-height: 500px; overflow: auto; margin-top: 12px;">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>系所代碼</th>
+							<th>系所名稱</th>
+							<th>審查狀態</th>
+							<th>最後審查者</th>
+							<th>最後審查時間</th>
+						</tr>
+					</thead>
+					<tbody id="youngAssociateTbody">
+						<tr>
+							<td>12345</td>
+							<td>資訊管理系</td>
+							<td>已儲存</td>
+							<td>Name</td>
+							<td>YYYY/MM/DD HH:mm:ss</td>
+						</tr>
+						<tr>
+							<td>12346</td>
+							<td>資訊應用外語系</td>
+							<td>已鎖定</td>
+							<td>Name</td>
+							<td>YYYY/MM/DD HH:mm:ss</td>
+						</tr>
+						<tr>
+							<td>12347</td>
+							<td>資訊工程系</td>
+							<td>未審查</td>
+							<td>Name</td>
+							<td>YYYY/MM/DD HH:mm:ss</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="col-md-4 text-center mb-5 mx-auto mt-4">
+			<button class="btn btn-danger btn-block" id="young-associate-confirm">確認海青班審查結果並鎖定</button>
 		</div>
 	</div>
 </div>

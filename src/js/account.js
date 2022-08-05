@@ -14,7 +14,8 @@
 		'department_permissions',
 		'two_year_tech_department_permissions',
 		'master_permissions',
-		'phd_permissions'
+		'phd_permissions',
+		'young_associate_department_permissions',
 	];
 	let _csvFile;
 	let _csvAccounts = [];
@@ -57,7 +58,8 @@
 	$AccountModal.on('click.submit', '.AccountModal__btn-submit', _handleAddUser);
 	$AccountModal.on('click.selectAll', '.btn-selectAll', _handleSelectAll);
 	$AccountModal.on('click.removeAll', '.btn-removeAll', _handleRemoveAll);
-	$AccountList.on('click.delAccount', '.AccountItem__btn-del', _handleDelAccount);
+	$AccountList.on('click.banAccount', '.AccountItem__btn-ban', _handleBanAccount);
+	$AccountList.on('click.activeAccount', '.AccountItem__btn-active', _handleActivateAccount);
 	$DeptList.on('click.select', '.DeptList__item .btn-select', _handleSelectDept);
 	$SelectedDeptList.on('click.remove', '.SelectedDeptList__item .btn-remove', _handleremoveDept);
 	$importAccountBtn.on('click', _handleUpload);
@@ -122,19 +124,51 @@
 			department_permissions: userData.editorOnly ? [] : userData.school_reviewer.department_permissions,
 			master_permissions: userData.editorOnly ? [] : userData.school_reviewer.master_permissions,
 			phd_permissions: userData.editorOnly ? [] : userData.school_reviewer.phd_permissions,
-			two_year_tech_department_permissions: userData.editorOnly ? [] : userData.school_reviewer.two_year_tech_department_permissions
+			two_year_tech_department_permissions: userData.editorOnly ? [] : userData.school_reviewer.two_year_tech_department_permissions,
+			young_associate_department_permissions: userData.editorOnly ? [] : userData.school_reviewer.young_associate_department_permissions
 		});
 	}
 
-	function _handleDelAccount() {
-		if (confirm('確定停用？')) {
-			const userID = $(this).parents('.AccountItem').data('id');
-
-			window.API.disableUser(userID, (data) => {
-
+	function _handleBanAccount() { // 停用帳號 
+		const userID = $(this).parents('.AccountItem').data('id');
+		swal({
+			title: '確定停用帳號？',
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: '確定',
+			cancelButtonText: '取消',
+		}).then(function () { // 確定後資料再解鎖
+			window.API.changeUserStatus(userID, (data) => {
+				Loading.stop();
+				swal({title: '已成功停用帳號', type:"success", confirmButtonText: '確定', allowOutsideClick: false})
 				_updateUserList();
 			});
-		}
+		}, function (dismiss) { // 取消則什麼也不發生
+			return;
+		});
+	}
+
+	function _handleActivateAccount() { // 啟用帳號 
+		const userID = $(this).parents('.AccountItem').data('id');
+		swal({
+			title: '確定啟用帳號？',
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: '確定',
+			cancelButtonText: '取消',
+		}).then(function () { // 確定後資料再解鎖
+			window.API.changeUserStatus(userID, (data) => {
+				Loading.stop();
+				swal({title: '已成功啟用帳號', type:"success", confirmButtonText: '確定', allowOutsideClick: false})
+				_updateUserList();
+			});
+		}, function (dismiss) { // 取消則什麼也不發生
+			return;
+		});
 	}
 
 	function _handleSelectDept() {
@@ -199,7 +233,7 @@
 		$fileInput.val('');
 		const fileName = file.name;
 		if (fileName.split('.').pop() !== 'csv') {
-			alert('請匯入 .csv 檔');
+			swal({title: `請匯入 .csv 檔`, type:"warning", confirmButtonText: '確定', allowOutsideClick: false})
 			return;
 		}
 
@@ -254,7 +288,7 @@
 				}
 
 				if (fieldIndex > 7 ) {
-					// "學士班權限","二技班權限","碩士班權限","博士班權限"
+					// "學士班權限","二技班權限","碩士班權限","博士班權限,"海青班權限"
 					if (val.toLowerCase() === 'all') {
 						data[_csvFieldMap[fieldIndex]] = 'all';
 					} else {
@@ -268,13 +302,11 @@
 			});
 
 			window.API.addUser(data, (err, data) => {
-				if (err) {
-					console.error(err);
-					return;
-				}
-
-				_updateUserList();
-
+				if (err == null) {
+					Loading.stop();
+					swal({title: '新帳號匯入成功', type:"success", confirmButtonText: '確定'});
+					_updateUserList();
+				} 
 			});
 		});
 
@@ -300,15 +332,16 @@
 		const master_permissions = $('.SelectedDeptList[data-system="master"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
 		const phd_permissions = $('.SelectedDeptList[data-system="phd"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
 		const two_year_tech_department_permissions = $('.SelectedDeptList[data-system="twoyear"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
+		const young_associate_department_permissions = $('.SelectedDeptList[data-system="youngassociate"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
 		const userID = $AccountModal.find('.AccountModal__input-id').val();
-		if (!username) return alert('帳號不得為空');
-		if (!name) return alert('用戶名稱不得為空');
-		if (type === 'C' && !password) return alert('密碼不得為空');
-		if (!organization) return alert('單位不得為空');
-		if (!job_title) return alert('職稱不得為空');
-		if (!email) return alert('MAIL 不得為空');
-		if (!phone) return alert('TEL 不得為空');
-		if (!checkPasswordComplex(password)) return alert('密碼複雜度不足');  // 有輸入密碼時檢查密碼複雜度
+		if (!username) return swal({title: `帳號不得為空`, type:"error", confirmButtonText: '確定', allowOutsideClick: false}); //alert('帳號不得為空');
+		if (!name) return swal({title: `用戶名稱不得為空`, type:"error", confirmButtonText: '確定', allowOutsideClick: false}); //alert('用戶名稱不得為空');
+		if (type === 'C' && !password) return swal({title: `密碼不得為空`, type:"error", confirmButtonText: '確定', allowOutsideClick: false}); //alert('密碼不得為空');
+		if (!checkPasswordComplex(password)) return swal({title: `密碼複雜度不足`, type:"error", confirmButtonText: '確定', allowOutsideClick: false}); //alert('密碼複雜度不足，需至少8碼且大寫、小寫、數字或特殊符號至少兩種！！');  // 有輸入密碼時檢查密碼複雜度
+		if (!organization) return swal({title: `單位不得為空`, type:"error", confirmButtonText: '確定', allowOutsideClick: false}); //alert('單位不得為空');
+		if (!job_title) return swal({title: `職稱不得為空`, type:"error", confirmButtonText: '確定', allowOutsideClick: false}); //alert('職稱不得為空');
+		if (!email) return swal({title: `MAIL 不得為空`, type:"error", confirmButtonText: '確定', allowOutsideClick: false}); //alert('MAIL 不得為空');
+		if (!phone) return swal({title: `TEL 不得為空`, type:"error", confirmButtonText: '確定', allowOutsideClick: false}); //alert('TEL 不得為空');
 
 		const data = {
 			password: password === '' ? '' : sha256(password),
@@ -322,29 +355,26 @@
 			department_permissions,
 			master_permissions,
 			phd_permissions,
-			two_year_tech_department_permissions
+			two_year_tech_department_permissions,
+			young_associate_department_permissions
 		};
 
 		type === 'C' && window.API.addUser(data, (err, data) => {
-			if (err) {
-				console.error(err);
-				return;
+			if (err == null) {
+				Loading.stop();
+				swal({title: '新增帳號成功', type:"success", confirmButtonText: '確定'});
+				$AccountModal.modal('hide');
+				_updateUserList();
 			}
-
-			$AccountModal.modal('hide');
-			_updateUserList();
-
 		});
 
 		type === 'U' && window.API.editUser({ ...data, userID }, (err, data) => {
-			if (err) {
-				console.error(err);
-				return;
+			if (err == null) {
+				Loading.stop();
+				swal({title: '更新帳號成功', type:"success", confirmButtonText: '確定'});
+				$AccountModal.modal('hide');
+				_updateUserList();
 			}
-
-
-			$AccountModal.modal('hide');
-			_updateUserList();
 		});
 	}
 
@@ -361,28 +391,39 @@
 			if (!val.editorOnly) {
 				org = encodeHtmlCharacters(val.school_reviewer.organization);  // 單位
 				accountPermission = val.school_reviewer.has_admin ? '管理員' : '一般使用者';;
+				accountStatus = val.school_reviewer.deleted_at;
 				deptPermission = [];
 				!!val.school_reviewer.department_permissions.length && deptPermission.push('學士班');
 				!!val.school_reviewer.master_permissions.length && deptPermission.push('碩士班');
 				!!val.school_reviewer.phd_permissions.length && deptPermission.push('博士班');
 				!!val.school_reviewer.two_year_tech_department_permissions.length && deptPermission.push('港二技');
+				!!val.school_reviewer.young_associate_department_permissions.length && deptPermission.push('海青班');
 				deptPermission = val.school_reviewer.has_admin ? '全部' : (!!deptPermission.length ? deptPermission.join(', ') : '無');
 			}
 			const encodedName = encodeHtmlCharacters(val.name);  // 用戶名稱（轉換過的）
 			const encodeUsername = encodeHtmlCharacters(val.username); //帳號（轉換過得）
-			let delBtnHtml = '';
+			let banBtnHtml = '';
+			let activeBtnHtml = '';
 			if(accountPermission === '管理員'){
-				delBtnHtml = `
+				banBtnHtml = `
 					<td>
 						
 					</td>
 				`;
 			} else {
-				delBtnHtml = `
-					<td class="text-danger clickable AccountItem__btn-del">
-						<i class="fa fa-times" aria-hidden="true"></i>
+				if (accountStatus != null) {
+					activeBtnHtml = `
+					<td class="text-success clickable AccountItem__btn-active">
+						<i class="fa fa-check" aria-hidden="true"></i>
 					</td>
 				`;
+				} else {
+					banBtnHtml = `
+					<td class="text-danger clickable AccountItem__btn-ban">
+						<i class="fa fa-ban" aria-hidden="true"></i>
+					</td>
+				`;
+				}	
 			}
 
 			$AccountList.find('tbody').append(`
@@ -390,7 +431,8 @@
 					<td class="text-warning clickable" data-toggle="modal" data-target=".AccountModal" data-type="U">
 						<i class="fa fa-pencil" aria-hidden="true"></i>
 					</td>
-					${delBtnHtml}
+					${activeBtnHtml}
+					${banBtnHtml}
 					<td class="AccountItem__username">${encodeUsername}</td>
 					<td class="AccountItem__organization">${org}</td>
 					<td class="AccountItem__name">${encodedName}</td>
@@ -408,8 +450,8 @@
 		const rows = window.API.CSVToArray(data);
 		const header = rows.shift();
 		const fieldLength = header.length;
-		if (fieldLength !== 12) {
-			alert ('匯入之 csv 欄位數量有誤');
+		if (fieldLength !== 13) {
+			swal({title: `匯入之 csv 欄位數量有誤`, type:"error", confirmButtonText: '確定', allowOutsideClick: false});
 			return;
 		}
 
@@ -420,7 +462,7 @@
 		//匯入前檢查密碼複雜度
 		for(let i = 0; i<_csvAccounts.length;i++){
 			if(!checkPasswordComplex(_csvAccounts[i][1])){
-				alert(' 密碼需至少8碼且大寫、小寫、數字或特殊符號至少兩種！！');
+				swal({title: `密碼需至少8碼且大寫、小寫、數字或特殊符號至少兩種！！`, type:"error", confirmButtonText: '確定', allowOutsideClick: false});
 				return;
 			}
 		}
@@ -433,15 +475,14 @@
 
 		let valueEmpty = 0;
 		for(let i = 0;i<rows.length;i++){
-			if(rows[i].length!=12){break;}
+			if(rows[i].length!=13){break;}
 			if(!rows[i][0]||!rows[i][1]||!rows[i][2]){
 				valueEmpty = 1;
 				break;
 			}
 		}
 		if(valueEmpty){
-			alert('請確認是否有帳號、密碼、姓名欄位未填寫');
-			window.location.reload();
+			swal({title: `請確認是否有帳號、密碼、姓名欄位未填寫`, type:"error", confirmButtonText: '確定', allowOutsideClick: false});
 			return;
 		}
 
@@ -480,7 +521,8 @@
 			['departments', 'bachelor', 'department_permissions'],
 			['master_departments', 'master', 'master_permissions'],
 			['phd_departments', 'phd', 'phd_permissions'],
-			['two_year_tech_departments', 'twoyear', 'two_year_tech_department_permissions']
+			['two_year_tech_departments', 'twoyear', 'two_year_tech_department_permissions'],
+			['young_associate_departments', 'youngassociate', 'young_associate_department_permissions']
 		];
 
 		systems.forEach((s) => {
@@ -576,7 +618,8 @@
 			department_permissions: data.department_permissions,
 			master_permissions: data.master_permissions,
 			phd_permissions: data.phd_permissions,
-			two_year_tech_department_permissions: data.two_year_tech_department_permissions
+			two_year_tech_department_permissions: data.two_year_tech_department_permissions,
+			young_associate_department_permissions: data.young_associate_department_permissions
 		});
 	}
 
@@ -619,7 +662,7 @@
 				}
 
 				if (fieldIndex > 7 ) {
-					// "學士班權限","二技班權限","碩士班權限","博士班權限"
+					// "學士班權限","二技班權限","碩士班權限","博士班權限,"海青班權限"
 					if (val.toLowerCase() === 'all') {
 						data[i][_csvFieldMap[fieldIndex]] = 'all';
 					} else {
@@ -632,17 +675,14 @@
 				data[i][_csvFieldMap[fieldIndex]] = val;
 			});
 		});
-
+		
 		//呼叫API function 傳送資料到後端
 		window.API.importUserList(data, (err, data) => {
-			if (err) {
-				console.error(err);
-				return;
-			} else {
-				alert(data.messages[0]);
+			if (err == null) {
+				Loading.stop();
+				swal({title: '匯入並覆蓋成功', type:"success", confirmButtonText: '確定'}).then(function() {window.location.reload();});
+				_updateUserList();
 			}
-
-			_updateUserList();
 		});
 
 		$CSVModal.modal('hide');

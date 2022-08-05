@@ -13,7 +13,7 @@
 	 * init
 	 */
 	if ([_system, _department_id, _student_id, _type_id, _filename].some((val) => val === null)) {
-		alert('Wrong url.');
+		swal({title: 'Wrong url.', type:"error", confirmButtonText: '確定', allowOutsideClick: false});
 		return;
 	}
 
@@ -33,7 +33,7 @@
 						window.location.replace(`./login.html?url=${_url}`);
 						reject();
 					} else {
-						alert(`Error ${err.status}: ${err.msg}`);
+						swal({title: 'Error' + err.status + ':' + err.msg, type:"error", confirmButtonText: '確定', allowOutsideClick: false});
 						reject();
 					}
 

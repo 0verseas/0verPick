@@ -11,34 +11,40 @@ const app = ( () => {
 	const $twoYearTechTbody = $('#twoYearTechTbody');
 	const $masterTbody = $('#masterTbody');
 	const $phdTbody = $('#phdTbody');
+	const $youngAssociateTbody = $('#youngAssociateTbody');
 
 	const $bachelorNavItem = $('#bachelor-nav-item');
 	const $twoYearTechNavItem = $('#two-year-tech-nav-item');
 	const $masterNavItem = $('#master-nav-item');
 	const $phdNavItem = $('#phd-nav-item');
+	const $youngAssociateNavItem = $('#young-associate-nav-item');
 
 	// 下載某學制的審查結果回覆表
 	const $bachelorDownload = $('#bachelor-download-review-form');
 	const $twoYearTechDownload = $('#two-year-tech-download-review-form');
 	const $masterDownload = $('#master-download-review-form');
 	const $phdDownload = $('#phd-download-review-form');
+	const $youngAssociateDownload = $('#young-associate-download-review-form');
 
 	// 確認並鎖定某學制的審查結果
 	const $bachelorCantComfirm = $('#bachelor-cant-confirm');
 	const $twoYearTechCantConfirm = $('#two-year-tech-cant-confirm');
 	const $masterCantConfirm = $('#master-cant-confirm');
 	const $phdCantConfirm = $('#phd-cant-confirm');
+	const $youngAssociateCantConfirm = $('#young-associate-cant-confirm');
 
 	const $bachelorCanComfirm = $('#bachelor-can-confirm');
 	const $twoYearTechCanConfirm = $('#two-year-tech-can-confirm');
 	const $masterCanConfirm = $('#master-can-confirm');
 	const $phdCanConfirm = $('#phd-can-confirm');
+	const $youngAssociateCanConfirm = $('#young-associate-can-confirm');
 
 	// 確認並鎖定某學制的審查結果
 	const $bachelorConfirm = $('#bachelor-confirm');
 	const $twoYearTechConfirm = $('#two-year-tech-confirm');
 	const $masterConfirm = $('#master-confirm');
 	const $phdConfirm = $('#phd-confirm');
+	const $youngAssociateConfirm = $('#young-associate-confirm');
 
 	// 最後送出資訊
 	const $bachelorConfirmBlock = $('#bachelor-confirm-block');
@@ -57,11 +63,16 @@ const app = ( () => {
 	const $phdConfirmBy = $('#phd-confirm-by');
 	const $phdConfirmAt = $('#phd-confirm-at');
 
+	const $youngAssociateConfirmBlock = $('#young-associate-confirm-block');
+	const $youngAssociateConfirmBy = $('#young-associate-confirm-by');
+	const $youngAssociateConfirmAt = $('#young-associate-confirm-at');
+
 	// 鎖定所有無人選填系所
 	const $bachelorLockAllNoStudent = $('#bachelor-lock-all-no-student');
 	const $masterLockAllNoStudent = $('#master-lock-all-no-student');
 	const $phdLockAllNoStudent = $('#phd-lock-all-no-student');
 	const $twoYearTechLockAllNoStudent = $('#two-year-tech-lock-all-no-student');
+	const $youngAssociateLockAllNoStudent = $('#young-associate-lock-all-no-student');
 
 	/**
 	 * init
@@ -83,31 +94,41 @@ const app = ( () => {
 	function systemConfirm(type_id) {
 
 		// 問一下是否要鎖定學制
-		const isConfirmed = confirm('確定要鎖定學制嗎？');
-		if (!isConfirmed) {
+		swal({
+			title: '確定要鎖定學制嗎？',
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: '確定',
+			cancelButtonText: '取消',
+		}).then(function () { // 確定後資料再解鎖
+			window.API.confirmSystem(type_id, (err, system) => {
+				if (err) {
+					console.error(err);
+					return;
+				}
+				window.location.reload();
+				switch (system.type_id) {
+					case 1:
+						_renderSystems($bachelorTbody, system);
+						break;
+					case 2:
+						_renderSystems($twoYearTechTbody, system);
+						break;
+					case 3:
+						_renderSystems($masterTbody, system);
+						break;
+					case 4:
+						_renderSystems($phdTbody, system);
+						break;
+					case 5:
+						_renderSystems($youngAssociateTbody, system);
+						break;
+				}
+			});
+		}, function (dismiss) { // 取消則什麼也不發生
 			return;
-		}
-
-		window.API.confirmSystem(type_id, (err, system) => {
-			if (err) {
-				console.error(err);
-				return;
-			}
-			window.location.reload();
-			switch (system.type_id) {
-				case 1:
-					_renderSystems($bachelorTbody, system);
-					break;
-				case 2:
-					_renderSystems($twoYearTechTbody, system);
-					break;
-				case 3:
-					_renderSystems($masterTbody, system);
-					break;
-				case 4:
-					_renderSystems($phdTbody, system);
-					break;
-			}
 		});
 	}
 
@@ -130,6 +151,9 @@ const app = ( () => {
 					break;
 				case 4:
 					_renderSystems($phdTbody, data.phd);
+					break;
+				case 5:
+					_renderSystems($youngAssociateTbody, data.young_associate);
 					break;
 			}
 		});
@@ -198,6 +222,19 @@ const app = ( () => {
 				});
 			} else {
 				$phdNavItem.remove();
+			}
+
+			if (data.young_associate) {
+				_renderSystems($youngAssociateTbody, data.young_associate);
+
+				$youngAssociateConfirm.click(() =>{
+					systemConfirm(5);
+				});
+				$youngAssociateLockAllNoStudent.click(() => {
+					lockAllNoStudent(5);
+				});
+			} else {
+				$youngAssociateNavItem.remove();
 			}
 		});
 
@@ -366,6 +403,39 @@ const app = ( () => {
 					$phdConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
 					$phdConfirmBlock.show();
 					$phdCantConfirm.hide();
+				}
+
+				break;
+				
+			case 5:
+				if (canDownload) {
+					$youngAssociateDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載海青班審查結果回覆表';
+
+					$youngAssociateDownload.click(() => {
+						systemDownload(5, 'formal');
+					});
+				} else {
+					$youngAssociateDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載海青班審查結果回覆表（預覽版）';
+
+					$youngAssociateDownload.click(() => {
+						systemDownload(5, 'preview');
+					});
+				}
+
+				$youngAssociateConfirm.prop('disabled', !canConfirm);
+
+				if(canConfirm == true){
+					$youngAssociateCantConfirm.hide();
+					$youngAssociateCanConfirm.show();
+				}
+				else{
+					$youngAssociateCanConfirm.hide();
+				}
+				if (lock) {
+					$youngAssociateConfirmBy.text(system.student_order_confirmer.name);
+					$youngAssociateConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
+					$youngAssociateConfirmBlock.show();
+					$youngAssociateCantConfirm.hide();
 				}
 
 				break;

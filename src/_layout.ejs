@@ -47,6 +47,9 @@
 							<li class="nav-item Nav__twoyear">
 								<a class="nav-link <%= current.source === 'twoyear' ? 'active' : ''%>" href="./twoyear.html">港二技資料</a>
 							</li>
+							<li class="nav-item Nav__youngassociate">
+								<a class="nav-link <%= current.source === 'youngassociate' ? 'active' : ''%>" href="./youngassociate.html">海青班資料</a>
+							</li>
 							<li class="nav-item Nav__download">
 								<a class="nav-link <%= current.source === 'download' ? 'active' : ''%>" href="./download.html">批次下載</a>
 							</li>
@@ -68,6 +71,7 @@
 		</div>
 		<%- yield %>
 	</div>
+	<script src="./js/loading.js"></script>
 	<div class="text-center pt-2 pb-2">
 		<%- include ('component/_footer') %>
 	</div>
