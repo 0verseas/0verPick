@@ -22,6 +22,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.pick.entrypoints=websecure"
       - "traefik.http.routers.pick.tls.certresolver=lets-encr"
-      - "traefik.http.routers.pick.rule=Host(``) && PathPrefix(`/review`)"
+      - "traefik.http.routers.pick.rule=Host(`${DOMAIN_NAME}`) && PathPrefix(`/review`)"
       - "traefik.http.routers.pick.tls.options=default"
       - "traefik.http.routers.pick.middlewares=secure-headers@file,traefik-compress@file"
