@@ -21,8 +21,8 @@
 	let downloadPptHTML='';
 	downloadPptHTML += `
 		<div>
-			<a href="https://reurl.cc/aNorND"  target="_blank">
-				<i class="fa fa-download" aria-hidden="true"></i> 111學年度個人申請制備審資料下載與審查回覆系統操作步驟
+			<a href="https://docs.google.com/presentation/d/1oGg9g7O39IXjOT1uua5j9QmYQX9qELDd_hQKB0ric10"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 個人申請制備審資料下載與審查回覆系統操作步驟
 			</a>
 		</div>
 		`;
