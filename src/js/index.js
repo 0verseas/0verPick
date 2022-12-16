@@ -15,6 +15,7 @@
 	const $annex06 = $('#annex06');
 	const $annex07 = $('#annex07');
 	const $annex08 = $('#annex08');
+	const $annex09 = $('#annex09');
 	const _config = window.getConfig();
 
 
@@ -146,4 +147,12 @@
 		</div>
 		`;
 	$annex08.html(annex08HTML);
+
+	$annex09.html(`
+		<div>
+			<a href="${_config.apiBase}/reviewers/myanmar_transcript_download"  target="_blank">
+				<i class="fa fa-download" aria-hidden="true"></i> 緬甸學生成績清冊下載
+			</a>
+		</div>
+	`);
 })();
