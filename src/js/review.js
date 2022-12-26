@@ -359,7 +359,7 @@
 				}
 
 				// 開放下載回覆表
-				$downloadResultFile[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載系所審查回覆表（pdf）';
+				$downloadResultFile[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載系所審查結果表（pdf）';
 
 				_downloadMode = 'formal';
 
@@ -375,7 +375,7 @@
 				$storeBlock.hide();
 
 				// 開放下載預覽版回覆表
-				$downloadResultFile[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載系所審查回覆表（預覽版 pdf）';
+				$downloadResultFile[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載系所回覆預覽表（預覽版 pdf）';
 
 				_downloadMode = 'preview';
 
