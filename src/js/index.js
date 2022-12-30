@@ -85,9 +85,9 @@
 		</li>
 		<li>
 			<div>
-				<a href="${_config.apiBase}/reviewers/myanmar_transcript_download"  target="_blank">
+				<button type="button" class="btn btn-link" id="btn_myanmar_transcript" style="padding:0;">
 					<i class="fa fa-download" aria-hidden="true"></i> 緬甸學生成績清冊下載
-				</a>
+				</button>
 			</div>
 		</li>
 		<li>
@@ -98,4 +98,32 @@
 			</div>
 		</li>
 	`);
+
+	$('#btn_myanmar_transcript').on('click', _handleMyanmarTranscriptDownload);
+
+	function _handleMyanmarTranscriptDownload() {
+		fetch(`${_config.apiBase}/reviewers/myanmar_transcript_download/check`, {
+			method: 'GET',
+			credentials: 'include'
+		})
+		.then((res) => {
+			if (res.ok){
+				window.open(`${_config.apiBase}/reviewers/myanmar_transcript_download/download`);
+			} else {
+				throw res;
+			}
+		})
+		.catch((err) => {
+			if (err.status && err.status === 404) {  // 找不到QQ or 未獲錄取
+				err.json().then((data) => {
+					alert(`查無資料！`);
+				});
+			} else {
+				err.json && err.json().then((data) => {
+					console.error(data);
+					alert(`ERROR: \n${data.messages[0]}`);
+				})
+			}
+		});
+	}
 })();
