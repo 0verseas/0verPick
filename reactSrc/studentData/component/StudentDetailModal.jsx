@@ -278,7 +278,7 @@ export default class StudentDetailModal extends React.Component {
 			let genderLimitMessage = '無';
 			let genderLimit = '';
 			if(data.gender_limit != null){
-				
+
 				if(data.gender_limit != student.student_personal_data.gender){
 					genderLimit = '不符合，只收';
 				}
@@ -295,7 +295,7 @@ export default class StudentDetailModal extends React.Component {
 				if(birthAfter != null && Date.parse(birthAfter).valueOf()> Date.parse(student.student_personal_data.birthday)){
 					birthLimit = '不符合，學生需';
 				}
-				
+
 				if(birthBefore != null && Date.parse(birthBefore).valueOf()< Date.parse(student.student_personal_data.birthday)){
 					birthLimit = '不符合，學生需';
 				}
@@ -309,6 +309,16 @@ export default class StudentDetailModal extends React.Component {
 				} else {
 					birthLimitMessage = '無';
 				}
+			}
+
+			let deptType = '';
+			switch(data.is_extended_department){
+				case 1:
+					deptType = <span class="badge table-warning">重點產業系所</span>
+					break;
+				case 2:
+					deptType = <span class="badge table-primary">國際專修部</span>
+					break;
 			}
 
 			this.setState({
@@ -330,6 +340,7 @@ export default class StudentDetailModal extends React.Component {
 				gSchoolCountry: `${student.student_personal_data.school_country_data.continent}/${student.student_personal_data.school_country_data.country}`, // 學校國別
 				aSchool: data.school.title, // 申請學校
 				dept: data.title,
+				deptType: deptType,
 				disability: student.student_personal_data.disability_level ? student.student_personal_data.disability_level+student.student_personal_data.disability_category : '無',
 				// 副學士和高級文憑的調查（只香港 && 學士班有）
 				HK_have_associate_degree_or_higher_diploma_graduated: student.student_personal_data.HK_have_associate_degree_or_higher_diploma_graduated===1 ? '是' : student.student_personal_data.HK_have_associate_degree_or_higher_diploma_graduated===0 ? '否' : '',  // 是否取得副學士或高級文憑畢業證書
@@ -483,7 +494,7 @@ export default class StudentDetailModal extends React.Component {
 								<th>申請學校</th>
 								<td colSpan={2}>{ this.state.aSchool }</td>
 								<th>系所</th>
-								<td colSpan={2}>{ this.state.dept }</td>
+								<td colSpan={2}>{this.state.deptType } { this.state.dept }</td>
 							</tr>
 							{/*香港學士班的副學士或高級文憑調查*/}
 							<tr>
