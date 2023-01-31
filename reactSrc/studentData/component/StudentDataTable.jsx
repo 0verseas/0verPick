@@ -12,7 +12,7 @@ import cloneDeep from 'lodash.clonedeep';
 class PageBar extends React.Component {
 	render() {
 		const pages = Math.ceil(this.props.dataLength / this.props.pageSize); // 總頁數
-		let frontHtml = ``; 
+		let frontHtml = ``;
 		let behindHtml = ``;
 		let pageOffset = 0; //偏移值
 		pageOffset = this.props.currentPage+6-pages <0 ? 0 :this.props.currentPage+6-pages; //如果到底了計算不能往後的值
@@ -20,7 +20,7 @@ class PageBar extends React.Component {
 		if(this.props.currentPage-6-pageOffset > 0){
 			pageFront = this.props.currentPage-5-pageOffset;
 			// 在第一頁按鈕後顯示...表示有選項被隱藏了
-			frontHtml = 
+			frontHtml =
 				<PaginationItem disabled>
 					<PaginationLink href="javascript:;" >
 						{'...'}
@@ -33,7 +33,7 @@ class PageBar extends React.Component {
 		if(this.props.currentPage+6-pageOffset < pages){
 			pageBehind = this.props.currentPage+5-pageOffset;
 			// 在最後頁按鈕前顯示...表示有選項被隱藏了
-			behindHtml = 
+			behindHtml =
 				<PaginationItem disabled>
 					<PaginationLink href="javascript:;" >
 						{'...'}
@@ -43,7 +43,7 @@ class PageBar extends React.Component {
 		}
 		let pageRange = pageBehind - pageFront;//PageBarRange值  按照前面的算法 目前不管怎樣都 <= 10
 		// 跳到最後頁面的按鈕html
-		let lastPageHtml = 
+		let lastPageHtml =
 			<PaginationItem onClick={() => {this.props.onPage(pages)}} active={pages === this.props.currentPage}>
 				<PaginationLink href="javascript:;" >
 					{pages}
@@ -193,9 +193,20 @@ export default class StudentDataTable extends React.Component {
 						<tbody>
 							{
 								studentList.map((val, i) => {
+									let deptType = '';
+									switch(val.deptType){
+										case 1:
+											deptType = <span class="badge table-warning">重點產業系所</span>
+											break;
+										case 2:
+											deptType = <span class="badge table-primary">國際專修部</span>
+											break;
+									}
 									return (
 										<tr key={`${val.no}-${val.name}-${val.dept}`}>
-											<td>{val.dept}</td>
+											<td>
+												{deptType} {val.dept}
+											</td>
 											<td>{val.no}</td>
 											<td>{val.name}</td>
 											<td>{val.identity}</td>

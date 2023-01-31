@@ -95,6 +95,14 @@ const app = ( () => {
 		let deptsHtmlString = '';
 
 		for (let dept of depts) {
+			switch(dept.is_extended_department){
+				case 1:
+					dept.title = '<span class="badge table-warning">重點產業系所</span>' + dept.title;
+					break;
+				case 2:
+					dept.title = '<span class="badge table-primary">國際專修部</span>' + dept.title;
+					break;
+			}
 			deptsHtmlString += `
 				<tr>
 					<td>${dept.title}</td>

@@ -99,7 +99,8 @@ export default class App extends React.Component {
 						email: student.student_data.email,
 						school: student.student_personal_data.school_name,
 						userID: student.user_id,
-						deptID: student.dept_id
+						deptID: student.dept_id,
+						deptType: dept.is_extended_department
 					});
 				});
 			});

@@ -141,7 +141,7 @@
 		const $oriItem = $(this).parents('.DeptList__item');
 		const system = $(this).parents('.DeptList').data('system');
 		const deptID = $oriItem.data('id');
-		const title = $oriItem.find('.title').text();
+		const title = $oriItem.find('.title').html();
 		const $newItem = $(`
 			<div class="pb-1 pl-1 pr-1 SelectedDeptList__item" data-id=${deptID}>
 				<span class="title">${title}</span>
@@ -160,7 +160,7 @@
 		const $oriItem = $(this).parents('.SelectedDeptList__item');
 		const system = $(this).parents('.SelectedDeptList').data('system');
 		const deptID = $oriItem.data('id');
-		const title = $oriItem.find('.title').text();
+		const title = $oriItem.find('.title').html();
 		const $newItem = $(`
 			<div class="pb-1 pl-1 pr-1 DeptList__item" data-id=${deptID}>
 				<span class="title">${title}</span>
@@ -308,7 +308,7 @@
 		if (!job_title) return alert('職稱不得為空');
 		if (!email) return alert('MAIL 不得為空');
 		if (!phone) return alert('TEL 不得為空');
-		if (!checkPasswordComplex(password)) return alert('密碼複雜度不足');  // 有輸入密碼時檢查密碼複雜度
+		if (!checkPasswordComplex(password)) return alert('密碼複雜度不足，密碼長度至少8碼；且大寫、小寫、數字或特殊符號至少兩種。');  // 有輸入密碼時檢查密碼複雜度
 
 		const data = {
 			password: password === '' ? '' : sha256(password),
@@ -374,7 +374,7 @@
 			if(accountPermission === '管理員'){
 				delBtnHtml = `
 					<td>
-						
+
 					</td>
 				`;
 			} else {
@@ -485,11 +485,20 @@
 
 		systems.forEach((s) => {
 			list[s[0]].forEach((val) => {
+				let deptType = '';
+				switch(val.is_extended_department){
+					case 1:
+						deptType = '<span class="badge table-warning">重點產業系所</span>'
+						break;
+					case 2:
+						deptType = '<span class="badge table-primary">國際專修部</span>'
+						break;
+				}
 				if (permissions[s[2]] && permissions[s[2]].some((v) => (val.id + '') === (v.dept_id + ''))) {
 					// 已被選取的系所
 					$(`.SelectedDeptList[data-system="${s[1]}"]`).append(`
 						<div class="pb-1 pl-1 pr-1 SelectedDeptList__item" data-id=${val.id}>
-							<span class="title">${val.title}</span>
+							<span class="title">${deptType} ${val.title}</span>
 							<span class="btn-remove">
 								<i class="fa fa-arrow-left d-none d-lg-inline" aria-hidden="true"></i>
 								<i class="fa fa-arrow-up d-inline d-lg-none" aria-hidden="true"></i>
@@ -499,7 +508,7 @@
 				} else {
 					$(`.DeptList[data-system="${s[1]}"]`).append(`
 						<div class="pb-1 pl-1 pr-1 DeptList__item" data-id="${val.id}">
-							<span class="title">${val.title}</span>
+							<span class="title">${deptType} ${val.title}</span>
 							<span class="btn-select">
 								<i class="fa fa-arrow-right d-none d-lg-inline" aria-hidden="true"></i>
 								<i class="fa fa-arrow-down d-inline d-lg-none" aria-hidden="true"></i>

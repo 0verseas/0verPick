@@ -270,10 +270,32 @@
 
 		// 綁定系所列表
 		let deptHTML = '';
+		let deptHTML1 = '';
+		let deptHTML2 = '';
+		let deptHTML3 = '';
 		const deptList = _systems[this.value].departments;
 		deptList.forEach(el => {
-			deptHTML += `<option value="${el.id}">${el.title}</option>`;
+			switch(el.is_extended_department){
+				case 1:
+					deptHTML2 += `<option value="${el.id}">${el.title}</option>`;
+					break;
+				case 2:
+					deptHTML3 += `<option value="${el.id}">${el.title}</option>`;
+					break
+				default:
+					deptHTML1 += `<option value="${el.id}">${el.title}</option>`;
+					break;
+			}
 		})
+
+		deptHTML += deptHTML1;
+		if(deptHTML2.length > 0){
+			deptHTML += `<optgroup label="重點產業系所">` + deptHTML2 + `</optgroup>`;
+		}
+
+		if(deptHTML3.length > 0){
+			deptHTML += `<optgroup label="國際專修部">` + deptHTML3 + `</optgroup>`
+		}
 		$deptSel.append(deptHTML);
 
 		// 若過濾結果為只有一個，直接幫使用者選定該系所
@@ -342,6 +364,14 @@
 
 			$infoDiv.show();
 			$deptHeading.text(data.title);
+			switch(data.is_extended_department){
+				case 1:
+					$deptHeading.html('<span class="badge table-warning">重點產業系所</span> ' + $deptHeading.text());
+					break;
+				case 2:
+					$deptHeading.html('<span class="badge table-primary">國際專修部</span> ' + $deptHeading.text());
+					break;
+			}
 			$systemHeading.text(systemName);
 			$downloadCSVBtn.attr('href', `${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}?type=file`);
 
