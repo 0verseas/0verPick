@@ -232,12 +232,15 @@
 	}
 
 	function _handleSubmitCSV() {
+		let data = {};
+		//將reviewer_list_csv 轉換成二維陣列
 		_csvAccounts.forEach((user, i) => {
-			const data = {};
+			data[i] = {}; //宣告第二維陣列
 			user.forEach((val, fieldIndex) => {
+				//將資料按照key匯入
 				if (fieldIndex === 1) {
 					// 密碼加密
-					data[_csvFieldMap[fieldIndex]] = sha256(val);
+					data[i][_csvFieldMap[fieldIndex]] = sha256(val);
 
 					return;
 				}
@@ -245,9 +248,9 @@
 				if (fieldIndex === 7) {
 					// 狀態
 					if (val === '啟用') {
-						data[_csvFieldMap[fieldIndex]] = true;
+						data[i][_csvFieldMap[fieldIndex]] = true;
 					} else {
-						data[_csvFieldMap[fieldIndex]] = false;
+						data[i][_csvFieldMap[fieldIndex]] = false;
 					}
 
 					return;
@@ -256,26 +259,26 @@
 				if (fieldIndex > 7 ) {
 					// "學士班權限","二技班權限","碩士班權限","博士班權限"
 					if (val.toLowerCase() === 'all') {
-						data[_csvFieldMap[fieldIndex]] = 'all';
+						data[i][_csvFieldMap[fieldIndex]] = 'all';
 					} else {
-						data[_csvFieldMap[fieldIndex]] = val === '' ? [] : val.split('#');
+						data[i][_csvFieldMap[fieldIndex]] = val === '' ? [] : val.split('#');
 					}
 
 					return;
 				}
 
-				data[_csvFieldMap[fieldIndex]] = val;
+				data[i][_csvFieldMap[fieldIndex]] = val;
 			});
+		});
 
-			window.API.addUser(data, (err, data) => {
-				if (err) {
-					console.error(err);
-					return;
-				}
+		window.API.addUser(data, (err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
 
-				_updateUserList();
+			_updateUserList();
 
-			});
 		});
 
 		$CSVModal.modal('hide');
@@ -310,7 +313,7 @@
 		if (!phone) return alert('TEL 不得為空');
 		if (!checkPasswordComplex(password)) return alert('密碼複雜度不足，密碼長度至少8碼；且大寫、小寫、數字或特殊符號至少兩種。');  // 有輸入密碼時檢查密碼複雜度
 
-		const data = {
+		let data = {
 			password: password === '' ? '' : sha256(password),
 			username,
 			name,
@@ -325,27 +328,30 @@
 			two_year_tech_department_permissions
 		};
 
-		type === 'C' && window.API.addUser(data, (err, data) => {
-			if (err) {
-				console.error(err);
-				return;
-			}
+		if(type === 'C'){
+			data = [data];
+			window.API.addUser(data, (err, data) => {
+				if (err) {
+					console.error(err);
+					return;
+				}
 
-			$AccountModal.modal('hide');
-			_updateUserList();
+				$AccountModal.modal('hide');
+				_updateUserList();
 
-		});
+			});
+		} else if (type === 'U'){
+			window.API.editUser({ ...data, userID }, (err, data) => {
+				if (err) {
+					console.error(err);
+					return;
+				}
 
-		type === 'U' && window.API.editUser({ ...data, userID }, (err, data) => {
-			if (err) {
-				console.error(err);
-				return;
-			}
 
-
-			$AccountModal.modal('hide');
-			_updateUserList();
-		});
+				$AccountModal.modal('hide');
+				_updateUserList();
+			});
+		}
 	}
 
 	/**
