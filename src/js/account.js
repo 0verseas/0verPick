@@ -222,16 +222,8 @@
 		fileReaderAsBinaryString.readAsBinaryString(file);
 	}
 
-	//依據flag 數值做判斷要去呼叫哪個函式 0 ： 新增   1：覆蓋
+	//依據flag 數值做判斷要去呼叫哪個 API 函式 0 ： 新增   1：覆蓋
 	function _handleSubmitSwitch(){
-		if(flag){
-			_handleImportSubmit();
-		} else {
-			_handleSubmitCSV();
-		}
-	}
-
-	function _handleSubmitCSV() {
 		let data = {};
 		//將reviewer_list_csv 轉換成二維陣列
 		_csvAccounts.forEach((user, i) => {
@@ -271,16 +263,29 @@
 			});
 		});
 
-		window.API.addUser(data, (err, data) => {
-			if (err) {
-				console.error(err);
-				return;
-			}
+		if(flag){
+			//呼叫匯入並覆蓋的 API function 傳送資料到後端
+			window.API.importUserList(data, (err, data) => {
+				if (err) {
+					console.error(err);
+					return;
+				} else {
+					alert(data.messages[0]);
+				}
 
-			_updateUserList();
+				_updateUserList();
+			});
+		} else {
+			//呼叫新增使用者的 API function 傳送資料到後端
+			window.API.addUser(data, (err, data) => {
+				if (err) {
+					console.error(err);
+					return;
+				}
 
-		});
-
+				_updateUserList();
+			});
+		}
 		$CSVModal.modal('hide');
 	}
 
@@ -605,62 +610,6 @@
 	function _uploadList(){
 		flag = 1;
 		$fileInput.trigger('click');
-	}
-
-	//按下匯入後 將reviewer_list_csv資料處理後傳送至後端 function
-	function _handleImportSubmit() {
-		let data = {};
-		//將reviewer_list_csv 轉換成二維陣列
-		_csvAccounts.forEach((user, i) => {
-			data[i] = {}; //宣告第二維陣列
-			user.forEach((val, fieldIndex) => {
-				//將資料按照key匯入
-				if (fieldIndex === 1) {
-					// 密碼加密
-					data[i][_csvFieldMap[fieldIndex]] = sha256(val);
-
-					return;
-				}
-
-				if (fieldIndex === 7) {
-					// 狀態
-					if (val === '啟用') {
-						data[i][_csvFieldMap[fieldIndex]] = true;
-					} else {
-						data[i][_csvFieldMap[fieldIndex]] = false;
-					}
-
-					return;
-				}
-
-				if (fieldIndex > 7 ) {
-					// "學士班權限","二技班權限","碩士班權限","博士班權限"
-					if (val.toLowerCase() === 'all') {
-						data[i][_csvFieldMap[fieldIndex]] = 'all';
-					} else {
-						data[i][_csvFieldMap[fieldIndex]] = val === '' ? [] : val.split('#');
-					}
-
-					return;
-				}
-
-				data[i][_csvFieldMap[fieldIndex]] = val;
-			});
-		});
-
-		//呼叫API function 傳送資料到後端
-		window.API.importUserList(data, (err, data) => {
-			if (err) {
-				console.error(err);
-				return;
-			} else {
-				alert(data.messages[0]);
-			}
-
-			_updateUserList();
-		});
-
-		$CSVModal.modal('hide');
 	}
 
 	async function _updateUserList() {
