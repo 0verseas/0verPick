@@ -127,13 +127,22 @@
 	}
 
 	function _handleDelAccount() {
-		if (confirm('確定停用？')) {
-			const userID = $(this).parents('.AccountItem').data('id');
-
-			window.API.disableUser(userID, (data) => {
-
-				_updateUserList();
-			});
+		const userID = $(this).parents('.AccountItem').data('id');
+		const userData = _userList.filter((val) => val.id === userID)[0];
+		if (userData.school_reviewer){
+			if (userData.school_reviewer.has_admin == true){
+				alert('無法停用管理員帳號');
+				return;
+			} else {
+				if (confirm('確定停用？')) {
+					const userID = $(this).parents('.AccountItem').data('id');
+		
+					window.API.disableUser(userID, (data) => {
+		
+						_updateUserList();
+					});
+				}
+			}
 		}
 	}
 
