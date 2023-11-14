@@ -37,6 +37,26 @@ class File extends React.Component {
 	}
 }
 
+// 身份驗證資料：檔案的 component
+class IdentityFile extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+
+	render() {
+		// 拿到檔案的連結
+		const src = `${window.getConfig().apiBase}/reviewers/students/${this.props.userID}/${this.props.type}/item/${this.props.itemID}/file/${this.props.file}`;
+
+		return (
+			<div class="img-thumbnail non-img-file-thumbnail" style={{display: 'inline-block'}}>
+				<a href={src} target="_blank">
+					<i className={`fa fa-file-${this.props.fileType}-o`} aria-hidden="true"></i>
+				</a>
+			</div>
+		);
+	}
+}
+
 // 備審資料的作品集 component
 class WorkFiles extends React.Component {
 	constructor(props) {
@@ -223,6 +243,7 @@ export default class StudentDetailModal extends React.Component {
 			engName: '',
 			birth: '',
 			resident: '', // 僑居地
+			residentId: '', // 僑居地id
 			gender: '',
 			tel: '',
 			phone: '',
@@ -233,13 +254,34 @@ export default class StudentDetailModal extends React.Component {
 			diplomas: [], // 學歷證明
 			transcripts: [], // 成績單
 			applicationDocs: [], // 備審資料
+			identityDocs: {
+				'01' : 'ID-card',
+				'02' : 'quit-school',
+				'03' : 'overseas-stay-years',
+				'04' : 'Taiwan-stay-dates',
+				'05' : 'hk-or-mo-guarantee',
+				'06' : 'head-shot',
+				'07' : 'home-return-permit',
+				'08' : 'change-of-name',
+				'09' : 'diploma',
+				'10' : 'scholl-transcript',
+				'11' : 'authorize-check-diploma',
+				'12' : 'olympia',
+				'13' : 'placement-transcript',
+				'14' : 'transcript-reference-table',
+				'15' : 'hk-mo-relations-ordinance',
+				'16' : 'tech-course-passed-proof',
+				'17' : 'foreign-passport'}, // 身份驗證
+			hasidentityDocs: {},
 			disability: '', // 身障程度
 		};
 
 		this.renderStudentData = this.renderStudentData.bind(this);
 		this.getStudentData = this.getStudentData.bind(this);
+		this.getIdentityDocs = this.getIdentityDocs.bind(this);
 		this.imgOrFile = this.imgOrFile.bind(this);
 		this.getFileType = this.getFileType.bind(this);
+		this.getIdentityFileURL = this.getIdentityFileURL.bind(this);
 	}
 
 	componentDidMount() {
@@ -333,6 +375,7 @@ export default class StudentDetailModal extends React.Component {
 				engName: student.student_data.eng_name,
 				birth: student.student_personal_data.birthday,
 				resident: `${student.student_personal_data.resident_location_data.continent}/${student.student_personal_data.resident_location_data.country}`, // 國籍
+				residentId: student.student_personal_data.resident_location, // 僑居地id
 				gender: student.student_personal_data.gender === 'F' ? '女' : '男',
 				tel: student.student_personal_data.resident_phone,
 				phone: student.student_personal_data.resident_cellphone,
@@ -367,6 +410,40 @@ export default class StudentDetailModal extends React.Component {
 				applicationDocs: data || []
 			});
 			// console.log('this.props', this.props);
+		});
+
+		Object.keys(this.state.identityDocs).map((identity_doc_code, i) => {
+			const value = this.state.identityDocs[identity_doc_code];
+			this.getIdentityDocs(parseInt(userID), identity_doc_code, value);
+		});
+	}
+
+	// 確認學上是否有相關的身份驗證檔案
+	getIdentityDocs(userID, itemID, itemName) {
+		window.API.getIdentityDocs({
+			userID, // 報名序號
+			itemID  // 學生上傳的身份驗證檔案碼
+		}, (err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+
+			data == 'true' ?
+			this.setState((prevState) => ({
+				hasidentityDocs: {
+					...prevState.hasidentityDocs,
+					[itemID]: data
+				}
+			}))
+			: ''
+
+			itemID == '08' ? 
+			this.setState({
+				change_of_name_code: itemID,
+				change_of_name_file: itemName
+			})
+			: ''
 		});
 	}
 
@@ -419,6 +496,19 @@ export default class StudentDetailModal extends React.Component {
 				/>
 			);
 		}
+	}
+
+	// 取得學生上傳的身份驗證檔案 URL
+	getIdentityFileURL(code, file) {
+		return (
+			<IdentityFile
+				file={parseInt(this.props.selectedStudent.userID) + '_' + file + '.pdf'}
+				userID={parseInt(this.props.selectedStudent.userID)}
+				type="uploaded-file"
+				itemID={code}
+				fileType='pdf'
+			/>
+		);
 	}
 
 	// 判斷是哪一種副檔名
@@ -518,6 +608,22 @@ export default class StudentDetailModal extends React.Component {
 						</tbody>
 					</Table>
 					<hr />
+
+					{
+						// 判斷是否有改名契的檔案，有就顯示
+						(this.state.hasidentityDocs['08'] && (this.state.residentId == '113' || this.state.residentId == '127')) ? 
+                            <div className="mb-2">
+                            <Card>
+                            	<CardHeader>改名契 <small>簡章規定應繳文件</small></CardHeader>
+                            	<CardBody>
+                            			{
+                            				this.getIdentityFileURL(this.state.change_of_name_code, this.state.change_of_name_file)
+                            			}
+                            	</CardBody>
+                            </Card>
+                            </div>
+						: ''
+					}
 
 					{
 						this.state.applicationDocs.map((doc, i) => {

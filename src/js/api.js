@@ -206,6 +206,20 @@ window.API = (() => {
 		.catch((err) => { _handleError(err, callback) });
 	}
 
+	function getIdentityDocs(data, callback) {
+		_setLoading();
+		fetch(`${_config.apiBase}/reviewers/students/${data.userID}/uploaded-file/item/${data.itemID}/file`, {
+		    method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+		})
+		.then(_parseData)
+		.then((data) => { callback && callback(null, data) })
+		.catch((err) => { _handleError(err, callback) });
+	}
+
 	function getDownloadableDepts(system = 'all', callback) {
 		_setLoading();
 		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments`, {
@@ -564,6 +578,7 @@ window.API = (() => {
 		getStudentDiploma,
 		getStudentTranscripts,
 		getApplicationDoc,
+		getIdentityDocs,
 		getDownloadableDepts,
 		getAllCanReviewDepts,
 		getStudentMergedFile,
