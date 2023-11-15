@@ -243,7 +243,7 @@ export default class StudentDetailModal extends React.Component {
 			engName: '',
 			birth: '',
 			resident: '', // 僑居地
-			residentId: '', // 僑居地id
+			residentID: '', // 僑居地id
 			gender: '',
 			tel: '',
 			phone: '',
@@ -254,25 +254,8 @@ export default class StudentDetailModal extends React.Component {
 			diplomas: [], // 學歷證明
 			transcripts: [], // 成績單
 			applicationDocs: [], // 備審資料
-			identityDocs: {
-				'01' : 'ID-card',
-				'02' : 'quit-school',
-				'03' : 'overseas-stay-years',
-				'04' : 'Taiwan-stay-dates',
-				'05' : 'hk-or-mo-guarantee',
-				'06' : 'head-shot',
-				'07' : 'home-return-permit',
-				'08' : 'change-of-name',
-				'09' : 'diploma',
-				'10' : 'scholl-transcript',
-				'11' : 'authorize-check-diploma',
-				'12' : 'olympia',
-				'13' : 'placement-transcript',
-				'14' : 'transcript-reference-table',
-				'15' : 'hk-mo-relations-ordinance',
-				'16' : 'tech-course-passed-proof',
-				'17' : 'foreign-passport'}, // 身份驗證
-			hasidentityDocs: {},
+			identityDocs: {}, // 身份驗證
+			hasIdentityDocs: {},
 			disability: '', // 身障程度
 		};
 
@@ -375,7 +358,7 @@ export default class StudentDetailModal extends React.Component {
 				engName: student.student_data.eng_name,
 				birth: student.student_personal_data.birthday,
 				resident: `${student.student_personal_data.resident_location_data.continent}/${student.student_personal_data.resident_location_data.country}`, // 國籍
-				residentId: student.student_personal_data.resident_location, // 僑居地id
+				residentID: student.student_personal_data.resident_location, // 僑居地id
 				gender: student.student_personal_data.gender === 'F' ? '女' : '男',
 				tel: student.student_personal_data.resident_phone,
 				phone: student.student_personal_data.resident_cellphone,
@@ -411,39 +394,35 @@ export default class StudentDetailModal extends React.Component {
 			});
 			// console.log('this.props', this.props);
 		});
-
-		Object.keys(this.state.identityDocs).map((identity_doc_code, i) => {
-			const value = this.state.identityDocs[identity_doc_code];
-			this.getIdentityDocs(parseInt(userID), identity_doc_code, value);
-		});
+		
+		this.getIdentityDocs(parseInt(userID)); // 取得學生上傳的身份驗證資料
 	}
 
 	// 確認學上是否有相關的身份驗證檔案
-	getIdentityDocs(userID, itemID, itemName) {
+	getIdentityDocs(userID) {
 		window.API.getIdentityDocs({
-			userID, // 報名序號
-			itemID  // 學生上傳的身份驗證檔案碼
+			userID // 報名序號
 		}, (err, data) => {
 			if (err) {
 				console.error(err);
 				return;
 			}
 
-			data == 'true' ?
-			this.setState((prevState) => ({
-				hasidentityDocs: {
-					...prevState.hasidentityDocs,
-					[itemID]: data
-				}
-			}))
-			: ''
-
-			itemID == '08' ? 
 			this.setState({
-				change_of_name_code: itemID,
-				change_of_name_file: itemName
+				identityDocs: data || {}
+			});
+
+			let hasIdentityDocs = Object.entries(this.state.identityDocs);
+
+			hasIdentityDocs.map(([code, value]) => {
+				code == '08' ?
+				this.setState({
+					change_of_name_file: true,
+					change_of_name_code: code,
+					change_of_name_filename: value
+				})
+				: ''
 			})
-			: ''
 		});
 	}
 
@@ -502,7 +481,7 @@ export default class StudentDetailModal extends React.Component {
 	getIdentityFileURL(code, file) {
 		return (
 			<IdentityFile
-				file={parseInt(this.props.selectedStudent.userID) + '_' + file + '.pdf'}
+				file={file}
 				userID={parseInt(this.props.selectedStudent.userID)}
 				type="uploaded-file"
 				itemID={code}
@@ -611,13 +590,13 @@ export default class StudentDetailModal extends React.Component {
 
 					{
 						// 判斷是否有改名契的檔案，有就顯示
-						(this.state.hasidentityDocs['08'] && (this.state.residentId == '113' || this.state.residentId == '127')) ? 
+						(this.state.change_of_name_file == true && (this.state.residentID == '113' || this.state.residentID == '127')) ? 
                             <div className="mb-2">
                             <Card>
                             	<CardHeader>改名契 <small>簡章規定應繳文件</small></CardHeader>
                             	<CardBody>
                             			{
-                            				this.getIdentityFileURL(this.state.change_of_name_code, this.state.change_of_name_file)
+                            				this.getIdentityFileURL(this.state.change_of_name_code, this.state.change_of_name_filename)
                             			}
                             	</CardBody>
                             </Card>

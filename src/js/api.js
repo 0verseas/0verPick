@@ -208,7 +208,7 @@ window.API = (() => {
 
 	function getIdentityDocs(data, callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/students/${data.userID}/uploaded-file/item/${data.itemID}/file`, {
+		fetch(`${_config.apiBase}/reviewers/students/${data.userID}`, {
 		    method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
