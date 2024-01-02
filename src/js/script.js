@@ -23,7 +23,7 @@
 			data.school_reviewer.phd_permissions.length,
 			data.school_reviewer.two_year_tech_department_permissions.length
 		);
-		
+
 		// 不管有沒有權限 沒有已打包的學生資料就不出現港二技頁面
 		if(!data.two_year_need_review){
 			$('.Nav__twoyear').remove();
