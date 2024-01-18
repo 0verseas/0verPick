@@ -71,7 +71,7 @@
 		</li>
 		<li>
 			<div>
-				<a href="https://cmn-hant.overseas.ncnu.edu.tw/chapters"  target="_blank">
+				<a href="https://cmn-hant.overseas.ncnu.edu.tw/further-study-area/admissions-guide/"  target="_blank">
 					<i class="fa fa-download" aria-hidden="true"></i> 各地區招生簡章
 				</a>
 			</div>
