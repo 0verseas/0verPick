@@ -538,9 +538,9 @@ window.API = (() => {
 
 		console.error(status);
 		err.json().then((msg) => {
-			if (err.status != 401) {
+			// if (err.status != 401) {
 				alert(msg.messages[0]);
-			}
+			// }
 			callback && callback({
 				status,
 				msg
