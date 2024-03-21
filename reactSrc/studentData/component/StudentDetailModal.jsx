@@ -25,27 +25,7 @@ class File extends React.Component {
 
 	render() {
 		// 拿到檔案的連結
-		const src = `${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/types/${this.props.type_id}/${this.props.type}/${this.props.file}`;
-
-		return (
-			<div class="img-thumbnail non-img-file-thumbnail" style={{display: 'inline-block'}}>
-				<a href={src} target="_blank">
-					<i className={`fa fa-file-${this.props.fileType}-o`} aria-hidden="true"></i>
-				</a>
-			</div>
-		);
-	}
-}
-
-// 身份驗證資料：檔案的 component
-class IdentityFile extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
-	render() {
-		// 拿到檔案的連結
-		const src = `${window.getConfig().apiBase}/reviewers/students/${this.props.userID}/${this.props.type}/item/${this.props.itemID}/file/${this.props.file}`;
+		const src = `${window.getConfig().apiBase}/young-associate/2/students/${this.props.deptID}/${this.props.userID}/admission-files/${this.props.type}/file/${this.props.file}`;
 
 		return (
 			<div class="img-thumbnail non-img-file-thumbnail" style={{display: 'inline-block'}}>
@@ -95,8 +75,7 @@ class WorkFiles extends React.Component {
 					system={this.props.system}
 					deptID={this.props.deptID}
 					userID={this.props.userID}
-					type="admission-selection-application-document"
-					type_id={this.props.type_id}
+					type={this.props.type}
 					fileType={fileType}
 				/>
 			);
@@ -107,8 +86,7 @@ class WorkFiles extends React.Component {
 					system={this.props.system}
 					deptID={this.props.deptID}
 					userID={this.props.userID}
-					type="admission-selection-application-document"
-					type_id={this.props.type_id}
+					type={this.props.type}
 					fileType={fileType}
 				/>
 			);
@@ -201,12 +179,8 @@ class Image extends React.Component {
 
 	render() {
 		// 判斷 src
-		let src = `${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/${this.props.type}/${this.props.img}`;
+		let src = `${window.getConfig().apiBase}/young-associate/2/students/${this.props.deptID}/${this.props.userID}/admission-files/${this.props.type}/file/${this.props.img}`;
 
-		//  如果是備審資料，src 改成備審資料的
-		if (this.props.type == 'admission-selection-application-document') {
-			src = `${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/types/${this.props.type_id}/${this.props.type}/${this.props.img}`;
-		}
 		// console.log(this.props.img);
 		return (
 			<div className="" style={{display: 'inline-block'}}>
@@ -261,10 +235,8 @@ export default class StudentDetailModal extends React.Component {
 
 		this.renderStudentData = this.renderStudentData.bind(this);
 		this.getStudentData = this.getStudentData.bind(this);
-		this.getIdentityDocs = this.getIdentityDocs.bind(this);
 		this.imgOrFile = this.imgOrFile.bind(this);
 		this.getFileType = this.getFileType.bind(this);
-		this.getIdentityFileURL = this.getIdentityFileURL.bind(this);
 	}
 
 	componentDidMount() {
@@ -347,32 +319,27 @@ export default class StudentDetailModal extends React.Component {
 			}
 
 			this.setState({
-				no: student.student_misc_data.overseas_student_id, // 僑生編號
-				remark: student.student_misc_data.overseas_student_id.toString().substr(0,2) == '06' ||
-						student.student_misc_data.overseas_student_id.toString().substr(0,2) == '07' ||
-						student.student_misc_data.overseas_student_id.toString().substr(0,2) == '08' ||
-						student.student_misc_data.overseas_student_id.toString().substr(0,2) == '09'? '師培計畫' : '', //師培生註記
+				no: student.student_data.overseas_student_id, // 僑生編號
+				remark: student.student_data.overseas_student_id.toString().substr(0,2) == '06' ||
+						student.student_data.overseas_student_id.toString().substr(0,2) == '07' ||
+						student.student_data.overseas_student_id.toString().substr(0,2) == '08' ||
+						student.student_data.overseas_student_id.toString().substr(0,2) == '09'? '師培計畫' : '', //師培生註記
 				email: student.student_data.email,
 				id: student.user_id.toString().padStart(6, 0), // 報名序號
 				name: student.student_data.name,
 				engName: student.student_data.eng_name,
-				birth: student.student_personal_data.birthday,
-				resident: `${student.student_personal_data.resident_location_data.continent}/${student.student_personal_data.resident_location_data.country}`, // 國籍
-				residentID: student.student_personal_data.resident_location, // 僑居地id
-				gender: student.student_personal_data.gender === 'F' ? '女' : '男',
-				tel: student.student_personal_data.resident_phone,
-				phone: student.student_personal_data.resident_cellphone,
-				gSchool: student.student_personal_data.school_name, // 畢業學校
-				gSchoolCountry: `${student.student_personal_data.school_country_data.continent}/${student.student_personal_data.school_country_data.country}`, // 學校國別
+				birth: student.student_data.birthday,
+				resident: `${student.student_data.resident_location_data.continent}/${student.student_data.resident_location_data.country}`, // 國籍
+				residentID: student.student_data.resident_location, // 僑居地id
+				gender: student.student_data.gender === 'F' ? '女' : '男',
+				tel: student.student_data.resident_phone,
+				phone: student.student_data.resident_cellphone,
+				gSchool: student.student_data.school_name, // 畢業學校
+				gSchoolCountry: `${student.student_data.school_country_data.continent}/${student.student_data.school_country_data.country}`, // 學校國別
 				aSchool: data.school.title, // 申請學校
 				dept: data.title,
 				deptType: deptType,
-				disability: student.student_personal_data.disability_level ? student.student_personal_data.disability_level+student.student_personal_data.disability_category : '無',
-				// 副學士和高級文憑的調查（只香港 && 學士班有）
-				HK_have_associate_degree_or_higher_diploma_graduated: student.student_personal_data.HK_have_associate_degree_or_higher_diploma_graduated===1 ? '是' : student.student_personal_data.HK_have_associate_degree_or_higher_diploma_graduated===0 ? '否' : '',  // 是否取得副學士或高級文憑畢業證書
-				HK_have_AD_or_HD: student.student_personal_data.HK_have_AD_or_HD === 1 ? '副學士學位' : student.student_personal_data.HK_have_AD_or_HD === 2 ? '高級文憑' : '無',
-				HK_AD_or_HD_class_name: student.student_personal_data.HK_AD_or_HD_class_name,
-				HK_AD_or_HD_school_name: student.student_personal_data.HK_AD_or_HD_school_name,
+				disability: student.student_data.disability_level ? student.student_data.disability_level+student.student_data.disability_category : '無',
 				birthLimitMessage:birthLimitMessage,//年齡限制文字訊息
 				genderLimitMessage:genderLimitMessage,//性別限制文字訊息
 			});
@@ -394,59 +361,10 @@ export default class StudentDetailModal extends React.Component {
 			});
 			// console.log('this.props', this.props);
 		});
-		
-		this.getIdentityDocs(parseInt(userID)); // 取得學生上傳的身份驗證資料
-	}
-
-	// 確認學上是否有相關的身份驗證檔案
-	getIdentityDocs(userID) {
-		window.API.getIdentityDocs({
-			userID // 報名序號
-		}, (err, data) => {
-			if (err) {
-				console.error(err);
-				return;
-			}
-
-			this.setState({
-				identityDocs: data || {}
-			});
-
-			let hasIdentityDocs = Object.entries(this.state.identityDocs);
-
-			hasIdentityDocs.map(([code, value]) => {
-				code == '08' ?
-				this.setState({
-					change_of_name_file: true,
-					change_of_name_code: code,
-					change_of_name_filename: value
-				})
-				: ''
-			})
-		});
 	}
 
 	// 判斷是 img 還是 file
-	imgOrFile(file, type_id) {
-		// 作品集要另外處理
-		if ([18, 38, 58, 78].includes(type_id)) {
-			return (
-				<WorkFiles
-					system={this.props.system}
-					deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
-					userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
-					type="admission-selection-application-document"
-					type_id={type_id}
-					name={file.name}
-					position={file.position}
-					work_type={file.work_type}
-					memo={file.memo}
-					work_urls={file.work_urls}
-					authorization_files={file.authorization_files}
-					work_files={file.work_files}
-				/>
-			);
-		}
+	imgOrFile(file, type_name) {
 
 		const fileType = this.getFileType(file.split('.')[1]);
 
@@ -457,8 +375,7 @@ export default class StudentDetailModal extends React.Component {
 					system={this.props.system}
 					deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
 					userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
-					type="admission-selection-application-document"
-					type_id={type_id}
+					type={type_name}
 					fileType={fileType}
 				/>
 			);
@@ -469,25 +386,11 @@ export default class StudentDetailModal extends React.Component {
 					system={this.props.system}
 					deptID={this.props.selectedStudent ? this.props.selectedStudent.deptID : ''}
 					userID={this.props.selectedStudent ? this.props.selectedStudent.userID : ''}
-					type="admission-selection-application-document"
-					type_id={type_id}
+					type={type_name}
 					fileType={fileType}
 				/>
 			);
 		}
-	}
-
-	// 取得學生上傳的身份驗證檔案 URL
-	getIdentityFileURL(code, file) {
-		return (
-			<IdentityFile
-				file={file}
-				userID={parseInt(this.props.selectedStudent.userID)}
-				type="uploaded-file"
-				itemID={code}
-				fileType='pdf'
-			/>
-		);
 	}
 
 	// 判斷是哪一種副檔名
@@ -521,25 +424,25 @@ export default class StudentDetailModal extends React.Component {
 						<tbody>
 							<tr>
 								<th>僑生編號</th>
-								<td>{ this.state.no }</td>
-								<th>備註</th>
-								<td>{ this.state.remark}</td>
-							</tr>
-							<tr>
+								<td >{ this.state.no }</td>
 								<th>報名序號</th>
 								<td>{ this.state.id }</td>
-								<th>姓名</th>
-								<td>{ this.state.name }</td>
+								<th>備註</th>
+								<td colSpan={2}>{ this.state.remark}</td>
+							</tr>
+							<tr>
+								<th>中文姓名</th>
+								<td colSpan={2}>{ this.state.name }</td>
 								<th>英文姓名</th>
-								<td>{ this.state.engName }</td>
+								<td colSpan={2}>{ this.state.engName }</td>
 							</tr>
 							<tr>
 								<th>出生日期</th>
 								<td>{ this.state.birth }</td>
-								<th>僑居地</th>
-								<td>{ this.state.resident }</td>
 								<th>性別</th>
 								<td>{ this.state.gender }</td>
+								<th>僑居地</th>
+								<td>{ this.state.resident }</td>
 							</tr>
 							<tr>
 								<th>email</th>
@@ -565,19 +468,6 @@ export default class StudentDetailModal extends React.Component {
 								<th>系所</th>
 								<td colSpan={2}>{this.state.deptType } { this.state.dept }</td>
 							</tr>
-							{/*香港學士班的副學士或高級文憑調查*/}
-							<tr>
-								<th colSpan={2}>曾經修讀或正在修習<br />副學士或高級文憑？</th>
-								<td>{ this.state.HK_have_AD_or_HD}</td>
-								<th colSpan={2}>是否已取得副學士或<br />高級文憑畢業證書</th>
-								<td>{ this.state.HK_have_associate_degree_or_higher_diploma_graduated}</td>
-							</tr>
-							<tr>
-								<th>副學士或高級文憑學校</th>
-								<td colSpan={2}>{ this.state.HK_AD_or_HD_school_name}</td>
-								<th>副學士或高級文憑課程</th>
-								<td colSpan={2}>{ this.state.HK_AD_or_HD_class_name}</td>
-							</tr>
 							<tr>
 								<th>系所規定<br/>性別限制</th>
 								<td colSpan={1}>{ this.state.genderLimitMessage}</td>
@@ -589,33 +479,15 @@ export default class StudentDetailModal extends React.Component {
 					<hr />
 
 					{
-						// 判斷是否有改名契的檔案，有就顯示
-						(this.state.change_of_name_file == true && (this.state.residentID == '113' || this.state.residentID == '127')) ? 
-                            <div className="mb-2">
-                            <Card>
-                            	<CardHeader>改名契 <small>簡章規定應繳文件</small></CardHeader>
-                            	<CardBody>
-                            			{
-                            				this.getIdentityFileURL(this.state.change_of_name_code, this.state.change_of_name_filename)
-                            			}
-                            	</CardBody>
-                            </Card>
-                            </div>
-						: ''
-					}
-
-					{
 						this.state.applicationDocs.map((doc, i) => {
 							return (
 								<div className="mb-2">
 									<Card>
-										<CardHeader>{doc.type.name} {doc.required ? <small>必審資料</small> : ''}</CardHeader>
+										<CardHeader>{doc.name} {(doc.type != 'proficiency') ? <span class="badge badge-danger">必繳</span> : <span class="badge badge-warning">選繳</span>}</CardHeader>
 										<CardBody>
 											{
-												(doc.paper != null) ? '以紙本寄送至貴系' :
-												// 作品集不只是一堆檔案，要另外處理
-												[18, 38, 58, 78].includes(doc.type_id) ? this.imgOrFile(doc.files, doc.type_id) : doc.files.map(file => {
-													return this.imgOrFile(file, doc.type_id);
+												doc.files.map(file => {
+													return this.imgOrFile(file, doc.type);
 												})
 											}
 										</CardBody>

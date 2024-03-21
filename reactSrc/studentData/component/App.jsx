@@ -15,7 +15,7 @@ export default class App extends React.Component {
 		super(props);
 		this.systemID = window.getSystem();
 		this.systemKeyMap = ['', 'department', 'two-year-tech', 'master', 'phd'];
-		this.identityMap = ['', '港澳生', '港澳具外國國籍之華裔學生', '海外僑生', '在臺港澳生', '在臺僑生', '僑先部結業生'];
+		// this.identityMap = ['', '港澳生', '港澳具外國國籍之華裔學生', '海外僑生', '在臺港澳生', '在臺僑生', '僑先部結業生'];
 		this.state = {
 			studentList: [
 				/*{
@@ -79,7 +79,7 @@ export default class App extends React.Component {
 	}
 
 	updateStudentData() {
-		window.API.getStudents(this.systemKeyMap[this.systemID],(err, data) => {
+		window.API.getStudents("young-associate",(err, data) => {
 			if (err) {
 				console.error(err);
 				return;
@@ -91,13 +91,13 @@ export default class App extends React.Component {
 				dept.students.forEach((student) => {
 					studentList.push({
 						dept: deptName,
-						no: student.student_misc_data.overseas_student_id,
+						no: student.student_data.overseas_student_id,
 						name: student.student_data.name,
-						identity: this.identityMap[student.student_qualification_verify.identity],
-						resident: student.student_personal_data.resident_location_data.country,
+						identity: "海外僑生",
+						resident: student.student_data.resident_location_data.country,
 						order: student.order,
 						email: student.student_data.email,
-						school: student.student_personal_data.school_name,
+						school: student.student_data.school_name,
 						userID: student.user_id,
 						deptID: student.dept_id,
 						deptType: dept.is_extended_department
@@ -118,7 +118,7 @@ export default class App extends React.Component {
 	}
 
 	handleDownload() {
-		window.location.href = `${window.getConfig().apiBase}/reviewers/${this.systemKeyMap[this.systemID]}/students?type=file`;
+		window.location.href = `${window.getConfig().apiBase}/young-associate/${this.systemKeyMap[this.systemID]}/students?type=file`;
 	}
 
 	parseList() {
@@ -142,13 +142,13 @@ export default class App extends React.Component {
 	}
 
 	render() {
-		const systemName = ['', '學士班', '港二技', '碩士班', '博士班'];
+		// const systemName = ['', '學士班', '港二技', '碩士班', '博士班'];
 		const parsedStudentList = this.parseList();
 		return (
 			<div>
 				<Row className="mb-2">
 					<Col>
-						<h4 className="d-inline">{ `${systemName[this.systemID]}學生資料` }</h4>
+						<h4 className="d-inline">{ `海青班學生資料` }</h4>
 						{!!this.state.studentList.length &&
 							<Button className="aligb-top float-right" color="primary" size="sm" onClick={this.handleDownload}>下載學生基本資料(Excel)</Button>
 						}

@@ -7,61 +7,28 @@ const app = ( () => {
 	/**
 	 * cache DOM
 	 */
-	const $bachelorTbody = $('#bachelorTbody');
-	const $twoYearTechTbody = $('#twoYearTechTbody');
-	const $masterTbody = $('#masterTbody');
-	const $phdTbody = $('#phdTbody');
+	const $oyvtpTbody = $('#oyvtpTbody');
 
-	const $bachelorNavItem = $('#bachelor-nav-item');
-	const $twoYearTechNavItem = $('#two-year-tech-nav-item');
-	const $masterNavItem = $('#master-nav-item');
-	const $phdNavItem = $('#phd-nav-item');
+	const $oyvtpNavItem = $('#oyvtp-nav-item');
 
 	// 下載某學制的審查結果回覆表
-	const $bachelorDownload = $('#bachelor-download-review-form');
-	const $twoYearTechDownload = $('#two-year-tech-download-review-form');
-	const $masterDownload = $('#master-download-review-form');
-	const $phdDownload = $('#phd-download-review-form');
+	const $oyvtpDownload = $('#oyvtp-download-review-form');
 
 	// 確認並鎖定某學制的審查結果
-	const $bachelorCantComfirm = $('#bachelor-cant-confirm');
-	const $twoYearTechCantConfirm = $('#two-year-tech-cant-confirm');
-	const $masterCantConfirm = $('#master-cant-confirm');
-	const $phdCantConfirm = $('#phd-cant-confirm');
+	const $oyvtpCantComfirm = $('#oyvtp-cant-confirm');
 
-	const $bachelorCanComfirm = $('#bachelor-can-confirm');
-	const $twoYearTechCanConfirm = $('#two-year-tech-can-confirm');
-	const $masterCanConfirm = $('#master-can-confirm');
-	const $phdCanConfirm = $('#phd-can-confirm');
+	const $oyvtpCanComfirm = $('#oyvtp-can-confirm');
 
 	// 確認並鎖定某學制的審查結果
-	const $bachelorConfirm = $('#bachelor-confirm');
-	const $twoYearTechConfirm = $('#two-year-tech-confirm');
-	const $masterConfirm = $('#master-confirm');
-	const $phdConfirm = $('#phd-confirm');
+	const $oyvtpConfirm = $('#oyvtp-confirm');
 
 	// 最後送出資訊
-	const $bachelorConfirmBlock = $('#bachelor-confirm-block');
-	const $bachelorConfirmBy = $('#bachelor-confirm-by');
-	const $bachelorConfirmAt = $('#bachelor-confirm-at');
-
-	const $twoYearTechConfirmBlock = $('#two-year-tech-confirm-block');
-	const $twoYearTechConfirmBy = $('#two-year-tech-confirm-by');
-	const $twoYearTechConfirmAt = $('#two-year-tech-confirm-at');
-
-	const $masterConfirmBlock = $('#master-confirm-block');
-	const $masterConfirmBy = $('#master-confirm-by');
-	const $masterConfirmAt = $('#master-confirm-at');
-
-	const $phdConfirmBlock = $('#phd-confirm-block');
-	const $phdConfirmBy = $('#phd-confirm-by');
-	const $phdConfirmAt = $('#phd-confirm-at');
+	const $oyvtpConfirmBlock = $('#oyvtp-confirm-block');
+	const $oyvtpConfirmBy = $('#oyvtp-confirm-by');
+	const $oyvtpConfirmAt = $('#oyvtp-confirm-at');
 
 	// 鎖定所有無人選填系所
-	const $bachelorLockAllNoStudent = $('#bachelor-lock-all-no-student');
-	const $masterLockAllNoStudent = $('#master-lock-all-no-student');
-	const $phdLockAllNoStudent = $('#phd-lock-all-no-student');
-	const $twoYearTechLockAllNoStudent = $('#two-year-tech-lock-all-no-student');
+	const $oyvtpLockAllNoStudent = $('#oyvtp-lock-all-no-student');
 
 	/**
 	 * init
@@ -77,7 +44,7 @@ const app = ( () => {
 	 * event handler
 	 */
 	function systemDownload(type_id, mode) {
-		window.open(`${_config.apiBase}/reviewers/systems/${type_id}/departments/all/review-result?mode=${mode}`, `_blank`);
+		window.open(`${_config.apiBase}/young-associate/systems/${type_id}/departments/all/review-result?mode=${mode}`, `_blank`);
 	}
 
 	function systemConfirm(type_id) {
@@ -95,17 +62,8 @@ const app = ( () => {
 			}
 			window.location.reload();
 			switch (system.type_id) {
-				case 1:
-					_renderSystems($bachelorTbody, system);
-					break;
 				case 2:
-					_renderSystems($twoYearTechTbody, system);
-					break;
-				case 3:
-					_renderSystems($masterTbody, system);
-					break;
-				case 4:
-					_renderSystems($phdTbody, system);
+					_renderSystems($oyvtpTbody, system);
 					break;
 			}
 		});
@@ -119,17 +77,8 @@ const app = ( () => {
 			}
 
 			switch (system_id) {
-				case 1:
-					_renderSystems($bachelorTbody, data.bachelor);
-					break;
 				case 2:
-					_renderSystems($twoYearTechTbody, data.two_year_tech);
-					break;
-				case 3:
-					_renderSystems($masterTbody, data.master);
-					break;
-				case 4:
-					_renderSystems($phdTbody, data.phd);
+					_renderSystems($oyvtpTbody, data.oyvtp);
 					break;
 			}
 		});
@@ -144,60 +93,19 @@ const app = ( () => {
 			}
 
 			// 判斷學制存不存在
-			if (data.bachelor) {
-				_renderSystems($bachelorTbody, data.bachelor);
+			if (data.oyvtp) {
+				_renderSystems($oyvtpTbody, data.oyvtp);
 
-				$bachelorConfirm.click(() =>{
-					systemConfirm(1);
-				});
-				$bachelorLockAllNoStudent.click(() => {
-					lockAllNoStudent(1);
-				});
-			} else {
-				$bachelorNavItem.remove();
-				document.getElementById("bachelor").classList.remove('active');
-				document.getElementById("bachelor").classList.remove('show');
-				document.getElementById("master").classList.add('active');
-				document.getElementById("master").classList.add('show');
-			}
-
-			if (data.two_year_tech) {
-				_renderSystems($twoYearTechTbody, data.two_year_tech);
-
-				$twoYearTechConfirm.click(() =>{
+				$oyvtpConfirm.click(() =>{
 					systemConfirm(2);
 				});
-				$twoYearTechLockAllNoStudent.click(() => {
+				$oyvtpLockAllNoStudent.click(() => {
 					lockAllNoStudent(2);
 				});
 			} else {
-				$twoYearTechNavItem.remove();
-			}
-
-			if (data.master) {
-				_renderSystems($masterTbody, data.master);
-
-				$masterConfirm.click(() =>{
-					systemConfirm(3);
-				});
-				$masterLockAllNoStudent.click(() => {
-					lockAllNoStudent(3);
-				});
-			} else {
-				$masterNavItem.remove();
-			}
-
-			if (data.phd) {
-				_renderSystems($phdTbody, data.phd);
-
-				$phdConfirm.click(() =>{
-					systemConfirm(4);
-				});
-				$phdLockAllNoStudent.click(() => {
-					lockAllNoStudent(4);
-				});
-			} else {
-				$phdNavItem.remove();
+				$oyvtpNavItem.remove();
+				document.getElementById("oyvtp").classList.remove('active');
+				document.getElementById("oyvtp").classList.remove('show');
 			}
 		});
 
@@ -245,134 +153,35 @@ const app = ( () => {
 		}
 		// 若學制已確認並鎖定，可以下載審核回覆表
 		switch (system.type_id) {
-			case 1:
-				if (canDownload) {
-					$bachelorDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載學士班審查結果回覆表';
-
-					$bachelorDownload.click(() => {
-						systemDownload(1, 'formal');
-					});
-				} else {
-					$bachelorDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載學士班審查結果回覆表（預覽版）';
-
-					$bachelorDownload.click(() => {
-						systemDownload(1, 'preview');
-					});
-				}
-
-				$bachelorConfirm.prop('disabled', !canConfirm);
-
-				if(canConfirm == true){
-					$bachelorCantComfirm.hide();
-					$bachelorCanComfirm.show();
-				}
-				else{
-					$bachelorCanComfirm.hide();
-				}
-				if (lock) {
-					$bachelorConfirmBy.text(system.student_order_confirmer.name);
-					$bachelorConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
-					$bachelorConfirmBlock.show();
-					$bachelorCantComfirm.hide();
-				}
-
-				break;
-
 			case 2:
 				if (canDownload) {
-					$twoYearTechDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載港二技審查結果回覆表';
+					$oyvtpDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載四年制產學合作學士班審查結果回覆表';
 
-					$twoYearTechDownload.click(() => {
+					$oyvtpDownload.click(() => {
 						systemDownload(2, 'formal');
 					});
 				} else {
-					$twoYearTechDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載港二技審查結果回覆表（預覽版）';
+					$oyvtpDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載四年制產學合作學士班審查結果回覆表（預覽版）';
 
-					$twoYearTechDownload.click(() => {
+					$oyvtpDownload.click(() => {
 						systemDownload(2, 'preview');
 					});
 				}
 
-				$twoYearTechConfirm.prop('disabled', !canConfirm);
+				$oyvtpConfirm.prop('disabled', !canConfirm);
 
 				if(canConfirm == true){
-					$twoYearTechCantConfirm.hide();
-					$twoYearTechCanConfirm.show();
+					$oyvtpCantComfirm.hide();
+					$oyvtpCanComfirm.show();
 				}
 				else{
-					$twoYearTechCanConfirm.hide();
+					$oyvtpCanComfirm.hide();
 				}
 				if (lock) {
-					$twoYearTechConfirmBy.text(system.student_order_confirmer.name);
-					$twoYearTechConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
-					$twoYearTechConfirmBlock.show();
-					$twoYearTechCantConfirm.hide();
-				}
-
-				break;
-
-			case 3:
-				if (canDownload) {
-					$masterDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載碩士班審查結果回覆表';
-
-					$masterDownload.click(() => {
-						systemDownload(3, 'formal');
-					});
-				} else {
-					$masterDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載碩士班審查結果回覆表（預覽版）';
-
-					$masterDownload.click(() => {
-						systemDownload(3, 'preview');
-					});
-				}
-
-				$masterConfirm.prop('disabled', !canConfirm);
-
-				if(canConfirm == true){
-					$masterCantConfirm.hide();
-					$masterCanConfirm.show();
-				}
-				else{
-					$masterCanConfirm.hide();
-				}
-				if (lock) {
-					$masterConfirmBy.text(system.student_order_confirmer.name);
-					$masterConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
-					$masterConfirmBlock.show();
-					$masterCantConfirm.hide();
-				}
-
-				break;
-
-			case 4:
-				if (canDownload) {
-					$phdDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載博士班審查結果回覆表';
-
-					$phdDownload.click(() => {
-						systemDownload(4, 'formal');
-					});
-				} else {
-					$phdDownload[0].innerHTML = '<i class="fa fa-download" aria-hidden="true"></i>下載博士班審查結果回覆表（預覽版）';
-
-					$phdDownload.click(() => {
-						systemDownload(4, 'preview');
-					});
-				}
-
-				$phdConfirm.prop('disabled', !canConfirm);
-
-				if(canConfirm == true){
-					$phdCantConfirm.hide();
-					$phdCanConfirm.show();
-				}
-				else{
-					$phdCanConfirm.hide();
-				}
-				if (lock) {
-					$phdConfirmBy.text(system.student_order_confirmer.name);
-					$phdConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
-					$phdConfirmBlock.show();
-					$phdCantConfirm.hide();
+					$oyvtpConfirmBy.text(system.student_order_confirmer.name);
+					$oyvtpConfirmAt.html(window.dateFns.format(system.review_confirmed_at, 'YYYY/MM/DD HH:mm:ss'));
+					$oyvtpConfirmBlock.show();
+					$oyvtpCantComfirm.hide();
 				}
 
 				break;

@@ -9,7 +9,7 @@ window.API = (() => {
 	 */
 	function login(data, callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/login`, {
+		fetch(`${_config.apiBase}/young-associate/reviewer-login`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -38,21 +38,7 @@ window.API = (() => {
 
 	function getUser(callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/login`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			credentials: 'include'
-		})
-		.then(_parseData)
-		.then((data) => { callback && callback(null, data) })
-		.catch((err) => { _handleError(err, callback) });
-	}
-
-	function getAvailableUsers(callback) {
-		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/available-users`, {
+		fetch(`${_config.apiBase}/young-associate/reviewer-login`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -66,7 +52,7 @@ window.API = (() => {
 
 	function getReviewers(callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/users`, {
+		fetch(`${_config.apiBase}/young-associate/reviewer-users`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -80,7 +66,7 @@ window.API = (() => {
 
 	function getDepts(callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/available-departments`, {
+		fetch(`${_config.apiBase}/young-associate/available-departments`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -94,7 +80,7 @@ window.API = (() => {
 
 	function addUser(data, callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/users`, {
+		fetch(`${_config.apiBase}/young-associate/reviewer-users`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -109,7 +95,7 @@ window.API = (() => {
 
 	function editUser(data, callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/users/${data.userID}`, {
+		fetch(`${_config.apiBase}/young-associate/reviewer-users/${data.userID}`, {
 			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json'
@@ -124,7 +110,7 @@ window.API = (() => {
 
 	function disableUser(userID, callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/users/${userID}`, {
+		fetch(`${_config.apiBase}/young-associate/reviewer-users/${userID}`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
@@ -138,7 +124,7 @@ window.API = (() => {
 
 	function getStudents(system, callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/${system}/students`, {
+		fetch(`${_config.apiBase}/young-associate/${system}/students`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -152,35 +138,7 @@ window.API = (() => {
 
 	function getOneStudent(data, callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/${data.system}/students/${data.deptID}/${data.userID}`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			credentials: 'include'
-		})
-		.then(_parseData)
-		.then((data) => { callback && callback(null, data) })
-		.catch((err) => { _handleError(err, callback) });
-	}
-
-	function getStudentDiploma(data, callback) {
-		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/${data.system}/students/${data.deptID}/${data.userID}/diploma`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			credentials: 'include'
-		})
-		.then(_parseData)
-		.then((data) => { callback && callback(null, data) })
-		.catch((err) => { _handleError(err, callback) });
-	}
-
-	function getStudentTranscripts(data, callback) {
-		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/${data.system}/students/${data.deptID}/${data.userID}/transcripts`, {
+		fetch(`${_config.apiBase}/young-associate/${data.system}/students/${data.deptID}/${data.userID}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -194,22 +152,8 @@ window.API = (() => {
 
 	function getApplicationDoc(data, callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/${data.system}/students/${data.deptID}/${data.userID}/types/-1/admission-selection-application-document`, {
+		fetch(`${_config.apiBase}/young-associate/2/students/${data.deptID}/${data.userID}/admission-files/all/file`, {
 			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			credentials: 'include'
-		})
-		.then(_parseData)
-		.then((data) => { callback && callback(null, data) })
-		.catch((err) => { _handleError(err, callback) });
-	}
-
-	function getIdentityDocs(data, callback) {
-		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/students/${data.userID}`, {
-		    method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -236,7 +180,7 @@ window.API = (() => {
 
 	function getAllCanReviewDepts(system = 'all', callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/systems`, {
+		fetch(`${_config.apiBase}/young-associate/systems`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -354,7 +298,7 @@ window.API = (() => {
 
 	function getDeptReviewResult(system, deptId, callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments/${deptId}`, {
+		fetch(`${_config.apiBase}/young-associate/systems/${system}/departments/${deptId}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -372,7 +316,7 @@ window.API = (() => {
 		}
 
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments/${deptId}?mode=${mode}`, {
+		fetch(`${_config.apiBase}/young-associate/systems/${system}/departments/${deptId}?mode=${mode}`, {
 			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json'
@@ -386,7 +330,7 @@ window.API = (() => {
 
 	function patchDeptReviewResult(system, deptId, mode, data, callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments/${deptId}?mode=${mode}`, {
+		fetch(`${_config.apiBase}/young-associate/systems/${system}/departments/${deptId}?mode=${mode}`, {
 			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json'
@@ -401,7 +345,7 @@ window.API = (() => {
 
 	function lockAllNoStudent(system, callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/lock-all-no-student-department/${system}`, {
+		fetch(`${_config.apiBase}/young-associate/lock-all-no-student-department/${system}`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -500,7 +444,7 @@ window.API = (() => {
 	// 拿到所有學制的審查狀態
 	function getSystems(callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/systems`, {
+		fetch(`${_config.apiBase}/young-associate/systems`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -515,7 +459,7 @@ window.API = (() => {
 	// 拿到所有學制的審查狀態
 	function confirmSystem(type_id, callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/systems/${type_id}`, {
+		fetch(`${_config.apiBase}/young-associate/systems/${type_id}`, {
 			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json'
@@ -550,7 +494,7 @@ window.API = (() => {
 
 	function importUserList(data, callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/user-list`, {
+		fetch(`${_config.apiBase}/young-associate/reviewer-user-list`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -567,7 +511,6 @@ window.API = (() => {
 		login,
 		logout,
 		getUser,
-		getAvailableUsers,
 		getReviewers,
 		getDepts,
 		addUser,
@@ -575,10 +518,7 @@ window.API = (() => {
 		disableUser,
 		getStudents,
 		getOneStudent,
-		getStudentDiploma,
-		getStudentTranscripts,
 		getApplicationDoc,
-		getIdentityDocs,
 		getDownloadableDepts,
 		getAllCanReviewDepts,
 		getStudentMergedFile,

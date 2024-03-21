@@ -107,24 +107,9 @@
 	function _setSystems(systems = null) {
 		let systemSelHtml = '<option value="-1" hidden selected disabled>請選擇</option>';
 
-		if (systems.bachelor) {
-			_systemMapping.push({id: "1", key: "bachelor", name: "學士班"});
-			systemSelHtml += '<option value="bachelor">學士班</option>';
-		}
-
-		if (systems.two_year_tech) {
-			_systemMapping.push({id: "2", key: "two_year_tech", name: "港二技"});
-			systemSelHtml += '<option value="two_year_tech">港二技</option>';
-		}
-
-		if (systems.master) {
-			_systemMapping.push({id: "3", key: "master", name: "碩士班"});
-			systemSelHtml += '<option value="master">碩士班</option>';
-		}
-
-		if (systems.phd) {
-			_systemMapping.push({id: "4", key: "phd", name: "博士班"});
-			systemSelHtml += '<option value="phd">博士班</option>';
+		if (systems.oyvtp) {
+			_systemMapping.push({id: "2", key: "oyvtp", name: "四年制產學合作學士班"});
+			systemSelHtml += '<option value="oyvtp">四年制產學合作學士班</option>';
 		}
 
 		$systemSel.html(systemSelHtml);
@@ -270,32 +255,10 @@
 
 		// 綁定系所列表
 		let deptHTML = '';
-		let deptHTML1 = '';
-		let deptHTML2 = '';
-		let deptHTML3 = '';
 		const deptList = _systems[this.value].departments;
 		deptList.forEach(el => {
-			switch(el.is_extended_department){
-				case 1:
-					deptHTML2 += `<option value="${el.id}">${el.title}</option>`;
-					break;
-				case 2:
-					deptHTML3 += `<option value="${el.id}">${el.title}</option>`;
-					break
-				default:
-					deptHTML1 += `<option value="${el.id}">${el.title}</option>`;
-					break;
-			}
+			deptHTML += `<option value="${el.id}">${el.title}</option>`;
 		})
-
-		deptHTML += deptHTML1;
-		if(deptHTML2.length > 0){
-			deptHTML += `<optgroup label="重點產業系所">` + deptHTML2 + `</optgroup>`;
-		}
-
-		if(deptHTML3.length > 0){
-			deptHTML += `<optgroup label="國際專修部">` + deptHTML3 + `</optgroup>`
-		}
 		$deptSel.append(deptHTML);
 
 		// 若過濾結果為只有一個，直接幫使用者選定該系所
@@ -364,14 +327,6 @@
 
 			$infoDiv.show();
 			$deptHeading.text(data.title);
-			switch(data.is_extended_department){
-				case 1:
-					$deptHeading.html('<span class="badge table-warning">重點產業系所</span> ' + $deptHeading.text());
-					break;
-				case 2:
-					$deptHeading.html('<span class="badge table-primary">國際專修部</span> ' + $deptHeading.text());
-					break;
-			}
 			$systemHeading.text(systemName);
 			$downloadCSVBtn.attr('href', `${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}?type=file`);
 

@@ -1,50 +1,41 @@
 <div class="row mb-3">
 	<div class="col-12">
 		<ul class="nav nav-tabs">
-			<li class="nav-item" id="bachelor-nav-item">
-				<a class="nav-link active" id="bachelor-tab" data-toggle="tab" href="#bachelor" role="tab" aria-controls="bachelor" aria-selected="true">學士班</a>
-			</li>
-			<li class="nav-item" id="master-nav-item">
-				<a class="nav-link" id="master-tab" data-toggle="tab" href="#master" role="tab" aria-controls="master" aria-selected="true">碩士班</a>
-			</li>
-			<li class="nav-item" id="phd-nav-item">
-				<a class="nav-link" id="phd-tab" data-toggle="tab" href="#phd" role="tab" aria-controls="phd" aria-selected="true">博士班</a>
-			</li>
-			<li class="nav-item" id="two-year-tech-nav-item">
-				<a class="nav-link" id="two-year-tech-tab" data-toggle="tab" href="#two-year-tech" role="tab" aria-controls="two-year-tech" aria-selected="true">港二技</a>
+			<li class="nav-item" id="oyvtp-nav-item">
+				<a class="nav-link active" id="oyvtp-tab" data-toggle="tab" href="#oyvtp" role="tab" aria-controls="oyvtp" aria-selected="true">四年制產學合作學士班</a>
 			</li>
 		</ul>
 	</div>
 </div>
 <div class="tab-content" id="myTabContent">
-	<div class="tab-pane fade show active row" id="bachelor" role="tabpanel" aria-labelledby="bachelor-tab">
+	<div class="tab-pane fade show active row" id="oyvtp" role="tabpanel" aria-labelledby="oyvtp-tab">
 		<div class="col-12">
 			<div class="row">
 				<div class="col-7">
-					<h3>學士班 系所審查狀態</h3>
+					<h3>四年制產學合作學士班 系所審查狀態</h3>
 				</div>
 
-				<div class="col-5 text-right" id="bachelor-cant-confirm">
+				<div class="col-5 text-right" id="oyvtp-cant-confirm">
 					<small class="badge badge-danger">此學制仍有系所尚未鎖定</small>
 				</div>
 
-				<div class="col-5 text-right" id="bachelor-can-confirm">
+				<div class="col-5 text-right" id="oyvtp-can-confirm">
 					<small class="badge badge-warning">此學制各系全已鎖定，可按下確認審查結果並鎖定</small>
 				</div>
 
-				<div class="col-5 text-right" id="bachelor-confirm-block" style="display: none;">
-					<small class="badge badge-primary">由 <span id="bachelor-confirm-by">Name</span> 確認並鎖定於 <span id="bachelor-confirm-at">YYYY/MM/DD HH:mm:ss</span></small>
+				<div class="col-5 text-right" id="oyvtp-confirm-block" style="display: none;">
+					<small class="badge badge-primary">由 <span id="oyvtp-confirm-by">Name</span> 確認並鎖定於 <span id="oyvtp-confirm-at">YYYY/MM/DD HH:mm:ss</span></small>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-12">
-					<button id="bachelor-lock-all-no-student" class="btn btn-info" role="button">
+					<button id="oyvtp-lock-all-no-student" class="btn btn-info" role="button">
 						<i class="fa fa-lock" aria-hidden="true"></i>
-						鎖定學士班所有無人選填系所
+						鎖定四年制產學合作學士班所有無人選填系所
 					</button>
-					<button id="bachelor-download-review-form" class="btn btn-success" role="button">
+					<button id="oyvtp-download-review-form" class="btn btn-success" role="button">
 						<i class="fa fa-download" aria-hidden="true"></i>
-						下載學士班審查結果回覆表
+						下載四年制產學合作學士班審查結果回覆表
 					</button>
 				</div>
 			</div>
@@ -59,7 +50,7 @@
 							<th>最後審查時間</th>
 						</tr>
 					</thead>
-					<tbody id="bachelorTbody">
+					<tbody id="oyvtpTbody">
 						<tr>
 							<td>12345</td>
 							<td>資訊管理系</td>
@@ -87,231 +78,7 @@
 		</div>
 
 		<div class="col-md-4 text-center mb-5 mx-auto mt-4">
-			<button class="btn btn-danger btn-block" id="bachelor-confirm">確認學士班審查結果並鎖定</button>
-		</div>
-	</div>
-
-	<div class="tab-pane fade row mb-3" id="master" role="tabpanel" aria-labelledby="master-tab">
-		<div class="col-12">
-			<div class="row">
-				<div class="col-7">
-					<h3>碩士班 系所審查狀態</h3>
-				</div>
-
-				<div class="col-5 text-right" id="master-cant-confirm">
-					<small class="badge badge-danger">此學制仍有系所尚未鎖定</small>
-				</div>
-
-				<div class="col-5 text-right" id="master-can-confirm">
-					<small class="badge badge-warning">此學制各系全已鎖定，可按下確認審查結果並鎖定</small>
-				</div>
-
-				<div class="col-5 text-right" id="master-confirm-block" style="display: none;">
-					<small class="badge badge-primary">由 <span id="master-confirm-by">Name</span> 確認並鎖定於 <span id="master-confirm-at">YYYY/MM/DD HH:mm:ss</span></small>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-12">
-					<button id="master-lock-all-no-student" class="btn btn-info" role="button">
-						<i class="fa fa-lock" aria-hidden="true"></i>
-						鎖定碩士班所有無人選填系所
-					</button>
-					<button id="master-download-review-form" class="btn btn-success" role="button">
-						<i class="fa fa-download" aria-hidden="true"></i>
-						下載碩士班審查結果回覆表
-					</button>
-				</div>
-			</div>
-			<div style="max-height: 500px; overflow: auto; margin-top: 12px;">
-				<table class="table table-hover">
-					<thead>
-						<tr>
-							<th>系所代碼</th>
-							<th>系所名稱</th>
-							<th>審查狀態</th>
-							<th>最後審查者</th>
-							<th>最後審查時間</th>
-						</tr>
-					</thead>
-					<tbody id="masterTbody">
-						<tr>
-							<td>12345</td>
-							<td>資訊管理系</td>
-							<td>已儲存</td>
-							<td>Name</td>
-							<td>YYYY/MM/DD HH:mm:ss</td>
-						</tr>
-						<tr>
-							<td>12346</td>
-							<td>資訊應用外語系</td>
-							<td>已鎖定</td>
-							<td>Name</td>
-							<td>YYYY/MM/DD HH:mm:ss</td>
-						</tr>
-						<tr>
-							<td>12347</td>
-							<td>資訊工程系</td>
-							<td>未審查</td>
-							<td>Name</td>
-							<td>YYYYYYYY/MM/DD HH:mm:ss</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-		<div class="col-md-4 text-center mb-5 mx-auto mt-4">
-			<button class="btn btn-danger btn-block" id="master-confirm">確認碩士班審查結果並鎖定</button>
-		</div>
-	</div>
-
-	<div class="tab-pane fade row mb-3" id="phd" role="tabpanel" aria-labelledby="phd-tab">
-		<div class="col-12">
-			<div class="row">
-				<div class="col-7">
-					<h3>博士班 系所審查狀態</h3>
-				</div>
-
-				<div class="col-5 text-right" id="phd-cant-confirm">
-					<small class="badge badge-danger">此學制仍有系所尚未鎖定</small>
-				</div>
-
-				<div class="col-5 text-right" id="phd-can-confirm">
-					<small class="badge badge-warning">此學制各系全已鎖定，可按下確認審查結果並鎖定</small>
-				</div>
-
-
-				<div class="col-5 text-right" id="phd-confirm-block" style="display: none;">
-					<small class="badge badge-primary">由 <span id="phd-confirm-by">Name</span> 確認並鎖定於 <span id="phd-confirm-at">YYYY/MM/DD HH:mm:ss</span></small>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-12">
-					<button id="phd-lock-all-no-student" class="btn btn-info" role="button">
-						<i class="fa fa-lock" aria-hidden="true"></i>
-						鎖定博士班所有無人選填系所
-					</button>
-					<button id="phd-download-review-form" class="btn btn-success" role="button">
-						<i class="fa fa-download" aria-hidden="true"></i>
-						下載博士班審查結果回覆表
-					</button>
-				</div>
-			</div>
-			<div style="max-height: 500px; overflow: auto; margin-top: 12px;">
-				<table class="table table-hover">
-					<thead>
-						<tr>
-							<th>系所代碼</th>
-							<th>系所名稱</th>
-							<th>審查狀態</th>
-							<th>最後審查者</th>
-							<th>最後審查時間</th>
-						</tr>
-					</thead>
-					<tbody id="phdTbody">
-						<tr>
-							<td>12345</td>
-							<td>資訊管理系</td>
-							<td>已儲存</td>
-							<td>Name</td>
-							<td>YYYY/MM/DD HH:mm:ss</td>
-						</tr>
-						<tr>
-							<td>12346</td>
-							<td>資訊應用外語系</td>
-							<td>已鎖定</td>
-							<td>Name</td>
-							<td>YYYY/MM/DD HH:mm:ss</td>
-						</tr>
-						<tr>
-							<td>12347</td>
-							<td>資訊工程系</td>
-							<td>未審查</td>
-							<td>Name</td>
-							<td>YYYYYYYY/MM/DD HH:mm:ss</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-		<div class="col-md-4 text-center mb-5 mx-auto mt-4">
-			<button class="btn btn-danger btn-block" id="phd-confirm">確認博士班審查結果並鎖定</button>
-		</div>
-	</div>
-
-	<div class="tab-pane fade row mb-3" id="two-year-tech" role="tabpanel" aria-labelledby="two-year-tech-tab">
-		<div class="col-12">
-			<div class="row">
-				<div class="col-7">
-					<h3>港二技 系所審查狀態</h3>
-				</div>
-
-				<div class="col-5 text-right" id="two-year-tech-cant-confirm">
-					<small class="badge badge-danger">此學制仍有系所尚未鎖定</small>
-				</div>
-
-				<div class="col-5 text-right" id="two-year-tech-can-confirm">
-					<small class="badge badge-warning">此學制各系全已鎖定，可按下確認審查結果並鎖定</small>
-				</div>
-
-
-				<div class="col-5 text-right" id="two-year-tech-confirm-block" style="display: none;">
-					<small class="badge badge-primary">由 <span id="two-year-tech-confirm-by">Name</span> 確認並鎖定於 <span id="two-year-tech-confirm-at">YYYY/MM/DD HH:mm:ss</span></small>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-12">
-					<button id="two-year-tech-lock-all-no-student" class="btn btn-info" role="button">
-						<i class="fa fa-lock" aria-hidden="true"></i>
-						鎖定港二技所有無人選填系所
-					</button>
-					<button id="two-year-tech-download-review-form" class="btn btn-success" role="button">
-						<i class="fa fa-download" aria-hidden="true"></i>
-						下載港二技審查結果回覆表
-					</button>
-				</div>
-			</div>
-			<div style="max-height: 500px; overflow: auto; margin-top: 12px;">
-				<table class="table table-hover">
-					<thead>
-						<tr>
-							<th>系所代碼</th>
-							<th>系所名稱</th>
-							<th>審查狀態</th>
-							<th>最後審查者</th>
-							<th>最後審查時間</th>
-						</tr>
-					</thead>
-					<tbody id="twoYearTechTbody">
-						<tr>
-							<td>12345</td>
-							<td>資訊管理系</td>
-							<td>已儲存</td>
-							<td>Name</td>
-							<td>YYYY/MM/DD HH:mm:ss</td>
-						</tr>
-						<tr>
-							<td>12346</td>
-							<td>資訊應用外語系</td>
-							<td>已鎖定</td>
-							<td>Name</td>
-							<td>YYYY/MM/DD HH:mm:ss</td>
-						</tr>
-						<tr>
-							<td>12347</td>
-							<td>資訊工程系</td>
-							<td>未審查</td>
-							<td>Name</td>
-							<td>YYYY/MM/DD HH:mm:ss</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-		<div class="col-md-4 text-center mb-5 mx-auto mt-4">
-			<button class="btn btn-danger btn-block" id="two-year-tech-confirm">確認港二技審查結果並鎖定</button>
+			<button class="btn btn-danger btn-block" id="oyvtp-confirm">確認四年制產學合作學士班審查結果並鎖定</button>
 		</div>
 	</div>
 </div>

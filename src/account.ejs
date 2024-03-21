@@ -119,11 +119,11 @@
 					<div class="form-group row DeptPermissionForm">
 						<div class="col-sm-2">可查看系所</div>
 						<div class="col-sm-10 mb-2">
-							<h4><span class="badge badge-warning">學士班</span></h4>
+							<h4><span class="badge badge-warning">四年制產學合作學士班</span></h4>
 							<div class="row">
 								<div class="col-lg-5">
 									<strong>所有系所</strong>
-									<div class="card pt-1 pb-1 DeptList" data-system="bachelor" style="max-height: 250px; min-height: 100px; overflow: auto;">
+									<div class="card pt-1 pb-1 DeptList" data-system="oyvtp" style="max-height: 250px; min-height: 100px; overflow: auto;">
 										<!-- <div class="pb-1 pl-1 pr-1 DeptList__item">
 											<span class="title">學 17301 經營管理系</span>
 											<span class="btn-select">
@@ -134,12 +134,12 @@
 									</div>
 								</div>
 								<div class="col-lg-2 text-center pt-2">
-									<button type="button" class="btn btn-sm btn-primary btn-selectAll mb-lg-2" data-system="bachelor">
+									<button type="button" class="btn btn-sm btn-primary btn-selectAll mb-lg-2" data-system="oyvtp">
 										全選
 										<i class="fa fa-chevron-right d-none d-lg-inline" aria-hidden="true"></i>
 										<i class="fa fa-chevron-down d-inline d-lg-none" aria-hidden="true"></i>
 									</button>
-									<button type="button" class="btn btn-sm btn-danger btn-removeAll" data-system="bachelor">
+									<button type="button" class="btn btn-sm btn-danger btn-removeAll" data-system="oyvtp">
 										移除
 										<i class="fa fa-chevron-left d-none d-lg-inline" aria-hidden="true"></i>
 										<i class="fa fa-chevron-up d-inline d-lg-none" aria-hidden="true"></i>
@@ -147,7 +147,7 @@
 								</div>
 								<div class="col-lg-5">
 									<strong>已選系所</strong>
-									<div class="card pt-1 pb-1 SelectedDeptList" data-system="bachelor" style="max-height: 250px; min-height: 100px; overflow: auto;">
+									<div class="card pt-1 pb-1 SelectedDeptList" data-system="oyvtp" style="max-height: 250px; min-height: 100px; overflow: auto;">
 										<!-- <div class="pb-1 pl-1 pr-1 SelectedDeptList__item">
 											<span class="title">學 17301 經營管理系</span>
 											<span class="btn-remove">
@@ -156,87 +156,6 @@
 											</span>
 										</div> -->
 									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-10 offset-sm-2 mb-2">
-							<h4>
-								<span class="badge badge-warning">碩士班</span>
-							</h4>
-							<div class="row">
-								<div class="col-lg-5">
-									<strong>所有系所</strong>
-									<div class="card pt-1 pb-1 DeptList" data-system="master" style="max-height: 250px; min-height: 100px; overflow: auto;"></div>
-								</div>
-								<div class="col-lg-2 text-center pt-2">
-									<button type="button" class="btn btn-sm btn-primary btn-selectAll mb-lg-2" data-system="master">
-										全選
-										<i class="fa fa-chevron-right d-none d-lg-inline" aria-hidden="true"></i>
-										<i class="fa fa-chevron-down d-inline d-lg-none" aria-hidden="true"></i>
-									</button>
-									<button type="button" class="btn btn-sm btn-danger btn-removeAll" data-system="master">
-										移除
-										<i class="fa fa-chevron-left d-none d-lg-inline" aria-hidden="true"></i>
-										<i class="fa fa-chevron-up d-inline d-lg-none" aria-hidden="true"></i>
-									</button>
-								</div>
-								<div class="col-lg-5">
-									<strong>已選系所</strong>
-									<div class="card pt-1 pb-1 SelectedDeptList" data-system="master" style="max-height: 250px; min-height: 100px; overflow: auto;"></div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-10 offset-sm-2 mb-2">
-							<h4>
-								<span class="badge badge-warning">博士班</span>
-							</h4>
-							<div class="row">
-								<div class="col-lg-5">
-									<strong>所有系所</strong>
-									<div class="card pt-1 pb-1 DeptList" data-system="phd" style="max-height: 250px; min-height: 100px; overflow: auto;"></div>
-								</div>
-								<div class="col-lg-2 text-center pt-2">
-									<button type="button" class="btn btn-sm btn-primary btn-selectAll mb-lg-2" data-system="phd">
-										全選
-										<i class="fa fa-chevron-right d-none d-lg-inline" aria-hidden="true"></i>
-										<i class="fa fa-chevron-down d-inline d-lg-none" aria-hidden="true"></i>
-									</button>
-									<button type="button" class="btn btn-sm btn-danger btn-removeAll" data-system="phd">
-										移除
-										<i class="fa fa-chevron-left d-none d-lg-inline" aria-hidden="true"></i>
-										<i class="fa fa-chevron-up d-inline d-lg-none" aria-hidden="true"></i>
-									</button>
-								</div>
-								<div class="col-lg-5">
-									<strong>已選系所</strong>
-									<div class="card pt-1 pb-1 SelectedDeptList" data-system="phd" style="max-height: 250px; min-height: 100px; overflow: auto;"></div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-10 offset-sm-2 mb-2">
-							<h4>
-								<span class="badge badge-warning">港二技</span>
-							</h4>
-							<div class="row">
-								<div class="col-lg-5">
-									<strong>所有系所</strong>
-									<div class="card pt-1 pb-1 DeptList" data-system="twoyear" style="max-height: 250px; min-height: 100px; overflow: auto;"></div>
-								</div>
-								<div class="col-lg-2 text-center pt-2">
-									<button type="button" class="btn btn-sm btn-primary btn-selectAll mb-lg-2" data-system="twoyear">
-										全選
-										<i class="fa fa-chevron-right d-none d-lg-inline" aria-hidden="true"></i>
-										<i class="fa fa-chevron-down d-inline d-lg-none" aria-hidden="true"></i>
-									</button>
-									<button type="button" class="btn btn-sm btn-danger btn-removeAll" data-system="twoyear">
-										移除
-										<i class="fa fa-chevron-left d-none d-lg-inline" aria-hidden="true"></i>
-										<i class="fa fa-chevron-up d-inline d-lg-none" aria-hidden="true"></i>
-									</button>
-								</div>
-								<div class="col-lg-5">
-									<strong>已選系所</strong>
-									<div class="card pt-1 pb-1 SelectedDeptList" data-system="twoyear" style="max-height: 250px; min-height: 100px; overflow: auto;"></div>
 								</div>
 							</div>
 						</div>

@@ -11,10 +11,7 @@
 		'organization',
 		'job_title',
 		'status',
-		'department_permissions',
-		'two_year_tech_department_permissions',
-		'master_permissions',
-		'phd_permissions'
+		'young_associate_department_permissions'
 	];
 	let _csvFile;
 	let _csvAccounts = [];
@@ -43,7 +40,7 @@
 		!data.school_reviewer.has_admin && window.history.back();
 	});
 
-	_userList = [...(await _getReviewers()), ...(await _getUserList())];
+	_userList = [...(await _getReviewers())];
 	_deptList = await _getDeptList();
 
 	_renderAccount(_userList);
@@ -119,10 +116,7 @@
 				id: userData.id
 			},
 			status: !userData.editorOnly && !userData.school_reviewer.deleted_at,
-			department_permissions: userData.editorOnly ? [] : userData.school_reviewer.department_permissions,
-			master_permissions: userData.editorOnly ? [] : userData.school_reviewer.master_permissions,
-			phd_permissions: userData.editorOnly ? [] : userData.school_reviewer.phd_permissions,
-			two_year_tech_department_permissions: userData.editorOnly ? [] : userData.school_reviewer.two_year_tech_department_permissions
+			young_associate_department_permissions: userData.editorOnly ? [] : userData.school_reviewer.young_associate_department_permissions
 		});
 	}
 
@@ -136,9 +130,9 @@
 			} else {
 				if (confirm('確定停用？')) {
 					const userID = $(this).parents('.AccountItem').data('id');
-		
+
 					window.API.disableUser(userID, (data) => {
-		
+
 						_updateUserList();
 					});
 				}
@@ -258,7 +252,7 @@
 				}
 
 				if (fieldIndex > 7 ) {
-					// "學士班權限","二技班權限","碩士班權限","博士班權限"
+					// "四年制產學合作學士班權限"
 					if (val.toLowerCase() === 'all') {
 						data[i][_csvFieldMap[fieldIndex]] = 'all';
 					} else {
@@ -313,10 +307,7 @@
 		const email = $AccountModal.find('.AccountModal__input-email').val();
 		const phone = $AccountModal.find('.AccountModal__input-phone').val();
 		const status = $AccountModal.find('.AccountModal__input-status[value=1]').is(':checked');
-		const department_permissions = $('.SelectedDeptList[data-system="bachelor"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
-		const master_permissions = $('.SelectedDeptList[data-system="master"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
-		const phd_permissions = $('.SelectedDeptList[data-system="phd"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
-		const two_year_tech_department_permissions = $('.SelectedDeptList[data-system="twoyear"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
+		const young_associate_department_permissions = $('.SelectedDeptList[data-system="oyvtp"] .SelectedDeptList__item').toArray().map((ele) => $(ele).data('id'));
 		const userID = $AccountModal.find('.AccountModal__input-id').val();
 		if (!username) return alert('帳號不得為空');
 		if (!name) return alert('用戶名稱不得為空');
@@ -336,10 +327,7 @@
 			email,
 			phone,
 			status,
-			department_permissions,
-			master_permissions,
-			phd_permissions,
-			two_year_tech_department_permissions
+			young_associate_department_permissions
 		};
 
 		if(type === 'C'){
@@ -382,10 +370,7 @@
 				org = encodeHtmlCharacters(val.school_reviewer.organization);  // 單位
 				accountPermission = val.school_reviewer.has_admin ? '管理員' : '一般使用者';;
 				deptPermission = [];
-				!!val.school_reviewer.department_permissions.length && deptPermission.push('學士班');
-				!!val.school_reviewer.master_permissions.length && deptPermission.push('碩士班');
-				!!val.school_reviewer.phd_permissions.length && deptPermission.push('博士班');
-				!!val.school_reviewer.two_year_tech_department_permissions.length && deptPermission.push('港二技');
+				!!val.school_reviewer.young_associate_department_permissions.length && deptPermission.push('四年制產學合作學士班');
 				deptPermission = val.school_reviewer.has_admin ? '全部' : (!!deptPermission.length ? deptPermission.join(', ') : '無');
 			}
 			const encodedName = encodeHtmlCharacters(val.name);  // 用戶名稱（轉換過的）
@@ -428,7 +413,7 @@
 		const rows = window.API.CSVToArray(data);
 		const header = rows.shift();
 		const fieldLength = header.length;
-		if (fieldLength !== 12) {
+		if (fieldLength !== 9) {
 			alert ('匯入之 csv 欄位數量有誤');
 			return;
 		}
@@ -453,7 +438,7 @@
 
 		let valueEmpty = 0;
 		for(let i = 0;i<rows.length;i++){
-			if(rows[i].length!=12){break;}
+			if(rows[i].length!=9){break;}
 			if(!rows[i][0]||!rows[i][1]||!rows[i][2]){
 				valueEmpty = 1;
 				break;
@@ -497,28 +482,16 @@
 		$DeptList.empty();
 		$SelectedDeptList.empty();
 		const systems = [
-			['departments', 'bachelor', 'department_permissions'],
-			['master_departments', 'master', 'master_permissions'],
-			['phd_departments', 'phd', 'phd_permissions'],
-			['two_year_tech_departments', 'twoyear', 'two_year_tech_department_permissions']
+			['young_associate_departments', 'oyvtp', 'young_associate_department_permissions'],
 		];
 
 		systems.forEach((s) => {
 			list[s[0]].forEach((val) => {
-				let deptType = '';
-				switch(val.is_extended_department){
-					case 1:
-						deptType = '<span class="badge table-warning">重點產業系所</span>'
-						break;
-					case 2:
-						deptType = '<span class="badge table-primary">國際專修部</span>'
-						break;
-				}
 				if (permissions[s[2]] && permissions[s[2]].some((v) => (val.id + '') === (v.dept_id + ''))) {
 					// 已被選取的系所
 					$(`.SelectedDeptList[data-system="${s[1]}"]`).append(`
 						<div class="pb-1 pl-1 pr-1 SelectedDeptList__item" data-id=${val.id}>
-							<span class="title">${deptType} ${val.title}</span>
+							<span class="title">${val.title}</span>
 							<span class="btn-remove">
 								<i class="fa fa-arrow-left d-none d-lg-inline" aria-hidden="true"></i>
 								<i class="fa fa-arrow-up d-inline d-lg-none" aria-hidden="true"></i>
@@ -528,7 +501,7 @@
 				} else {
 					$(`.DeptList[data-system="${s[1]}"]`).append(`
 						<div class="pb-1 pl-1 pr-1 DeptList__item" data-id="${val.id}">
-							<span class="title">${deptType} ${val.title}</span>
+							<span class="title">${val.title}</span>
 							<span class="btn-select">
 								<i class="fa fa-arrow-right d-none d-lg-inline" aria-hidden="true"></i>
 								<i class="fa fa-arrow-down d-inline d-lg-none" aria-hidden="true"></i>
@@ -538,23 +511,6 @@
 				}
 			});
 		});
-	}
-
-	// 有 editor 權限，沒有 reviewer 權限的使用者
-	function _getUserList() {
-		return new Promise((resolve, reject) => {
-			window.API.getAvailableUsers((err, data) => {
-				if (err) {
-					console.error(err);
-					reject(err);
-					return;
-				}
-
-				resolve(data.map((val, i) => {
-					return Object.assign({}, val, { editorOnly: true });
-				}));
-			});
-		})
 	}
 
 	// 有 reviewer 權限的使用者
@@ -602,17 +558,14 @@
 
 		// 可查看系所
 		_renderDeptList(_deptList, {
-			department_permissions: data.department_permissions,
-			master_permissions: data.master_permissions,
-			phd_permissions: data.phd_permissions,
-			two_year_tech_department_permissions: data.two_year_tech_department_permissions
+			young_associate_department_permissions: data.young_associate_department_permissions
 		});
 	}
 
 	//匯出reviewer_list_csv funciotn
 	function _downloadList(){
 		const baseUrl = window.getConfig().apiBase;
-		window.location.href = `${baseUrl}/reviewers/user-list`;
+		window.location.href = `${baseUrl}/young-associate/reviewer-user-list`;
 	}
 
 	//匯入reviewer_list_excel funciotn
@@ -622,7 +575,7 @@
 	}
 
 	async function _updateUserList() {
-		_userList = [...(await _getReviewers()), ...(await _getUserList())];
+		_userList = [...(await _getReviewers())];
 		_renderAccount(_userList);
 	}
 
