@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>個人申請制備審資料下載與審查回覆系統</title>
+	<title>海外青年訓練班學生資料下載與審查回覆系統</title>
 	<%- include ('component/_header') %>
 </head>
 <body>
@@ -11,9 +11,9 @@
 			<div class="col-12">
 				<div class="mx-auto" style="width: 540px; display: flex;">
 					<div style="flex: 1">
-						<img src="./img/logo.png" alt="logo" height="80" />
+						<img src="./img/logo.png" alt="logo" height="100" />
 					</div>
-					<div class="pl-1" style="font-size: 26px; font-weight: bold; flex: 4;" id="loginWordOfSystem">個人申請制<br />備審資料下載與審查回覆系統</div>
+					<div class="pl-1" style="font-size: 26px; font-weight: bold; flex: 4;" id="loginWordOfSystem">海外青年訓練班<br />學生資料下載與審查回覆系統</div>
 				</div>
 			</div>
 		</div>
@@ -54,16 +54,16 @@
 		const _productionConfig = window.getConfig();
 
 		if (!_productionConfig.isProduction) {
-			document.title='個人申請制備審資料下載與審查回覆系統-測試站';
-			document.getElementById('loginWordOfSystem').innerHTML='個人申請制<br />備審資料下載與審查回覆系統<br />測試站';
+			document.title='海外青年訓練班學生資料下載與審查回覆系統-測試站';
+			document.getElementById('loginWordOfSystem').innerHTML='海外青年訓練班<br />學生資料下載與審查回覆系統<br />測試站';
 		}
 
 		/* Sample function that returns boolean in case the browser is Internet Explorer*/
 		function isIE() {
 		ua = navigator.userAgent;
 			/* MSIE used to detect old browsers and Trident used to newer ones*/
-			var is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;			
-			return is_ie; 
+			var is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
+			return is_ie;
 		}
 		/* Create an alert to show if the browser is IE or not */
 		if (isIE()){
