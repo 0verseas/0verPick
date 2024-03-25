@@ -164,9 +164,9 @@ window.API = (() => {
 		.catch((err) => { _handleError(err, callback) });
 	}
 
-	function getDownloadableDepts(system = 'all', callback) {
+	function getDownloadableDepts(system, callback) {
 		_setLoading();
-		fetch(`${_config.apiBase}/reviewers/systems/${system}/departments`, {
+		fetch(`${_config.apiBase}/young-associate/systems/${system}/departments`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -195,7 +195,7 @@ window.API = (() => {
 	function getStudentMergedFile(system, studentId, deptId, filetype) {
 		_setLoading();
 
-		const request = fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptId}/students/${studentId}?mode=check&filetype=${filetype}`, {
+		const request = fetch(`${_config.apiBase}/young-associate/merged-pdf/systems/${system}/departments/${deptId}/students/${studentId}?mode=check&filetype=${filetype}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -209,7 +209,7 @@ window.API = (() => {
 	function getAllStudentMergedFile(system, deptId, filetype) {
 		_setLoading();
 
-		const request = fetch(`${_config.apiBase}/reviewers/merged-pdf/systems/${system}/departments/${deptId}/students?mode=check&filetype=${filetype}`, {
+		const request = fetch(`${_config.apiBase}/young-associate/merged-pdf/systems/${system}/departments/${deptId}/students?mode=check&filetype=${filetype}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -401,14 +401,15 @@ window.API = (() => {
 		return request.then(res => {
 			// 有問題彈出問題
 			if (!res.ok) {
-				if (res.status === 404) {
-					window.alert('檔案尚未合併完成');
-				} else if (res.status === 401) {
-					window.alert('無權限下載，請重新登入');
-					// window.location.href = './login.html';
-				}
-
-				throw res;
+				return res.json().then(data => {
+					if (res.status === 404) {
+						window.alert(data.messages);
+					} else if (res.status === 401) {
+						window.alert('無權限下載，請重新登入');
+						// window.location.href = './login.html';
+					}
+					throw res;
+				});
 			}
 
 			// 沒問題取得檔案

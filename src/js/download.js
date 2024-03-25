@@ -6,15 +6,9 @@ const app = ( () => {
 	/**
 	 * cache DOM
 	 */
-	const $bachelorTbody = $('#bachelorTbody');
-	const $twoYearTechTbody = $('#twoYearTechTbody');
-	const $masterTbody = $('#masterTbody');
-	const $phdTbody = $('#phdTbody');
+	const $oyvtpTbody = $('#oyvtpTbody');
 
 	const $allpdfzip = $('#allpdfzip');
-	const $twoyearallpdfzip = $('#twoyearallpdfzip');
-
-	let _two_year_tech_depts = [];
 
 	/**
 	 * init
@@ -36,47 +30,22 @@ const app = ( () => {
 
 	function _init() {
 		// 取得使用者可下載的系所列表
-		window.API.getDownloadableDepts('all', (err, data) => {
+		window.API.getDownloadableDepts(2, (err, data) => {
 			if (err) {
 				console.error(err);
 				return;
 			}
 
-			_renderDepartments($bachelorTbody, 'bachelor', '學士班', data.bachelor_depts)
-			_renderDepartments($twoYearTechTbody, 'two-year', '港二技', data.two_year_tech_depts)
-			_renderDepartments($masterTbody, 'master', '碩士班', data.master_depts)
-			_renderDepartments($phdTbody, 'phd', '博士班', data.phd_depts)
+			_renderDepartments($oyvtpTbody, 2, data)
 
-			// 學士班有人就顯示 系所表格
-			if(data.bachelor_depts.length > 0){
-				$('.bachelorForm').show();
+			// 海青班有人就顯示 系所表格
+			if(data.length > 0){
+				$('.oyvtpForm').show();
 			}
 
-			// 港二技有人就顯示 系所表格
-			if(data.two_year_tech_depts.length > 0){
-				$('.twoYearForm').show();
-			}
-
-			// 碩士班有人就顯示 系所表格
-			if(data.master_depts.length > 0){
-				$('.masterForm').show();
-			}
-
-			// 博士班有人就顯示 系所表格
-			if(data.phd_depts.length > 0){
-				$('.phdForm').show();
-			}
-
-			// 學碩博沒人就隱藏 全校檔案按鈕
-			if((data.bachelor_depts.length + data.master_depts.length + data.phd_depts.length) < 1){
+			// 海青沒人就隱藏 全校檔案按鈕
+			if(data.length < 1){
 				$allpdfzip.remove();
-			}
-
-			_two_year_tech_depts = data.two_year_tech_depts;
-			if (_two_year_tech_depts.length < 1) {
-				$twoyearallpdfzip.remove();
-			} else {
-				$twoyearallpdfzip.show();
 			}
 		});
 
@@ -91,18 +60,10 @@ const app = ( () => {
 	}
 
 	// 渲染某學制系所
-	function _renderDepartments($tbody, system, systemName, depts) {
+	function _renderDepartments($tbody, system, depts) {
 		let deptsHtmlString = '';
 
 		for (let dept of depts) {
-			switch(dept.is_extended_department){
-				case 1:
-					dept.title = '<span class="badge table-warning">重點產業系所</span>' + dept.title;
-					break;
-				case 2:
-					dept.title = '<span class="badge table-primary">國際專修部</span>' + dept.title;
-					break;
-			}
 			deptsHtmlString += `
 				<tr>
 					<td>${dept.title}</td>
