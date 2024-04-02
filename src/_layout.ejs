@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>海外青年訓練班學生資料下載與審查回覆系統</title>
+	<title>中華民國僑務委員會 - 海外青年技術訓練班學生資料下載與審查回覆系統</title>
 	<%- include ('component/_header') %>
 </head>
 <body>
@@ -9,7 +9,7 @@
 	<div class="container" style="min-height: calc(100vh - 112px)">
 		<div class="row pt-3" style="margin-bottom: -24px;">
 			<div class="col-12">
-				<a href="./" style="width: 540px; display: flex; color: inherit; text-decoration: none;">
+				<a href="./" style="width: 380px; display: flex; color: inherit; text-decoration: none;">
 					<div class="text-center" style="flex: 1">
 						<img src="./img/logo.png" alt="logo" height="60" />
 					</div>
@@ -71,8 +71,8 @@
 		const _productionConfig = window.getConfig();
 
 		if (!_productionConfig.isProduction) {
-			document.title='海外青年訓練班學生資料下載與審查回覆系統-測試站';
-			document.getElementById('wordOfSystem').innerHTML='中華民國僑務委員會-海外青年技術訓練班<br />學生資料下載與審查回覆系統<br />測試站';
+			document.title='中華民國僑務委員會 - 海外青年技術訓練班學生資料下載與審查回覆系統-測試站';
+			document.getElementById('wordOfSystem').innerHTML='中華民國僑務委員會 - 海外青年技術訓練班<br />學生資料下載與審查回覆系統<br />測試站';
 		}
 
 		if (_productionConfig.isProduction) {
