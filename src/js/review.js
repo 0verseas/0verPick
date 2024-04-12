@@ -157,7 +157,7 @@
 	}
 
 	function _handleDownloadResultFile() {
-		window.open(`${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}/review-result?mode=${_downloadMode}`, `_blank`);
+		window.open(`${_config.apiBase}/young-associate/systems/${_systemId}/departments/${_deptId}/review-result?mode=${_downloadMode}`, `_blank`);
 	}
 
 	function _renderCSVTable(fileName, data) {
@@ -328,7 +328,7 @@
 			$infoDiv.show();
 			$deptHeading.text(data.title);
 			$systemHeading.text(systemName);
-			$downloadCSVBtn.attr('href', `${_config.apiBase}/reviewers/systems/${_systemId}/departments/${_deptId}?type=file`);
+			$downloadCSVBtn.attr('href', `${_config.apiBase}/young-associate/systems/${_systemId}/departments/${_deptId}?type=file`);
 
 			// 系所資料已鎖定
 			if (isConfirmed) {
