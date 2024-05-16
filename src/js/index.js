@@ -8,7 +8,7 @@
 	$('#link-list').html(`
 		<li>
 			<div>
-				<a href="https://docs.google.com/presentation/d/1hjUL_qKJ_raJOxDA-XVbujncG2lEGWans9NB91apvOs"  target="_blank">
+				<a href="https://docs.google.com/presentation/d/14mHF4c4pq1czkmv2gj6eMVMbMQC_gUO8/edit?usp=sharing&ouid=113984502575913490966&rtpof=true&sd=true"  target="_blank">
 					<i class="fa fa-download" aria-hidden="true"></i> 海外青年技術訓練班學生資料下載與審查回覆系統操作步驟
 				</a>
 			</div>
@@ -41,7 +41,7 @@
 				審核通過並排序；-1：尚未審核）、不合格原因（審查結果為0時），備註為非必填欄位。其餘欄位在審核回覆開放後並進入下載時系統會自動帶入。</span>
 			</div>
 		</li>
-		<li>
+		<!--<li>
 			<div>
 				<a href="https://admission.taiwan-world.net/zh_tw/4year/brochure4"  target="_blank">
 					<i class="fa fa-download" aria-hidden="true"></i> 各地區招生簡章
@@ -54,7 +54,7 @@
 					<i class="fa fa-download" aria-hidden="true"></i> 僑生及港澳生招生名額查詢系統
 				</a>
 			</div>
-		</li>
+		</li>-->
 	`);
 
 	$('#btn_myanmar_transcript').on('click', _handleMyanmarTranscriptDownload);
