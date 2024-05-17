@@ -32,10 +32,10 @@
 		<li>
 			<div>
 				<a href="https://drive.google.com/file/d/14hNHCI_E1KP0jy_eWyRCPlfY7mPSXK-I/view?usp=sharing"  target="_blank">
-					<i class="fa fa-download" aria-hidden="true"></i> 審查回覆表範例
+					<i class="fa fa-download" aria-hidden="true"></i> 系所審查結果表範例
 				</a>
 				<a href="https://drive.google.com/file/d/1GgUHLQhc4XtP2N3x8nM6lbUcJZZPmMOJ/view?usp=sharing"  target="_blank">
-					<i class="fa fa-download" aria-hidden="true"></i> 審查結果不通過原因代碼對照表
+					<i class="fa fa-download" aria-hidden="true"></i> 系所審查結果不通過原因代碼對照表
 				</a>
 				<span style="font-size: 13px; color: DarkCyan;">若在審核回覆開放前要先填寫學生錄取狀況，可參閱審核回覆表範例，只需紀錄 僑生編號、審查結果（0：不通過；數字1234:
 				審核通過並排序；-1：尚未審核）、不合格原因（審查結果為0時），備註為非必填欄位。其餘欄位在審核回覆開放後並進入下載時系統會自動帶入。</span>
