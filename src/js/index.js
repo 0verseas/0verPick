@@ -8,7 +8,7 @@
 	$('#link-list').html(`
 		<li>
 			<div>
-				<a href="https://docs.google.com/presentation/d/14mHF4c4pq1czkmv2gj6eMVMbMQC_gUO8/edit?usp=sharing&ouid=113984502575913490966&rtpof=true&sd=true"  target="_blank">
+				<a href="https://docs.google.com/presentation/d/1m8WwEXH5IJuqjLmeCk0q3hV1GosIUQmi/edit?usp=sharing&ouid=113984502575913490966&rtpof=true&sd=true"  target="_blank">
 					<i class="fa fa-download" aria-hidden="true"></i> 海外青年技術訓練班學生資料下載與審查回覆系統操作步驟
 				</a>
 			</div>
