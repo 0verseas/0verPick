@@ -336,7 +336,8 @@
 					fail_result: el.fail_result,
 					name: el.name,
 					overseas_student_id: el.overseas_student_id,
-					review_memo: el.review_memo
+					review_memo: el.review_memo,
+					certification_of_chinese: (_systemId == 2) ?true :el.certification_of_chinese // 因為港二技沒有這個欄位 所以直接設定為 true
 				}
 			});
 
@@ -511,6 +512,11 @@
 		_reviewFailed.forEach((data, index) => {
 			let name = encodeHtmlCharacters(data.name);
 			let review_memo = encodeHtmlCharacters(data.review_memo);  // 不合格清單備註
+			if(data.certification_of_chinese){
+				lockHtml = '';
+			} else {
+				lockHtml = 'disabled';
+			}
 			failedHTML += `
 			<tr>
 				<td>${data.overseas_student_id}</td>
