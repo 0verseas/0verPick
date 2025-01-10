@@ -95,7 +95,10 @@
 			_reasonMapping = data;
 			_reasonMapping.splice(0, 0, {id:0, reason:"< 請選擇不合格原因… >"});
 			_reasonMapping.forEach(el => {
-				_reasonOptionHTML += (el.id == '0' || el.id == '48') ? `<option value="${el.id}" style="display: none" disabled>${el.reason}</option>` :`<option value="${el.id}">${el.reason}</option>`;
+				_reasonOptionHTML +=
+					(el.id == '0' || el.id == '48')
+					? `<option value="${el.id}" style="display: none;" disabled>${el.reason}</option>`
+					:`<option value="${el.id}">${el.reason}</option>`;
 			});
 		})
 
@@ -512,22 +515,31 @@
 		_reviewFailed.forEach((data, index) => {
 			let name = encodeHtmlCharacters(data.name);
 			let review_memo = encodeHtmlCharacters(data.review_memo);  // 不合格清單備註
+			let selectHtml = '';
+			let memoHtml = '';
 			if(data.certification_of_chinese){
 				lockHtml = '';
+				selectHtml = `
+					<select id="failedReason-${index}" data-index="${index}" class="form-control form-control-sm sel-reason" ${lockHtml} style="word-break: break-all;">
+						${_reasonOptionHTML}
+					</select>
+				`;
+				memoHtml = `<input type="text" data-index="${index}" class="input-memo form-control form-control-sm" value="${review_memo}" ${lockHtml}>`;
 			} else {
+				let fail_result = _reasonMapping.find(result => result.id == data.fail_result).reason;
 				lockHtml = 'disabled';
+				selectHtml = `<textarea class="form-control form-control-sm sel-reason" ${lockHtml}>${fail_result}</textarea>`;
+				memoHtml = `<textarea type="text" class="input-memo form-control form-control-sm" ${lockHtml}>${review_memo}</textarea>`;
 			}
 			failedHTML += `
 			<tr>
 				<td>${data.overseas_student_id}</td>
 				<td>${name}</td>
 				<td>
-					<select id="failedReason-${index}" data-index="${index}" class="form-control form-control-sm sel-reason" ${lockHtml}>
-						${_reasonOptionHTML}
-					</select>
+					${selectHtml}
 				</td>
 				<td>
-					<input type="text" data-index="${index}" class="input-memo form-control form-control-sm" value="${review_memo}" ${lockHtml}>
+					${memoHtml}
 				</td>
 				<td class="text-center">
 					<button class="btn btn-warning btn-failed-return" data-pass="0" data-index="${index}" ${lockHtml}> 退回 </button>
