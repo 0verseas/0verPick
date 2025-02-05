@@ -8,6 +8,13 @@
 	$('#link-list').html(`
 		<li>
 			<div>
+				<a href="https://drive.google.com/file/d/12QrPOyCDQjVdjZ1JKI-fVdSoiZm-BPlc/view?usp=sharing"  target="_blank">
+					<i class="fa fa-download" aria-hidden="true"></i>海聯試字第1143000008號-114學年度「個人申請」備審資料下載與審查作業事宜
+				</a>
+			</div>
+		</li>
+		<li>
+			<div>
 				<a href="https://docs.google.com/presentation/d/1oGg9g7O39IXjOT1uua5j9QmYQX9qELDd_hQKB0ric10"  target="_blank">
 					<i class="fa fa-download" aria-hidden="true"></i> 個人申請制備審資料下載與審查回覆系統操作步驟
 				</a>
