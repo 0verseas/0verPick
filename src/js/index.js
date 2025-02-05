@@ -9,7 +9,7 @@
 		<li>
 			<div>
 				<a href="https://drive.google.com/file/d/12QrPOyCDQjVdjZ1JKI-fVdSoiZm-BPlc/view?usp=sharing"  target="_blank">
-					<i class="fa fa-download" aria-hidden="true"></i>本會114年2月5日海聯試字第1143000008號-114學年度「個人申請」備審資料下載與審查作業事宜
+					<i class="fa fa-download" aria-hidden="true"></i>本會114年2月5日海聯試字第1143000008號函-114學年度「個人申請」備審資料下載與審查作業事宜
 				</a>
 			</div>
 		</li>
