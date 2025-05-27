@@ -53,7 +53,6 @@ const app = ( () => {
 			if (!!user.school_reviewer.has_admin) {
 				$allpdfzip.show();
 			} else {
-				$twoyearallpdfzip.remove();
 				$allpdfzip.remove();
 			}
 		});
