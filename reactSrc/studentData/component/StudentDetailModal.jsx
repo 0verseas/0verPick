@@ -87,6 +87,7 @@ class WorkFiles extends React.Component {
 
 	imgOrFile(file) {
 		const fileType = this.getFileType(file.split('.')[1]);
+		console.log(fileType);
 
 		if (fileType === 'img') {
 			return (
@@ -116,6 +117,7 @@ class WorkFiles extends React.Component {
 	}
 
 	render() {
+		console.log(this.props.work_files);
 		return (
 			<div>
 				<li>作品名稱：{this.props.name}</li>
@@ -394,7 +396,7 @@ export default class StudentDetailModal extends React.Component {
 			});
 			// console.log('this.props', this.props);
 		});
-		
+
 		this.getIdentityDocs(parseInt(userID)); // 取得學生上傳的身份驗證資料
 	}
 
@@ -590,7 +592,7 @@ export default class StudentDetailModal extends React.Component {
 
 					{
 						// 判斷是否有改名契的檔案，有就顯示
-						(this.state.change_of_name_file == true && (this.state.residentID == '113' || this.state.residentID == '127')) ? 
+						(this.state.change_of_name_file == true && (this.state.residentID == '113' || this.state.residentID == '127')) ?
                             <div className="mb-2">
                             <Card>
                             	<CardHeader>改名契 <small>簡章規定應繳文件</small></CardHeader>
