@@ -28,7 +28,7 @@ class File extends React.Component {
 		const src = `${window.getConfig().apiBase}/reviewers/${this.props.system}/students/${this.props.deptID}/${this.props.userID}/types/${this.props.type_id}/${this.props.type}/${this.props.file}`;
 
 		return (
-			<div class="img-thumbnail non-img-file-thumbnail" style={{display: 'inline-block'}}>
+			<div className="img-thumbnail non-img-file-thumbnail" style={{display: 'inline-block'}}>
 				<a href={src} target="_blank">
 					<i className={`fa fa-file-${this.props.fileType}-o`} aria-hidden="true"></i>
 				</a>
@@ -48,7 +48,7 @@ class IdentityFile extends React.Component {
 		const src = `${window.getConfig().apiBase}/reviewers/students/${this.props.userID}/${this.props.type}/item/${this.props.itemID}/file/${this.props.file}`;
 
 		return (
-			<div class="img-thumbnail non-img-file-thumbnail" style={{display: 'inline-block'}}>
+			<div className="img-thumbnail non-img-file-thumbnail" style={{display: 'inline-block'}}>
 				<a href={src} target="_blank">
 					<i className={`fa fa-file-${this.props.fileType}-o`} aria-hidden="true"></i>
 				</a>
@@ -87,7 +87,6 @@ class WorkFiles extends React.Component {
 
 	imgOrFile(file) {
 		const fileType = this.getFileType(file.split('.')[1]);
-		console.log(fileType);
 
 		if (fileType === 'img') {
 			return (
@@ -117,7 +116,6 @@ class WorkFiles extends React.Component {
 	}
 
 	render() {
-		console.log(this.props.work_files);
 		return (
 			<div>
 				<li>作品名稱：{this.props.name}</li>
